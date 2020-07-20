@@ -12,6 +12,10 @@ const routes: Array<RouteConfig> = [
     redirect: "/login"
   },
   {
+    path: "/",
+    redirect: "login"
+  },
+  {
     path: "/home",
     name: "Home",
     children: [

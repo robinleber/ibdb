@@ -20,7 +20,7 @@
           v-model="navBar.search"
         >
         </el-input>
-          <el-button type="primary" icon="fas fa-search" />
+        <el-button :class="$style.searchBtn" type="primary" icon="fas fa-search" />
         <div :class="$style.lastItem">
           <span>Hallo, Robin</span>
           <el-avatar size="large" />
