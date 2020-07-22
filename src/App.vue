@@ -22,5 +22,10 @@ export default class App extends Vue {}
   background-image: url("./assets/bg.png");
   font-family: "Roboto Regular", sans-serif;
   height: 100vh;
+  width: 100vw;
+
+  img {
+      -webkit-user-drag: none;
+  }
 }
 </style>

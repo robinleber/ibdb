@@ -1,0 +1,71 @@
+@font-face {
+    font-family: "Roboto Regular";
+    src: url("../../../../assets/font/Roboto/Roboto-Regular.ttf");
+}
+
+.books {
+    .functionBar {
+        display: flex;
+        align-items: center;
+        padding: 0.75em 0;
+
+        .sortBtn {
+            // color: whitesmoke;
+            font-size: 14pt;
+            margin-right: 10px;
+        }
+    }
+
+    .bookWrapper {
+        display: grid;
+        grid-gap: 0.5em;
+        grid-template-columns: repeat(auto-fill, 200px);
+        height: calc(100vh - 165px);
+        justify-content: space-between;
+        margin-right: 1em;
+        overflow-y: auto;
+        padding-right: 0.5em;
+        width: calc(85% - 10px);
+    }
+
+    .book {
+        border-radius: 0.25em;
+        border: solid 1px whitesmoke;
+        cursor: pointer;
+        position: relative;
+        transition: transform 200ms ease;
+        user-select: none;
+        width: 200px;
+        height: 300px;
+
+        .cover {
+            border-radius: 0.25em;
+            height: 100%;
+        }
+
+        .info {
+            height: 100%;
+            width: 100%;
+            background-image: linear-gradient(to top, #dce3e9cc, #f5f5f5cc);
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 1;
+            padding: 1em;
+            opacity: 0;
+            transition: opacity 200ms ease;
+
+            &:hover {
+                opacity: 1;
+            }
+
+            .title {
+                font-weight: 700;
+            }
+        }
+
+        .subInfo {
+            font-family: "Roboto Regular", serif;
+        }
+    }
+}

@@ -1,8 +1,10 @@
 import Vue from "vue";
 import VueRouter, { RouteConfig } from "vue-router";
-import Home from "../views/Home.vue";
-import Login from "../views/Login.vue";
-import Books from "../views/Books.vue"
+import Home from "@/views/Home/Home.vue";
+import Login from "@/views/Login/Login.vue";
+import Books from "@/views/Home/Children/Books/Books.vue"
+import Profile from "@/views/Home/Children/Profile/Profile.vue"
+import Settings from "@/views/Home/Children/Settings/Settings.vue"
 
 Vue.use(VueRouter);
 
@@ -17,12 +19,22 @@ const routes: Array<RouteConfig> = [
   },
   {
     path: "/home",
-    name: "Home",
+    redirect: "Books",
     children: [
       {
         path: "/books",
         name: "Books",
         component: Books
+      },
+      {
+        path: "/profile",
+        name: "Profile",
+        component: Profile
+      },
+      {
+        path: "/settings",
+        name: "Settings",
+        component: Settings
       }
     ],
     component: Home,

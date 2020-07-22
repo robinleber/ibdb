@@ -8,7 +8,9 @@ export default class App extends Vue {
 
     signIn = {
         user: "",
-        pass: ""
+        pass: "",
+        rememberMe: false,
+        remainLoggedIn: false
     };
 
     signUp = {

@@ -25,7 +25,17 @@
                         <el-form-item label="Passwort">
                             <el-input v-model="signIn.pass" type="password" show-password />
                         </el-form-item>
-                        <el-button :class="$style.submitBtn" type="primary">Anmelden</el-button>
+                        <!-- <el-form-item>
+                            <el-checkbox v-model="signIn.rememberMe">E-Mail-Adresse merken</el-checkbox>
+                            <el-checkbox v-model="signIn.remainLoggedIn">Angemeldet bleiben (180 Tage)</el-checkbox>
+                        </el-form-item> -->
+                        <el-form-item>
+                            <el-button :class="$style.submitBtn" @click="$router.push('Home')" type="primary">Anmelden</el-button>
+                        </el-form-item>
+                        <el-button style="width: 100%; border: 1px solid #148dff" @click="$router.push('Home')">
+                            <img src="https://www.shareicon.net/data/256x256/2016/07/10/119930_google_512x512.png" style="align-items: middle;" width="16px" alt="">
+                            Mit Google anmelden
+                        </el-button>
                     </el-form>
                 </el-col>
                 <el-col :class="$style.signUp" :span="12">
@@ -43,6 +53,7 @@
                     </el-form>
                 </el-col>
             </el-row>
+            <el-link type="primary" :underline="false" :class="$style.forgotPassword">Passwort vergessen?</el-link>
         </el-card>
     </div>
 </template>
