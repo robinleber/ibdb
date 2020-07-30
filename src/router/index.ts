@@ -3,6 +3,7 @@ import VueRouter, { RouteConfig } from "vue-router";
 import Home from "@/views/Home/Home.vue";
 import Login from "@/views/Login/Login.vue";
 import Books from "@/views/Home/Children/Books/Books.vue"
+import Authors from "@/views/Home/Children/Authors/Authors.vue"
 import Profile from "@/views/Home/Children/Profile/Profile.vue"
 import Settings from "@/views/Home/Children/Settings/Settings.vue"
 
@@ -15,7 +16,7 @@ const routes: Array<RouteConfig> = [
   },
   {
     path: "/",
-    redirect: "login"
+    redirect: "Login"
   },
   {
     path: "/home",
@@ -25,6 +26,11 @@ const routes: Array<RouteConfig> = [
         path: "/books",
         name: "Books",
         component: Books
+      },
+      {
+        path: "/authors",
+        name: "Authors",
+        component: Authors
       },
       {
         path: "/profile",

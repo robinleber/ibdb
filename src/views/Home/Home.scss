@@ -16,28 +16,43 @@
 
 a {
     color: black;
-    text-decoration: none;
     font-family: "Roboto Regular", sans-serif;
+    text-decoration: none;
 }
 
 .home {
-    padding: 1em;
+    padding: 1em 1em 0 1em;
     font-family: "Roboto Slab Regular";
 
     .navBar {
         align-items: center;
-        background-image: linear-gradient(to top, #dce3e9, #f5f5f5);
-        border-radius: 3px;
-        border: 1px solid #148dff !important;
+        border-radius: 4px;
+        border: none !important;
+        color: #323232;
         display: flex;
         height: 60px;
         position: relative;
+        user-select: none;
         width: 100%;
 
+        .logo {
+            height: 60px;
+            position: relative;
+            left: -10px;
+            border-radius: 0;
+            margin-right: 10px;
+            border-radius: 3px 0 0 3px;
+        }
+
         .navItem {
-            height: 40px;
-            display: flex;
             align-items: center;
+            display: flex;
+            height: 40px;
+            user-select: none;
+
+            &:hover {
+                background-color: transparent !important;
+            }
 
             + .navItem {
                 margin-left: 15px;
@@ -50,6 +65,18 @@ a {
 
         .searchInput {
             width: 400px;
+            margin-left: 20px;
+        }
+
+        .sortDropdown {
+            margin-left: 15px;
+
+            .sortBtn {
+                color: #323232;
+                font-family: "Roboto Slab Regular", serif;
+                font-size: 12pt;
+                font-weight: 100;
+            }
         }
 
         .lastItem {
@@ -64,12 +91,11 @@ a {
 
             .avatar {
                 cursor: pointer;
+                height: 60px;
+                border-radius: 0 3px 3px 0;
+                position: relative;
+                right: 0;
             }
         }
-    }
-
-    .routerView {
-        width: 100%;
-        height: 100%;
     }
 }

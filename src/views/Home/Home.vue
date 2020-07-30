@@ -1,42 +1,52 @@
 <template>
   <div :class="$style.home">
-    <el-menu default-active="1" :class="$style.navBar" mode="horizontal" router>
-        <img :class="$style.navItem" src="@/assets/logo.svg" style="margin-left: 10px">
-        <el-menu-item index="1" :class="$style.navItem" route="Books">
-          <i class="fas fa-book" /> 
-          <span>Bücher</span>
-        </el-menu-item>
-        <el-menu-item index="2" :class="$style.navItem" route="Profile">
-          <i class="fas fa-user" /> 
-          <span>Profil</span>
-        </el-menu-item>
-        <el-menu-item index="3" :class="$style.navItem" route="Settings">
-          <i class="fas fa-cogs" /> 
-          <span>Einstellungen</span>
-        </el-menu-item>
-        <el-input
-          :class="[$style.searchInput, $style.navItem]"
-          placeholder="Suche..."
-          v-model="navBar.search"
-        >
-          <el-button slot="append" :class="$style.searchBtn" type="primary" icon="fas fa-search" />
-        </el-input>
-        <div :class="$style.lastItem">
-          <span>Hallo, {{ username }}</span>
-          <el-dropdown trigger="click" slot="dropdown">
-            <el-avatar :class="$style.avatar">
-              <img src="@/assets/avatar.png">
-            </el-avatar>
-            <el-dropdown-menu>
-              <el-dropdown-item>
-                  <router-link to="login">
-                    <i class="fas fa-sign-out-alt" />
-                    <span>Abmelden</span>
-                  </router-link>
-              </el-dropdown-item>
-            </el-dropdown-menu>
-          </el-dropdown>
-        </div>
+    <el-menu
+      :class="$style.navBar"
+      active-text-color="#ff5252"
+      background-color="#fafafa"
+      class="md-elevation-3"
+      default-active="1"
+      mode="horizontal"
+      router
+      text-color="#323232"
+    >
+      <img :class="$style.logo" src="@/assets/logo_no_borders.svg" style="margin-left: 10px" />
+      <el-menu-item index="1" :class="$style.navItem" route="Books">
+        <i class="fas fa-book" />
+        <span>Bibliothek</span>
+      </el-menu-item>
+      <el-menu-item index="4" :class="$style.navItem" route="Authors">
+        <i class="fas fa-feather-alt" />
+        <span>Autoren</span>
+      </el-menu-item>
+      <el-menu-item index="2" :class="$style.navItem" route="Profile">
+        <i class="fas fa-user" />
+        <span>Profil</span>
+      </el-menu-item>
+      <el-menu-item index="3" :class="$style.navItem" route="Settings">
+        <i class="fas fa-cogs" />
+        <span>Einstellungen</span>
+      </el-menu-item>
+      <md-field :class="$style.searchInput" md-clearable md-inline>
+        <label>Suchen</label>
+        <md-input v-model="navBar.search" />
+      </md-field>
+      <md-button class="md-icon-button md-primary md md-raised">
+        <md-icon>search</md-icon>
+      </md-button>
+      <div :class="$style.lastItem">
+        <span>Hallo, {{ username }}</span>
+        <md-menu>
+          <img src="@/assets/avatar.png" :class="$style.avatar" />
+
+          <md-menu-content>
+            <md-menu-item @click="$router.push('login')">
+              <md-icon>exit_to_app</md-icon>
+              <span>Abmelden</span>
+            </md-menu-item>
+          </md-menu-content>
+        </md-menu>
+      </div>
     </el-menu>
     <router-view :class="$style.routerView" />
   </div>

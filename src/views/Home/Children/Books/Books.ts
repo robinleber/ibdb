@@ -1,60 +1,174 @@
 import { Component, Vue } from "vue-property-decorator";
+import AddBookDialog from "@/components/AddBookDialog/AddBookDialog.vue";
 
-@Component
+@Component({
+    components: {
+        AddBookDialog
+    }
+})
 
-export default class App extends Vue {
+export default class Books extends Vue {
+    readonly AUTH_KEY = "AIzaSyBgOAglMk-N5JQWU6BYRuo5GpyXZKOSRD8";
+
+    isbnList = [
+        "9783734162121",
+        "9783734162145",
+        "9783734162169",
+        "9783734162190",
+        "9781983699740",
+        "9783551583932",
+        "9783551583406",
+        "9783551583413",
+        "9783551583420",
+        "9783551583949"
+    ];
+
     bookList = [
         {
-            isbn: "978-0-3758-2670-2",
-            title: "Eragon - Das Vermächtnis der Drachenreiter",
-            summary: "Der Wind heulte durch die Nacht und trug einen Duft heran, der die Welt verändern sollte ... Als Eragon auf der Jagd einen glänzenden blauen Stein findet, ahnt er nicht, dass dieser Fund sein Leben verändern wird.Doch plötzlich rührt sich der Stein.Feine Risse zeichnen sich auf seiner Oberfläche ab - ein Drachenjunges entschlüpft der Schale und es beschert Eragon ein Vermächtnis, das älter ist als die Welt ...",
-            authors: ["Christopher Paolini"],
-            partOf: "Inheritance Cycle",
-            coverSrc: "https://www.randomhouse.de/content/edition/covervoila_hires/Paolini_CEragon_1Das_Vermaechtnis_der_194473.jpg",
-            pages: 736,
-            atPage: 736
-        },
-        {
-            isbn: "978-0-3758-2670-2",
-            title: "Eragon - Der Auftrag des Ältesten",
-            summary: "After successfully evading an Urgals ambush, Eragon is adopted into the Ingeitum clan and sent to finish his training so he can further help the Varden in their struggle against the Empire.",
-            authors: ["Christopher Paolini"],
-            partOf: "Inheritance Cycle",
-            coverSrc: "https://m.media-amazon.com/images/I/51bQGq+OJ7L.jpg",
-            pages: 864,
-            atPage: 864
-        },
-        {
-            isbn: "978-0-3758-2670-2",
-            title: "Eragon - Die Weisheit des Feuers",
-            summary: "After successfully evading an Urgals ambush, Eragon is adopted into the Ingeitum clan and sent to finish his training so he can further help the Varden in their struggle against the Empire.",
-            authors: ["Christopher Paolini"],
-            partOf: "Inheritance Cycle",
-            coverSrc: "https://m.media-amazon.com/images/I/51B2aXHKiZL.jpg",
-            pages: 861,
-            atPage: 861
-        },
-        {
-            isbn: "978-0-3758-2670-2",
-            title: "Eragon - Das Erbe der Macht",
-            summary: "Inheritance starts when the Varden attack Belatona, a city of the Empire. In the battle, Saphira, Eragon's dragon, is nearly killed by a Dauthdaert (death spear) called Niernen —a spear from the Dragon Wars intended to destroy magical wards and kill dragons.",
-            authors: ["Christopher Paolini"],
-            partOf: "Inheritance Cycle",
-            coverSrc: "https://m.media-amazon.com/images/I/51feKxk5vEL.jpg",
-            pages: 986,
-            atPage: 986
-        },
-        {
-            isbn: "",
-            title: "The Prince of Milk",
-            summary: "",
-            authors: ["exurb1a"],
-            partOf: "The Prince of Milk",
-            coverSrc: "http://covers.openlibrary.org/b/isbn/9781983699740-L.jpg",
-            pages: 351,
-            atPage: 78
+            "kind": "books#volume",
+            "id": "Xqc5DwAAQBAJ",
+            "etag": "Zme9l0UpilE",
+            "selfLink": "https://www.googleapis.com/books/v1/volumes/Xqc5DwAAQBAJ",
+            "volumeInfo": {
+                "title": "Über den wilden Fluss",
+                "authors": [
+                    "Philip Pullman"
+                ],
+                "publishedDate": "2017-11-17",
+                "industryIdentifiers": [
+                    {
+                        "type": "ISBN_13",
+                        "identifier": "9783551583932"
+                    },
+                    {
+                        "type": "ISBN_10",
+                        "identifier": "3551583935"
+                    }
+                ],
+                "readingModes": {
+                    "text": false,
+                    "image": false
+                },
+                "pageCount": 560,
+                "printType": "BOOK",
+                "categories": [
+                    "Juvenile Fiction"
+                ],
+                "averageRating": 4,
+                "ratingsCount": 2,
+                "maturityRating": "NOT_MATURE",
+                "allowAnonLogging": false,
+                "contentVersion": "preview-1.0.0",
+                "panelizationSummary": {
+                    "containsEpubBubbles": false,
+                    "containsImageBubbles": false
+                },
+                "imageLinks": {
+                    "smallThumbnail": "http://books.google.com/books/content?id=Xqc5DwAAQBAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api",
+                    "thumbnail": "http://books.google.com/books/content?id=Xqc5DwAAQBAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"
+                },
+                "language": "de",
+                "previewLink": "http://books.google.de/books?id=Xqc5DwAAQBAJ&dq=isbn%3D9783551583932&hl=&cd=1&source=gbs_api",
+                "infoLink": "http://books.google.de/books?id=Xqc5DwAAQBAJ&dq=isbn%3D9783551583932&hl=&source=gbs_api",
+                "canonicalVolumeLink": "https://books.google.com/books/about/%C3%9Cber_den_wilden_Fluss.html?hl=&id=Xqc5DwAAQBAJ"
+            },
+            "saleInfo": {
+                "country": "DE",
+                "saleability": "NOT_FOR_SALE",
+                "isEbook": false
+            },
+            "accessInfo": {
+                "country": "DE",
+                "viewability": "NO_PAGES",
+                "embeddable": false,
+                "publicDomain": false,
+                "textToSpeechPermission": "ALLOWED",
+                "epub": {
+                    "isAvailable": false
+                },
+                "pdf": {
+                    "isAvailable": false
+                },
+                "webReaderLink": "http://play.google.com/books/reader?id=Xqc5DwAAQBAJ&hl=&printsec=frontcover&source=gbs_api",
+                "accessViewStatus": "NONE",
+                "quoteSharingAllowed": false
+            },
+            "searchInfo": {
+                "textSnippet": "Der 11-jährige Malcolm lebt mit seinen Eltern und seinem Dæmon Asta in Oxford und geht in dem Kloster auf der anderen Seite der Themse aus und ein."
+            }
         }
     ];
+
+    sortSelected = "";
+    sort(value: string): void {
+        this.sortSelected = value;
+    }
+
+    filter = [];
+
+    getBook() {
+        this.bookList = [];
+        for (const isbn of this.isbnList)
+            Vue.axios
+                .get(`https://www.googleapis.com/books/v1/volumes?q=isbn%3D${isbn}&key=${this.AUTH_KEY}`)
+                .then(async response => {
+                    this.bookList.push(await response.data.items[0])
+                    console.log(this.bookList)
+                })
+                .catch((e) =>
+                    console.log(e.message));
+    }
+
+    beforeMount() {
+        this.getBook();
+    }
+
+    addBookDialogVisible = false;
+
+    filters = [
+        {
+            label: "Genre",
+            type: "check",
+            options: [
+                {
+                    value: false,
+                    label: "Fantasy",
+                },
+                {
+                    value: false,
+                    label: "Science Fiction",
+                }
+            ]
+        },
+        {
+            label: "Autor",
+            type: "check",
+            options: [
+                {
+                    value: false,
+                    label: "Christopher Paolini",
+                },
+                {
+                    value: false,
+                    label: "Philip Pullman",
+                }
+            ]
+        },
+        {
+            label: "Seitenzahl",
+            type: "input",
+            options: [
+                {
+                    value: "",
+                    label: "MIN",
+                },
+                {
+                    value: "",
+                    label: "MAX",
+                }
+            ]
+        }
+    ]
 
     getProgress(pages: number, atPage: number) {
         return Math.round((100 / pages) * atPage);
@@ -66,5 +180,17 @@ export default class App extends Vue {
             authorsString += ", " + authors[i];
         }
         return authorsString;
+    }
+
+    getGenreColor(genre: string) {
+        switch (genre) {
+            case "Fantasy": return "#67c23a";
+            case "Science Fiction": return "#ff5252";
+            case "Philosophie": return "#196fa3";
+            case "Jugendliteratur": return "#f27405";
+            case "Abenteuer": return "#51c07c";
+            case "Action": return "#cf2217";
+            case "Steampunk": return "#6e5644";
+        }
     }
 }
