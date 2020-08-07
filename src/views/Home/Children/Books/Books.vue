@@ -1,6 +1,6 @@
 <template>
   <div :class="$style.books">
-    <div :class="$style.fnBar" v-if="bookList.length">
+    <div :class="$style.fnBar" v-if="bookList.length > 0">
       <md-button class="md-primary md-raised">
         <md-icon>library_add</md-icon>
         <span>&nbsp;Buch hinzufügen</span>
@@ -79,7 +79,7 @@
       md-icon="collections_bookmark"
       md-label="Gähnende Leere"
       md-rounded
-      v-if="!bookList.length"
+      v-if="bookList.length < 1"
     >
       <md-button class="md-primary md md-raised">
         <md-icon>library_add</md-icon>
@@ -87,9 +87,9 @@
       </md-button>
     </md-empty-state>
 
-    <md-content :class="$style.bookWrapper" v-if="bookList.length" class="md-scrollbar">
+    <md-content :class="$style.bookWrapper" v-if="bookList.length > 0" class="md-scrollbar" v-loading="isLoading">
       <el-tooltip
-        :content="`${book.atPage}/${book.pages} │ ${getProgress(book.pages, book.atPage)}%`"
+        :content="`${0}/${book.pageCount} │ ${getProgress(book.pageCount, 0)}%`"
         :key="index"
         effect="light"
         v-for="(book, index) in bookList"
@@ -98,15 +98,15 @@
           <md-ripple>
             <md-card-media-cover :class="$style.cover">
               <md-card-media ratio="5:3">
-                <img :src="book.volumeInfo.imageLinks.thumbnail" />
+                <img :src="book.imageLinks.thumbnail" v-if="book.imageLinks" />
               </md-card-media>
             </md-card-media-cover>
 
             <div :class="$style.info">
-              <span :class="$style.title">{{ book.volumneInfo.title }}</span>
+              <span :class="$style.title">{{ book.title }}</span>
               <br />
 
-              <div :class="$style.author">{{ getAuthors(book.volumeInfo.authors) }}</div>
+              <div :class="$style.author">{{ getAuthors(book.authors) }}</div>
 
               <div :class="$style.genreWrapper">
                 <el-tag
@@ -115,7 +115,7 @@
                   :key="index"
                   effect="dark"
                   size="small"
-                  v-for="(genre, index) in book.volumeInfo.categories"
+                  v-for="(genre, index) in book.categories"
                 >{{ genre }}</el-tag>
               </div>
 
@@ -125,7 +125,7 @@
                 score-template="{value}"
                 show-score
                 text-color="#ffbb00"
-                v-model="book.volumeInfo.averageRating"
+                v-model="book.averageRating"
               />
             </div>
           </md-ripple>

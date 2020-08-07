@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { Component, Vue } from "vue-property-decorator";
 import AddBookDialog from "@/components/AddBookDialog/AddBookDialog.vue";
 
@@ -8,54 +9,39 @@ import AddBookDialog from "@/components/AddBookDialog/AddBookDialog.vue";
 })
 
 export default class Books extends Vue {
+    // Google API => Authentification Key
     readonly AUTH_KEY = "AIzaSyBgOAglMk-N5JQWU6BYRuo5GpyXZKOSRD8";
 
-    isbnList = [
-        "9783734162121",
-        "9783734162145",
-        "9783734162169",
-        "9783734162190",
-        "9781983699740",
-        "9783551583932",
-        "9783551583406",
-        "9783551583413",
-        "9783551583420",
-        "9783551583949"
-    ];
+    // Page Loading
+    isLoading = true;
 
+    isbnList: [string] | undefined;
+
+    // Set Booklist array structure
     bookList = [
         {
             "kind": "books#volume",
-            "id": "Xqc5DwAAQBAJ",
-            "etag": "Zme9l0UpilE",
-            "selfLink": "https://www.googleapis.com/books/v1/volumes/Xqc5DwAAQBAJ",
+            "id": "FCPSvQEACAAJ",
+            "etag": "I8t98GatYmk",
+            "selfLink": "https://www.googleapis.com/books/v1/volumes/FCPSvQEACAAJ",
             "volumeInfo": {
-                "title": "Über den wilden Fluss",
-                "authors": [
-                    "Philip Pullman"
-                ],
-                "publishedDate": "2017-11-17",
-                "industryIdentifiers": [
-                    {
-                        "type": "ISBN_13",
-                        "identifier": "9783551583932"
-                    },
-                    {
-                        "type": "ISBN_10",
-                        "identifier": "3551583935"
-                    }
-                ],
+                "title": "Eragon - Der Auftrag des Ältesten",
+                "authors": ["Christopher Paolini"],
+                "publishedDate": "2019-01-21",
+                "industryIdentifiers": [{
+                    "type": "ISBN_10",
+                    "identifier": "3734162149"
+                },
+                {
+                    "type": "ISBN_13",
+                    "identifier": "9783734162145"
+                }],
                 "readingModes": {
                     "text": false,
                     "image": false
                 },
-                "pageCount": 560,
+                "pageCount": 800,
                 "printType": "BOOK",
-                "categories": [
-                    "Juvenile Fiction"
-                ],
-                "averageRating": 4,
-                "ratingsCount": 2,
                 "maturityRating": "NOT_MATURE",
                 "allowAnonLogging": false,
                 "contentVersion": "preview-1.0.0",
@@ -63,14 +49,10 @@ export default class Books extends Vue {
                     "containsEpubBubbles": false,
                     "containsImageBubbles": false
                 },
-                "imageLinks": {
-                    "smallThumbnail": "http://books.google.com/books/content?id=Xqc5DwAAQBAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api",
-                    "thumbnail": "http://books.google.com/books/content?id=Xqc5DwAAQBAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"
-                },
                 "language": "de",
-                "previewLink": "http://books.google.de/books?id=Xqc5DwAAQBAJ&dq=isbn%3D9783551583932&hl=&cd=1&source=gbs_api",
-                "infoLink": "http://books.google.de/books?id=Xqc5DwAAQBAJ&dq=isbn%3D9783551583932&hl=&source=gbs_api",
-                "canonicalVolumeLink": "https://books.google.com/books/about/%C3%9Cber_den_wilden_Fluss.html?hl=&id=Xqc5DwAAQBAJ"
+                "previewLink": "http://books.google.de/books?id=FCPSvQEACAAJ&dq=isbn%3D9783734162145&hl=&cd=1&source=gbs_api",
+                "infoLink": "http://books.google.de/books?id=FCPSvQEACAAJ&dq=isbn%3D9783734162145&hl=&source=gbs_api",
+                "canonicalVolumeLink": "https://books.google.com/books/about/Eragon_Der_Auftrag_des_%C3%84ltesten.html?hl=&id=FCPSvQEACAAJ"
             },
             "saleInfo": {
                 "country": "DE",
@@ -82,22 +64,19 @@ export default class Books extends Vue {
                 "viewability": "NO_PAGES",
                 "embeddable": false,
                 "publicDomain": false,
-                "textToSpeechPermission": "ALLOWED",
+                "textToSpeechPermission":
+                    "ALLOWED",
                 "epub": {
                     "isAvailable": false
                 },
                 "pdf": {
                     "isAvailable": false
                 },
-                "webReaderLink": "http://play.google.com/books/reader?id=Xqc5DwAAQBAJ&hl=&printsec=frontcover&source=gbs_api",
+                "webReaderLink": "http://play.google.com/books/reader?id=FCPSvQEACAAJ&hl=&printsec=frontcover&source=gbs_api",
                 "accessViewStatus": "NONE",
                 "quoteSharingAllowed": false
-            },
-            "searchInfo": {
-                "textSnippet": "Der 11-jährige Malcolm lebt mit seinen Eltern und seinem Dæmon Asta in Oxford und geht in dem Kloster auf der anderen Seite der Themse aus und ein."
             }
-        }
-    ];
+        }];
 
     sortSelected = "";
     sort(value: string): void {
@@ -106,17 +85,26 @@ export default class Books extends Vue {
 
     filter = [];
 
-    getBook() {
+    async getBook() {
+        this.isLoading = true;
+
+        // Clear Booklist while keeping array structure
         this.bookList = [];
-        for (const isbn of this.isbnList)
-            Vue.axios
-                .get(`https://www.googleapis.com/books/v1/volumes?q=isbn%3D${isbn}&key=${this.AUTH_KEY}`)
-                .then(async response => {
-                    this.bookList.push(await response.data.items[0])
-                    console.log(this.bookList)
-                })
-                .catch((e) =>
-                    console.log(e.message));
+        let bookIndex = 0;
+
+        // Fetch Book data via ISBN
+        if (this.isbnList) {
+            for (const ISBN of this.isbnList) {
+                await Vue.axios(`https://www.googleapis.com/books/v1/volumes?q=isbn%3D${ISBN}&key=${this.AUTH_KEY}`)
+                    .then(response => {
+                        this.bookList.push(response.data.items[0].volumeInfo)
+                        console.info(response.data)
+                    })
+                    .catch(e => console.error(console.trace(e)));
+            }
+        }
+
+        this.isLoading = false;
     }
 
     beforeMount() {
@@ -169,6 +157,7 @@ export default class Books extends Vue {
             ]
         }
     ]
+
 
     getProgress(pages: number, atPage: number) {
         return Math.round((100 / pages) * atPage);

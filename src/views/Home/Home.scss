@@ -36,12 +36,12 @@ a {
         width: 100%;
 
         .logo {
-            height: 60px;
-            position: relative;
-            left: -10px;
             border-radius: 0;
-            margin-right: 10px;
             border-radius: 3px 0 0 3px;
+            height: 60px;
+            left: -10px;
+            margin-right: 10px;
+            position: relative;
         }
 
         .navItem {
@@ -49,6 +49,11 @@ a {
             display: flex;
             height: 40px;
             user-select: none;
+
+            &[class="is-active"] {
+                border: none !important;
+                background-color: red;
+            }
 
             &:hover {
                 background-color: transparent !important;
@@ -68,17 +73,6 @@ a {
             margin-left: 20px;
         }
 
-        .sortDropdown {
-            margin-left: 15px;
-
-            .sortBtn {
-                color: #323232;
-                font-family: "Roboto Slab Regular", serif;
-                font-size: 12pt;
-                font-weight: 100;
-            }
-        }
-
         .lastItem {
             align-items: center;
             display: flex;
@@ -89,12 +83,16 @@ a {
                 margin-right: 20px;
             }
 
-            .avatar {
-                cursor: pointer;
-                height: 60px;
-                border-radius: 0 3px 3px 0;
+            .avatarContent {
                 position: relative;
                 right: 0;
+                width: 60px;
+
+                .avatar {
+                    border-radius: 0 3px 3px 0;
+                    cursor: pointer;
+                    height: 60px;
+                }
             }
         }
     }

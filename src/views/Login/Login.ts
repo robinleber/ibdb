@@ -1,13 +1,15 @@
-
+/* eslint-disable */
 import { Component, Vue } from "vue-property-decorator";
 
 @Component
 
 export default class Login extends Vue {
     isLoading = false;
+    isRegister = false;
+    rememberMe = false;
 
     signIn = {
-        user: "",
+        email: "",
         pass: "",
         rememberMe: false,
         remainLoggedIn: false
@@ -15,6 +17,7 @@ export default class Login extends Vue {
 
     signUp = {
         user: "",
+        email: "",
         pass: "",
         passRepeat: ""
     };

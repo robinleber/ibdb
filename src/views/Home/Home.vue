@@ -27,7 +27,7 @@
         <i class="fas fa-cogs" />
         <span>Einstellungen</span>
       </el-menu-item>
-      <md-field :class="$style.searchInput" md-clearable md-inline>
+      <md-field :class="$style.searchInput" md-clearable md-inline role="search">
         <label>Suchen</label>
         <md-input v-model="navBar.search" />
       </md-field>
@@ -36,16 +36,18 @@
       </md-button>
       <div :class="$style.lastItem">
         <span>Hallo, {{ username }}</span>
-        <md-menu>
-          <img src="@/assets/avatar.png" :class="$style.avatar" />
+        <md-ripple :class="$style.avatarContent">
+          <md-menu :md-offset-x="0" :md-offset-y="10">
+            <img src="@/assets/avatar.png" :class="$style.avatar" md-menu-trigger />
 
-          <md-menu-content>
-            <md-menu-item @click="$router.push('login')">
-              <md-icon>exit_to_app</md-icon>
-              <span>Abmelden</span>
-            </md-menu-item>
-          </md-menu-content>
-        </md-menu>
+            <md-menu-content>
+              <md-menu-item @click="$router.push('login')">
+                <md-icon>exit_to_app</md-icon>
+                <span>Abmelden</span>
+              </md-menu-item>
+            </md-menu-content>
+          </md-menu>
+        </md-ripple>
       </div>
     </el-menu>
     <router-view :class="$style.routerView" />

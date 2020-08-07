@@ -3,6 +3,10 @@
     src: url("../../assets/font/Roboto_Slab/RobotoSlab-Thin.ttf");
 }
 @font-face {
+    font-family: "Roboto Slab Light";
+    src: url("../../assets/font/Roboto_Slab/RobotoSlab-Light.ttf");
+}
+@font-face {
     font-family: "Roboto Regular";
     src: url("../../assets/font/Roboto/Roboto-Regular.ttf");
 }
@@ -21,49 +25,76 @@
     justify-content: center;
     width: 100%;
 
-    .header {
-        align-items: center;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        left: 15%;
-        position: absolute;
-        // height of logo -> 125px
-        top: calc(50% - (125px / 2));
-
-        > .label {
-            color: #323232;
-            font-family: "Roboto Slab Thin", serif;
-            font-size: 17.5pt;
-            font-weight: 700;
-        }
-    }
-
-    .signInContainer {
-        background-image: linear-gradient(to top, #ccd3d8, #f5f5f5);
-        border: 1px solid #148dff;
-        font-family: "Roboto Regular", sans-serif;
-        left: calc(30% + 250px);
-        position: absolute;
-        width: 600px;
-
-        .cardHeader {
-            font-weight: 700;
-        }
-
-        .signIn {
-            padding-right: 1em;
-        }
-
-        .signUp {
-            border-left: 1px solid #bfc4cae8;
-            padding-left: 1em;
-        }
-
-        .forgotPassword {
-            bottom: -20px;
+    .loginCard {
+        width: 300px;
+        position: relative;
+        
+        .logo {
+            border-radius: 5px;
+            height: 100px;
+            left: 50%;
             position: absolute;
-            z-index: 100;
+            top: -50px;
+            transform: translateX(-50%);
+            user-select: none;
+        }
+
+        .logoText {
+            font-family: "Roboto Slab Light", sans-serif;
+            font-size: 13.75pt;
+            font-weight: 500;
+            margin-top: 55px;
+            text-align: center;
+            user-select: none;
+        }
+
+        .rememberMe {
+            margin-top: -20px;
+        }
+
+        .loginBtn {
+            margin: -10px 0 20px 0;
+            width: 80%;
+        }
+
+        .loginWithTxt {
+            color: gray;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .btnGrp {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .socialBtnGrp {
+            display: flex;
+            justify-content: stretch;
+
+            button {
+                height: 45px;
+
+                &.fbBtn {
+                    background-color: #3b5998;
+                    color: #fafafa !important;
+                }
+
+                width: 100%;
+
+                i {
+                    font-size: 15pt;
+                    margin-right: 10px;
+                    vertical-align: -2px;
+                }
+            }
+        }
+
+        .notAMemberTxt {
+            color: gray;
+            margin: 20px 0;
+            text-align: center;
         }
     }
 }

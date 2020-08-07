@@ -5,6 +5,7 @@
 </template>
 
 <script lang="ts">
+/* eslint-disable */
 import { Component, Vue } from "vue-property-decorator";
 
 @Component
@@ -22,10 +23,21 @@ export default class App extends Vue {}
     src: url("./assets/font/Roboto/Roboto-Regular.ttf");
   }
 
-  background-image: linear-gradient(to top, #ddd8, #ddd8), url("assets/bg3.png");
+  background-image: linear-gradient(to top, #ddd8, #ddd8), url("assets/bg4.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+
   font-family: "Roboto Regular", sans-serif;
   height: 100vh;
   width: 100vw;
+
+  a {
+    text-decoration: none;
+  }
 
   img {
     -webkit-user-drag: none;
