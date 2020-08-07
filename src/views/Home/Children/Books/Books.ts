@@ -1,6 +1,7 @@
 /* eslint-disable */
 import { Component, Vue } from "vue-property-decorator";
 import AddBookDialog from "@/components/AddBookDialog/AddBookDialog.vue";
+import { mainEventBus } from "@/components/mainEventBus.ts";
 
 @Component({
     components: {
@@ -9,11 +10,8 @@ import AddBookDialog from "@/components/AddBookDialog/AddBookDialog.vue";
 })
 
 export default class Books extends Vue {
-    // Google API => Authentification Key
+    // Google API Authentification Key
     readonly AUTH_KEY = "AIzaSyBgOAglMk-N5JQWU6BYRuo5GpyXZKOSRD8";
-
-    // Page Loading
-    isLoading = true;
 
     isbnList: [string] | undefined;
 
@@ -78,40 +76,11 @@ export default class Books extends Vue {
             }
         }];
 
+    // List of selected sorting conditions
     sortSelected = "";
     sort(value: string): void {
         this.sortSelected = value;
     }
-
-    filter = [];
-
-    async getBook() {
-        this.isLoading = true;
-
-        // Clear Booklist while keeping array structure
-        this.bookList = [];
-        let bookIndex = 0;
-
-        // Fetch Book data via ISBN
-        if (this.isbnList) {
-            for (const ISBN of this.isbnList) {
-                await Vue.axios(`https://www.googleapis.com/books/v1/volumes?q=isbn%3D${ISBN}&key=${this.AUTH_KEY}`)
-                    .then(response => {
-                        this.bookList.push(response.data.items[0].volumeInfo)
-                        console.info(response.data)
-                    })
-                    .catch(e => console.error(console.trace(e)));
-            }
-        }
-
-        this.isLoading = false;
-    }
-
-    beforeMount() {
-        this.getBook();
-    }
-
-    addBookDialogVisible = false;
 
     filters = [
         {
@@ -158,12 +127,42 @@ export default class Books extends Vue {
         }
     ]
 
+    async getBook() {
+        // Show loading screen
+        mainEventBus.$emit("changeMainLoading", true, "Lade Bibliothek");
 
-    getProgress(pages: number, atPage: number) {
+        // Clear Booklist while keeping array structure
+        this.bookList = [];
+
+        // Check if isbnList is empty
+        if (this.isbnList) {
+            // Fetch Book data for every ISBN in isbnList
+            for (const ISBN of this.isbnList) {
+                await Vue.axios(`https://www.googleapis.com/books/v1/volumes?q=isbn%3D${ISBN}&key=${this.AUTH_KEY}`)
+                    .then(response => {
+                        // Add book to bookList
+                        this.bookList.push(response.data.items[0].volumeInfo)
+                        // Log response status
+                        console.info(response.data.status)
+                    })
+                    .catch(e => console.error(console.trace(e)));
+            }
+        }
+
+        // Hide loading screen
+        mainEventBus.$emit("changeMainLoading", false, "");
+    }
+
+    beforeMount(): void {
+        this.getBook();
+    }
+
+
+    getProgress(pages: number, atPage: number): number {
         return Math.round((100 / pages) * atPage);
     }
 
-    getAuthors(authors: [string]) {
+    getAuthors(authors: [string]): string {
         let authorsString = authors[0];
         for (let i = 1; i < authors.length; i++) {
             authorsString += ", " + authors[i];
@@ -171,7 +170,7 @@ export default class Books extends Vue {
         return authorsString;
     }
 
-    getGenreColor(genre: string) {
+    getGenreColor(genre: string): string {
         switch (genre) {
             case "Fantasy": return "#67c23a";
             case "Science Fiction": return "#ff5252";
@@ -180,6 +179,11 @@ export default class Books extends Vue {
             case "Abenteuer": return "#51c07c";
             case "Action": return "#cf2217";
             case "Steampunk": return "#6e5644";
+            default: return "#286aab";
         }
+    }
+
+    showAddBookDialog(): void {
+        mainEventBus.$emit("showAddBookDialog");
     }
 }

@@ -17,6 +17,12 @@
 
     .emptyState {
         margin-top: 10%;
+
+        [class="md-empty-state-description"] {
+            font-family: "Roboto Regular", sans-serif;
+            width: 80%;
+            color: #fafafa;
+        }
     }
 
     .bookWrapper {

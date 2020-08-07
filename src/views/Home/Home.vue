@@ -3,12 +3,12 @@
     <el-menu
       :class="$style.navBar"
       active-text-color="#ff5252"
-      background-color="#fafafa"
+      background-color="#424242"
       class="md-elevation-3"
       default-active="1"
       mode="horizontal"
       router
-      text-color="#323232"
+      text-color="#fafafa"
     >
       <img :class="$style.logo" src="@/assets/logo_no_borders.svg" style="margin-left: 10px" />
       <el-menu-item index="1" :class="$style.navItem" route="Books">
@@ -34,6 +34,12 @@
       <md-button class="md-icon-button md-primary md md-raised">
         <md-icon>search</md-icon>
       </md-button>
+      <md-switch
+        :class="$style.darkModeSwitch"
+        @change="switchDarkMode()"
+        v-model="isDarkMode"
+        class="md-primary"
+      >Dark Mode</md-switch>
       <div :class="$style.lastItem">
         <span>Hallo, {{ username }}</span>
         <md-ripple :class="$style.avatarContent">

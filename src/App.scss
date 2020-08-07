@@ -1,0 +1,48 @@
+:root {
+  --primary: #323232;
+}
+
+#app {
+
+  @font-face {
+    font-family: "Roboto Regular";
+    src: url("./assets/font/Roboto/Roboto-Regular.ttf");
+  }
+
+  background-image: linear-gradient(to top, #425252bb, #425252bb), url("assets/bg4.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+
+  font-family: "Roboto Regular", sans-serif;
+  height: 100vh;
+  width: 100vw;
+
+  a {
+    text-decoration: none;
+  }
+
+  img {
+    -webkit-user-drag: none;
+  }
+
+  ::selection {
+    background-color: #323232;
+    color: #fafafa;
+  }
+
+  .md-button {
+    .md-icon {
+      vertical-align: -8px;
+    }
+  }
+
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+}

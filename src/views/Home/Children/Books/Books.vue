@@ -1,7 +1,7 @@
 <template>
   <div :class="$style.books">
     <div :class="$style.fnBar" v-if="bookList.length > 0">
-      <md-button class="md-primary md-raised">
+      <md-button class="md-primary md-raised" @click="showAddBookDialog()">
         <md-icon>library_add</md-icon>
         <span>&nbsp;Buch hinzufügen</span>
       </md-button>
@@ -81,13 +81,18 @@
       md-rounded
       v-if="bookList.length < 1"
     >
-      <md-button class="md-primary md md-raised">
+      <md-button class="md-primary md md-raised" @click="showAddBookDialog()">
         <md-icon>library_add</md-icon>
         <span>&nbsp;Buch hinzufügen</span>
       </md-button>
     </md-empty-state>
 
-    <md-content :class="$style.bookWrapper" v-if="bookList.length > 0" class="md-scrollbar" v-loading="isLoading">
+    <md-content
+      :class="$style.bookWrapper"
+      v-if="bookList.length > 0"
+      class="md-scrollbar"
+      v-loading="isLoading"
+    >
       <el-tooltip
         :content="`${0}/${book.pageCount} │ ${getProgress(book.pageCount, 0)}%`"
         :key="index"
@@ -144,7 +149,7 @@
       layout="prev, pager, next"
     />
 
-    <add-book-dialog :dialogVisible="addBookDialogVisible" />
+    <add-book-dialog />
   </div>
 </template>
 
