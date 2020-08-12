@@ -1,30 +1,52 @@
 .addBook {
     .stepper {
-        [class="md-layout-item"] {
-            padding: 1em;
-            display: flex;
-            align-items: center;
-            flex-direction: column;
+        .firstStep {
+            [class="md-layout-item"] {
+                padding: 1em;
+                display: flex;
+                align-items: center;
+                flex-direction: column;
 
-            .scanIsbnBtnContainer {
-                border-right: 1px solid lightgray;
-                height: 100%;
+                .scanIsbnBtnContainer {
+                    border-right: 1px solid lightgray;
+                    height: 100%;
 
-                .isbnInputLabel {
-                    color: #ffffffb3;
+                    .isbnInputLabel {
+                        color: #ffffffb3;
+                    }
+
+                    .scanIsbnBtn {
+                        font-size: 70pt;
+                        height: 100px;
+                        width: 200px;
+                        padding: 0 !important;
+                        margin-left: 0;
+                    }
                 }
 
-                .scanIsbnBtn {
-                    font-size: 70pt;
-                    height: 100px;
-                    width: 200px;
-                    padding: 0 !important;
-                    margin-left: 0;
+                .submitIsbnBtn {
+                    width: 100%;
                 }
             }
+        }
+        
+        .secondStep {
+            width: 50%;
 
-            .submitIsbnBtn {
-                width: 100%;
+            .isbnWrapper {
+                display: flex;
+                justify-content: left;
+                margin-bottom: 15px;
+                user-select: none;
+            }
+
+            .topBookInfo {
+                margin-bottom: 20px;
+
+                .bookInfo {
+                    margin-left: 10px;
+                    width: 50%;
+                }
             }
         }
     }

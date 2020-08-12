@@ -2,7 +2,6 @@
 import { Component, Vue } from "vue-property-decorator";
 
 @Component
-
 export default class Login extends Vue {
     isLoading = false;
     isRegister = false;
@@ -12,13 +11,13 @@ export default class Login extends Vue {
         email: "",
         pass: "",
         rememberMe: false,
-        remainLoggedIn: false
+        remainLoggedIn: false,
     };
 
     signUp = {
         user: "",
         email: "",
         pass: "",
-        passRepeat: ""
+        passRepeat: "",
     };
 }

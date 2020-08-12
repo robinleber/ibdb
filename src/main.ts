@@ -6,9 +6,9 @@ import "./registerServiceWorker";
 /**
  * Import Axios
  */
-import axios from 'axios'
-import VueAxios from 'vue-axios'
-Vue.use(VueAxios, axios)
+import axios from "axios";
+import VueAxios from "vue-axios";
+Vue.use(VueAxios, axios);
 /**
  * Import Element UI
  */
@@ -27,7 +27,7 @@ Vue.use(VueMaterial);
 Vue.config.productionTip = false;
 
 new Vue({
-  router,
-  store,
-  render: h => h(App)
+    router,
+    store,
+    render: (h) => h(App),
 }).$mount("#app");

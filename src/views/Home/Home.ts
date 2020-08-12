@@ -3,13 +3,12 @@ import { Component, Vue } from "vue-property-decorator";
 import { mainEventBus } from "@/components/mainEventBus.ts";
 
 @Component
-
 export default class Home extends Vue {
-    username = "Robin"
+    username = "Robin";
     isDarkMode = true;
 
     navBar = {
-        search: ""
+        search: "",
     };
 
     switchDarkMode() {

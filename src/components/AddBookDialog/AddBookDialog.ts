@@ -2,24 +2,27 @@ import { Component, Vue } from "vue-property-decorator";
 import { mainEventBus } from "@/components/mainEventBus.ts";
 
 @Component
-
 export default class AddBookDialog extends Vue {
     isAddBookDialogVisible = false;
     isbnInput = "";
     activeStep = "first";
-    first = false;
-    second = false;
+    steps = [
+        {
+            step: false,
+        },
+        {
+            step: false,
+        },
+    ];
 
     isNumber(): string {
         return this.isbnInput.replace(/\D+/g, "");
     }
 
-    setDone(id: string, index: string): void {
-        this[id] = true;
+    setDone(id: number, index: string): void {
+        this.steps[id].step = true;
 
-        if (index) {
-            this.activeStep = index;
-        }
+        if (index) this.activeStep = index;
     }
 
     cancel() {
@@ -28,6 +31,9 @@ export default class AddBookDialog extends Vue {
     }
 
     mounted(): void {
-        mainEventBus.$on("showAddBookDialog", () => this.isAddBookDialogVisible = true);
+        mainEventBus.$on(
+            "showAddBookDialog",
+            () => (this.isAddBookDialogVisible = true)
+        );
     }
 }
