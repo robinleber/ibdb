@@ -2,6 +2,7 @@ import Vue from "vue";
 import VueRouter, { RouteConfig } from "vue-router";
 import Home from "@/views/Home/Home.vue";
 import Login from "@/views/Login/Login.vue";
+import Dashboard from "@/views/Home/Children/Dashboard/Dashboard.vue"
 import Books from "@/views/Home/Children/Books/Books.vue"
 import Authors from "@/views/Home/Children/Authors/Authors.vue"
 import Profile from "@/views/Home/Children/Profile/Profile.vue"
@@ -20,8 +21,13 @@ const routes: Array<RouteConfig> = [
   },
   {
     path: "/home",
-    redirect: "Books",
+    redirect: "Dashboard",
     children: [
+      {
+        path: "/dashboard",
+        name: "Dashboard",
+        component: Dashboard
+      },
       {
         path: "/books",
         name: "Books",

@@ -3,33 +3,29 @@
         <el-menu
             :class="$style.navBar"
             active-text-color="#ff5252"
-            background-color="#424242"
+            background-color="#fafafa"
             class="md-elevation-3"
             default-active="1"
             mode="horizontal"
             router
-            text-color="#fafafa"
+            text-color="#002651"
         >
             <img
                 :class="$style.logo"
                 src="@/assets/logo_no_borders.svg"
                 style="margin-left: 10px"
             />
-            <el-menu-item index="1" :class="$style.navItem" route="Books">
+            <el-menu-item index="1" :class="$style.navItem" route="Dashboard">
+                <i class="fas fa-chart-line" />
+                <span>Dashboard</span>
+            </el-menu-item>
+            <el-menu-item index="2" :class="$style.navItem" route="Books">
                 <i class="fas fa-book" />
                 <span>Bibliothek</span>
             </el-menu-item>
-            <el-menu-item index="4" :class="$style.navItem" route="Authors">
+            <el-menu-item index="3" :class="$style.navItem" route="Authors">
                 <i class="fas fa-feather-alt" />
                 <span>Autoren</span>
-            </el-menu-item>
-            <el-menu-item index="2" :class="$style.navItem" route="Profile">
-                <i class="fas fa-user" />
-                <span>Profil</span>
-            </el-menu-item>
-            <el-menu-item index="3" :class="$style.navItem" route="Settings">
-                <i class="fas fa-cogs" />
-                <span>Einstellungen</span>
             </el-menu-item>
             <md-field
                 :class="$style.searchInput"
@@ -43,13 +39,6 @@
             <md-button class="md-icon-button md-primary md md-raised">
                 <md-icon>search</md-icon>
             </md-button>
-            <md-switch
-                :class="$style.darkModeSwitch"
-                @change="switchDarkMode()"
-                v-model="isDarkMode"
-                class="md-primary"
-                >Dark Mode</md-switch
-            >
             <div :class="$style.lastItem">
                 <span>Hallo, {{ username }}</span>
                 <md-ripple :class="$style.avatarContent">
@@ -61,8 +50,16 @@
                         />
 
                         <md-menu-content>
-                            <md-menu-item @click="$router.push('login')">
-                                <md-icon>exit_to_app</md-icon>
+                            <md-menu-item @click="$router.push('profile')">
+                                <md-icon>face</md-icon>
+                                <span>Profil</span>
+                            </md-menu-item>
+                            <md-menu-item @click="$router.push('settings')">
+                                <md-icon>settings</md-icon>
+                                <span>Einstellungen</span>
+                            </md-menu-item>
+                            <md-menu-item class="md-accent" @click="$router.push('login')">
+                                <md-icon class="md-accent">exit_to_app</md-icon>
                                 <span>Abmelden</span>
                             </md-menu-item>
                         </md-menu-content>

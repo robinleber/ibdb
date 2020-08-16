@@ -29,7 +29,7 @@
                 }
             }
         }
-        
+
         .secondStep {
             width: 50%;
 
@@ -51,7 +51,14 @@
         }
     }
 
-    .cancelBtn {
-        width: 125px;
+    .btns {
+        display: flex;
+        justify-content: space-between;
+
+        .cancelBtn,
+        .backBtn,
+        .doneBtn {
+            width: 125px;
+        }
     }
 }

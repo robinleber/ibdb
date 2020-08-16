@@ -1,0 +1,34 @@
+.dashboard {
+    padding-top: 1em;
+    display: grid;
+    gap: 10px;
+    grid-template-columns: repeat(auto-fill, 325px);
+
+    .bookCount {
+        width: 300px;
+        .content {
+            .counter {
+                font-size: 80pt;
+                line-height: 80pt;
+            }
+
+            .sub {
+                text-align: right;
+            }
+        }
+    }
+
+    .pagesRead {
+        width: 400px;
+        .content {
+            .counter {
+                font-size: 80pt;
+                line-height: 80pt;
+            }
+
+            .sub {
+                text-align: right;
+            }
+        }
+    }
+}

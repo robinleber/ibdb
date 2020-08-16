@@ -35,6 +35,7 @@
                             :class="$style.submitIsbnBtn"
                             @click="setDone(0, 'second')"
                             class="md-raised md-primary"
+                            :disabled="isbnInput == ''"
                         >
                             <md-icon>check</md-icon>Bestätigen
                         </md-button>
@@ -47,86 +48,51 @@
                 :md-done.sync="steps[1].step"
                 :class="$style.secondStep"
             >
-                <div :class="$style.isbnWrapper">
-                    <md-chip
-                        md-clickable
-                        :class="$style.isbn13"
-                        class="md-elevation-3 md-accent"
-                    >
-                        <strong>ISBN-13</strong>
-                        <span @click="$event.target.select()">
-                            9876112550091
-                        </span>
-                    </md-chip>
-                    <md-chip
-                        md-clickable
-                        :class="$style.isbn10"
-                        class="md-elevation-3 md-accent"
-                    >
-                        <strong>ISBN-10</strong>
-                        <span @click="$event.target.select()">
-                            6112550710
-                        </span>
-                    </md-chip>
-                </div>
-                <div class="md-layout" :class="$style.topBookInfo">
-                    <div class="layout-item" :class="$style.bookCover">
+                <div class="md-layout">
+                    <div class="md-layout-item">
                         <img
-                            class="md-elevation-3"
-                            style="height: 300px; border-radius: .25em"
+                            :class="$style.cover"
+                            width="300"
                             src="https://www.randomhouse.de/content/edition/covervoila_hires/Paolini_CEragon_1Das_Vermaechtnis_der_194473.jpg"
+                            class="md-elevation-3"
                         />
                     </div>
-                    <div class="layout-item" :class="$style.bookInfo">
+                    <div class="md-layout-item md-size-1">
                         <md-field>
                             <label>Titel</label>
-                            <md-input
-                                value="Eragon - Das Vermächtnis der Drachenreiter"
-                            ></md-input>
+                            <md-input v-model="bookInfo.volumeInfo.title" />
                         </md-field>
-                        <md-field>
-                            <label>Autor</label>
-                            <md-input value="Christopher Paolini"></md-input>
-                        </md-field>
-                        <div style="margin-bottom: 20px;">
-                            <label style="font-size: 12px; color: lightgray">
-                                Genres
-                            </label>
-                            <br />
-                            <el-tag type="success" effect="dark"
-                                >Juvenile Fiction</el-tag
-                            >&nbsp;
-                            <el-tag type="danger" effect="dark">Fantasy</el-tag>
+                        <div :class="$style.isbnWrapper">
+                            <md-chip md-clickable class="md-primary"
+                                ><strong>ISBN-13</strong
+                                >&nbsp;9783608939811</md-chip
+                            >
+                            <md-chip md-clickable class="md-primary"
+                                ><strong>ISBN-10</strong
+                                >&nbsp;3608939811</md-chip
+                            >
                         </div>
                         <md-field>
-                            <label>Seitenzahl</label>
-                            <md-input value="800"> </md-input>
-                            <span class="md-suffix">Seiten</span>
+                            <label>Autoren</label>
+                            <md-input :value="getAuthors(bookInfo.volumeInfo.authors)" />
                         </md-field>
                     </div>
                 </div>
-                <md-content
-                    style="width: 450px; margin-bottom: 13px;"
-                    class="md-scrollbar"
-                    >Als Eragon auf der Jagd einen blauen Stein findet, ahnt er
-                    nicht, dass dieser Fund sein Leben verändern wird. Er freut
-                    sich, denn vielleicht kann er den Stein gegen Essen für
-                    seine Familie eintauschen. Doch dann entschlüpft dem Stein
-                    ein Drachenjunges und beschert Eragon ein Vermächtnis, das
-                    älter ist als die Welt selbst.
-                </md-content>
-                <el-rate
-                    disabled
-                    score-template="{value}"
-                    show-score
-                    text-color="#ffbb00"
-                    :value="4"
-                />
             </md-step>
         </md-steppers>
-        <md-button :class="$style.cancelBtn" @click="cancel()"
-            >Abbrechen</md-button
-        >
+        <div :class="$style.btns">
+            <md-button class="md-accent md-raised" :class="$style.cancelBtn" @click="cancel()"
+                >Abbrechen</md-button
+            >
+            <div :class="$style.rightBtns" v-if="steps[0].step == true">
+                <md-button @click="steps[0].step = false; activeStep = 'first'" :class="$style.backBtn" class="md-raised"
+                    >Zurück</md-button
+                >
+                <md-button :class="$style.doneBtn" class="md-primary md-raised"
+                    >Fertig!</md-button
+                >
+            </div>
+        </div>
     </md-dialog>
 </template>
 

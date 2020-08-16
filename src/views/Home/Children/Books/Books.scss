@@ -3,16 +3,16 @@
     src: url("../../../../assets/font/Roboto/Roboto-Regular.ttf");
 }
 
+.strong {
+    font-weight: 700;
+}
+
 .books {
     -webkit-user-drag: none;
 
     .fnBar {
         margin-left: -8px;
         margin-top: 10px;
-
-        .strong {
-            font-weight: 700;
-        }
     }
 
     .emptyState {

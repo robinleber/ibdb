@@ -3,12 +3,13 @@
 }
 
 #app {
+
     @font-face {
         font-family: "Roboto Regular";
         src: url("./assets/font/Roboto/Roboto-Regular.ttf");
     }
 
-    background-image: linear-gradient(to top, #425252bb, #425252bb),
+    background-image: linear-gradient(to top, #fafafabb, #fafafabb),
         url("assets/bg4.png");
     background-position: center;
     background-repeat: no-repeat;
