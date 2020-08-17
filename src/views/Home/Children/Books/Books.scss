@@ -2,6 +2,10 @@
     font-family: "Roboto Regular";
     src: url("../../../../assets/font/Roboto/Roboto-Regular.ttf");
 }
+@font-face {
+    font-family: "Roboto Slab Regular";
+    src: url("../../../../assets/font/Roboto_Slab/RobotoSlab-Regular.ttf");
+}
 
 .strong {
     font-weight: 700;
@@ -9,6 +13,23 @@
 
 .books {
     -webkit-user-drag: none;
+
+    .filter {
+        width: 250px;
+        .filterHeader {
+            .filterIcon {
+                color: black;
+                margin-right: 10px;
+                vertical-align: -3px;
+            }
+        }
+
+        .filterContent {
+            .filterTree {
+                font-family: "Roboto Slab Regular", serif;
+            }
+        }
+    }
 
     .fnBar {
         margin-left: -8px;
@@ -83,7 +104,7 @@
                 }
 
                 .author {
-                    margin-top: 5px;
+                      margin-top: 5px;
                 }
 
                 .genreWrapper {
@@ -95,25 +116,18 @@
                     }
                 }
 
-                .partOf {
-                    // font-size: 11pt;
-                    font-family: "Roboto Regular", sans-serif;
-                    position: absolute;
-                    bottom: 40px;
-                }
-
-                .rating {
+                .lastItems {
                     position: absolute;
                     bottom: 1em;
                 }
             }
         }
-    }
 
-    .progress {
-        position: absolute;
-        bottom: 0;
-        z-index: 10;
+        .progress {
+            position: absolute;
+            bottom: 0;
+            z-index: 10;
+        }
     }
 
     .pagination {

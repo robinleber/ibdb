@@ -13,6 +13,9 @@ export default class AddBookDialog extends Vue {
         {
             step: false,
         },
+        {
+            step: false,
+        },
     ];
 
     bookInfo = {

@@ -3,15 +3,14 @@ import { Component, Vue } from "vue-property-decorator";
 import { mainEventBus } from "@/components/mainEventBus.ts";
 
 @Component
-
 export default class Dashbaord extends Vue {
     bookCount: string = this.getBookCount(244);
-    pagesRead = "132.440"
+    pagesRead = "132.440";
 
     getBookCount(count: number): string {
         let stringCount = `${count}`;
 
-        while (stringCount.length < 4) {    
+        while (stringCount.length < 4) {
             stringCount = `0${stringCount}`;
         }
 

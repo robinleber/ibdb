@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { Component, Vue } from "vue-property-decorator";
+import { Component, Vue, Prop } from "vue-property-decorator";
 import AddBookDialog from "@/components/AddBookDialog/AddBookDialog.vue";
 import { mainEventBus } from "@/components/mainEventBus.ts";
 
@@ -9,10 +9,32 @@ import { mainEventBus } from "@/components/mainEventBus.ts";
     },
 })
 export default class Books extends Vue {
+    @Prop()
+    label = "name";
+    children = "zones";
+    isLeaf = "leaf";
+
     // Google API Authentification Key
     readonly AUTH_KEY = "AIzaSyBgOAglMk-N5JQWU6BYRuo5GpyXZKOSRD8";
 
-    isbnList = ["9783608939811", "9783608939828", "9783608939835"];
+    isbnList = [
+        "9783608939811",
+        "9783608939828",
+        "9783608939835",
+        "3551551677",
+        "3551354022",
+        "3551551693",
+        "3551551936",
+        "9783551354051",
+        "9783551354068",
+        "9783551354075",
+        "9783734162121",
+        "9783734162145",
+        "9783734162169",
+        "9783734162190",
+        "9781983699748",
+        "1983699748",
+    ];
 
     // Set Booklist array structure
     bookList = [
@@ -92,47 +114,78 @@ export default class Books extends Vue {
     filters = [
         {
             label: "Genre",
-            type: "check",
-            options: [
+            children: [
                 {
-                    value: false,
+                    label: "Action",
+                },
+                {
                     label: "Fantasy",
                 },
                 {
-                    value: false,
-                    label: "Science Fiction",
+                    label: "Novel",
                 },
             ],
         },
         {
-            label: "Autor",
-            type: "check",
-            options: [
+            label: "Autoren",
+            children: [
                 {
-                    value: false,
                     label: "Christopher Paolini",
                 },
                 {
-                    value: false,
-                    label: "Philip Pullman",
+                    label: "Joanne K. Rowling",
+                },
+                {
+                    label: "J. R. R. Tolkien",
+                },
+                {
+                    label: "exurb1a",
                 },
             ],
         },
         {
-            label: "Seitenzahl",
-            type: "input",
-            options: [
+            label: "Franchise",
+            children: [
                 {
-                    value: "",
-                    label: "MIN",
+                    label: "Tolkien's Welt",
                 },
                 {
-                    value: "",
-                    label: "MAX",
+                    label: "Harry Potter",
+                },
+                {
+                    label: "Eragon",
+                },
+                {
+                    label: "His dark Materials",
                 },
             ],
         },
     ];
+
+    // label: "Genre",
+    // label: "Autor",
+    // label: "Seitenzahl",
+
+    loadNode(node: any, resolve: any) {
+        if (node.level === 0) {
+            return resolve([{ name: "region" }]);
+        }
+        if (node.level > 1) return resolve([]);
+
+        setTimeout(() => {
+            const data = [
+                {
+                    name: "leaf",
+                    leaf: true,
+                },
+                {
+                    name: "zone",
+                },
+            ];
+
+            resolve(data);
+        }, 500);
+    }
 
     async getBook() {
         // Show loading screen
