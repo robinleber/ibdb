@@ -26,7 +26,7 @@
     width: 100%;
 
     .loginCard {
-        width: 300px;
+        width: 350px;
         position: relative;
 
         .logo {
@@ -49,6 +49,10 @@
         }
 
         .rememberMe {
+            margin-top: -20px;
+        }
+
+        .stayLoggedIn {
             margin-top: -20px;
         }
 
@@ -91,7 +95,41 @@
             }
         }
 
-        .notAMemberTxt {
+        .notAMemberTxt, .forgotPass {
+            color: gray;
+            margin: 20px 0;
+            text-align: center;
+        }
+    }
+
+    .registerCard {
+        width: 350px;
+        position: relative;
+
+        .logo {
+            border-radius: 5px;
+            height: 100px;
+            left: 50%;
+            position: absolute;
+            top: -50px;
+            transform: translateX(-50%);
+            user-select: none;
+        }
+
+        .logoText {
+            font-family: "Roboto Slab Light", sans-serif;
+            font-size: 13.75pt;
+            font-weight: 500;
+            margin-top: 55px;
+            text-align: center;
+            user-select: none;
+        }
+
+        .registerBtn {
+            width: 80%;
+        }
+
+        .alreadyAMemberTxt {
             color: gray;
             margin: 20px 0;
             text-align: center;

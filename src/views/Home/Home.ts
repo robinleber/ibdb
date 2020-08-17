@@ -14,4 +14,8 @@ export default class Home extends Vue {
     switchDarkMode() {
         mainEventBus.$emit("switchDarkMode", this.isDarkMode);
     }
+
+    mounted() {
+        mainEventBus.$emit("changeMainLoading", false, "");
+    }
 }
