@@ -104,7 +104,8 @@
                     <img
                       :src="
                         `https://pictures.abebooks.com/isbn/${isbnList[index]}-us.jpg`
-                      " 
+                      "
+                      v-if="src"
                     />
                   </md-card-media>
                 </md-card-media-cover>

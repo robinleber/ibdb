@@ -50,15 +50,15 @@
                         />
 
                         <md-menu-content>
-                            <md-menu-item @click="$router.push('profile')">
+                            <md-menu-item @click="$router.replace('profile')">
                                 <md-icon>face</md-icon>
                                 <span>Profil</span>
                             </md-menu-item>
-                            <md-menu-item @click="$router.push('settings')">
+                            <md-menu-item @click="$router.replace('settings')">
                                 <md-icon>settings</md-icon>
                                 <span>Einstellungen</span>
                             </md-menu-item>
-                            <md-menu-item class="md-accent" @click="$router.push('login')">
+                            <md-menu-item class="md-accent" @click="logout()">
                                 <md-icon class="md-accent">exit_to_app</md-icon>
                                 <span>Abmelden</span>
                             </md-menu-item>

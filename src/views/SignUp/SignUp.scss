@@ -1,0 +1,81 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    outline: none;
+    padding: 0;
+}
+
+.signUp {
+    align-items: center;
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    width: 100%;
+
+    .signUpCard {
+        width: 300px;
+        position: relative;
+
+        .logo {
+            border-radius: 5px;
+            height: 100px;
+            left: 50%;
+            position: absolute;
+            top: -50px;
+            transform: translateX(-50%);
+            user-select: none;
+        }
+
+        .signUpTxt {
+            color: #424242;
+            font-family: "Yantramanav Medium", sans-serif;
+            font-size: 24pt;
+            font-weight: 500;
+            margin-bottom: 40px;
+            margin-top: 90px;
+            text-align: center;
+            text-transform: uppercase;
+        }
+
+        .firstStep {
+            .createAccountBtn {
+                width: 80%;
+                margin: 0 10% 15px 0;
+            }
+        }
+
+        .secondStep {
+            text-align: center;
+
+            .addProfilePicture {
+                border: dashed #0000008a 5px;
+                height: 150px;
+                width: 150px;
+                display: flex;
+                margin-left: 50px;
+
+                i {
+                    font-size: 50pt !important;
+                }
+            }
+
+            .cardActions {
+                display: flex;
+                justify-content: stretch;
+                padding: 0;
+                margin-bottom: 15px;
+
+                .goBackBtn,
+                .completeBtn {
+                    width: 50%;
+                }
+            }
+        }
+
+        .alreadyAMemberTxt {
+            color: gray;
+            margin: 20px 0;
+            text-align: center;
+        }
+    }
+}

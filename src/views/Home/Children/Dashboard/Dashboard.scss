@@ -4,6 +4,13 @@
     gap: 10px;
     grid-template-columns: repeat(auto-fill, 325px);
 
+    [class="md-title"] {
+        font-family: "Yantramanav Regular";
+    }
+    [class="md-subhead"] {
+        font-family: "Roboto Slab Regular";
+    }
+
     .bookCount {
         width: 300px;
         .content {

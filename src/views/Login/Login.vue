@@ -1,21 +1,19 @@
 <template>
     <div :class="$style.login">
         <form
-            @keyup.enter="$router.push('home')"
+            @keyup.enter="login()"
             class="md-layout md-elevation-10"
             novalidate
-            v-if="!isRegister"
         >
             <md-card :class="$style.loginCard" class="md-layout-item">
                 <img src="@/assets/logo.svg" :class="$style.logo" />
-                <div :class="$style.logoText">Internet Book Database</div>
+                <div :class="$style.loginText">Login</div>
 
                 <md-card-content :class="$style.content">
                     <md-field>
-                        <label for="email">E-Mail</label>
+                        <label>E-Mail</label>
                         <md-input
                             type="email"
-                            name="email"
                             id="email"
                             autocomplete="email"
                             v-model="signIn.email"
@@ -23,15 +21,17 @@
                     </md-field>
 
                     <md-field>
-                        <label for="email">Passwort</label>
+                        <label>Passwort</label>
                         <md-input
                             type="password"
-                            name="password"
                             id="password"
                             autocomplete="password"
-                            v-model="signIn.password"
+                            v-model="signIn.pass"
                         />
                     </md-field>
+                    <el-link :underline="false" @click="resetPass()" :class="$style.forgotPass">
+                        Passwort vergessen?
+                    </el-link>
                     <md-checkbox :class="$style.rememberMe" v-model="rememberMe"
                         >E-Mail-Adresse merken</md-checkbox
                     >
@@ -44,13 +44,6 @@
 
                 <md-card-actions :class="$style.btnGrp">
                     <md-button
-                        class="md-primary md-flat"
-                        v-if="isRegister"
-                        @click="isRegister = false"
-                        >Zurück</md-button
-                    >
-                    <md-button
-                        v-if="!isRegister"
                         class="md-primary md-raised"
                         @click="login()"
                         :class="$style.loginBtn"
@@ -71,90 +64,16 @@
                         &nbsp;Facebook
                     </md-button>
                 </md-card-actions>
-                <div class="md-layout">
-                    <div class="md-layout-item">
-                        <div :class="$style.notAMemberTxt">
-                            Noch keinen Account?
-                            <br />
-                            <el-link
-                                :underline="false"
-                                @click="isRegister = true"
-                                >Hier registrieren</el-link
-                            >
-                        </div>
-                    </div>
-                    <div class="md-layout-item">
-                        <div :class="$style.forgotPass">
-                            Passwort vergessen?
-                            <br />
-                            <el-link
-                                :underline="false"
-                                @click="resetPass()"
-                                >Hier zurücksetzen</el-link
-                            >
-                        </div>
-                    </div>
-                </div>
-            </md-card>
-        </form>
-        <form
-            @keyup.enter="$router.push('home')"
-            class="md-layout md-elevation-10"
-            novalidate
-            v-else
-        >
-            <md-card :class="$style.registerCard" class="md-layout-item">
-                <img src="@/assets/logo.svg" :class="$style.logo" />
-                <div :class="$style.logoText">Internet Book Database</div>
 
-                <md-card-content :class="$style.content">
-                    <md-field>
-                        <label for="email">E-Mail</label>
-                        <md-input
-                            type="email"
-                            name="email"
-                            id="email"
-                            autocomplete="email"
-                            v-model="signUp.email"
-                        />
-                    </md-field>
+                <md-divider style="margin-top: 15px;" />
 
-                    <md-field>
-                        <label for="email">Passwort</label>
-                        <md-input
-                            type="password"
-                            name="password"
-                            id="password"
-                            autocomplete="password"
-                            v-model="signUp.password"
-                        />
-                    </md-field>
-
-                    <md-field>
-                        <label for="email">Passwort wiederholen</label>
-                        <md-input
-                            type="password"
-                            name="password"
-                            id="password"
-                            autocomplete="password"
-                            v-model="signUp.passRepeat"
-                        />
-                    </md-field>
-                </md-card-content>
-
-                <md-card-actions :class="$style.btnGrp">
-                    <md-button
-                        class="md-primary md-raised"
-                        @click="register()"
-                        :class="$style.registerBtn"
-                        >Registrieren
-                    </md-button>
-                </md-card-actions>
-                <div :class="$style.alreadyAMemberTxt">
-                    Du hast schon einen Account?
+                <div :class="$style.notAMemberTxt">
+                    Noch keinen Account?
                     <br />
-                    <el-link :underline="false" @click="isRegister = false"
-                        >Zum Login</el-link
+                    <el-link
+                        :underline="false"
+                        @click="$router.replace('SignUp')"
+                        >Hier registrieren</el-link
                     >
                 </div>
             </md-card>
