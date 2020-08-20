@@ -1,6 +1,6 @@
 <template>
     <div :class="$style.home">
-        <el-menu
+        <!-- <el-menu
             :class="$style.navBar"
             active-text-color="#ff5252"
             background-color="#fafafa"
@@ -44,9 +44,16 @@
                 <md-ripple :class="$style.avatarContent">
                     <md-menu :md-offset-x="0" :md-offset-y="10">
                         <img
-                            src="@/assets/avatar.png"
+                            :src="navBar.profileSrc"
                             :class="$style.avatar"
                             md-menu-trigger
+                            v-if="false"
+                        />
+                        <img
+                            src="@/assets/avatar_default.png"
+                            :class="$style.avatar"
+                            md-menu-trigger
+                            v-if="navBar.profileSrc"
                         />
 
                         <md-menu-content>
@@ -66,7 +73,76 @@
                     </md-menu>
                 </md-ripple>
             </div>
-        </el-menu>
+        </el-menu> -->
+        <div :class="$style.menu" class="md-elevation-3">
+            <img
+                :class="$style.logo"
+                src="@/assets/logo_no_borders.svg"
+            />
+            <md-tabs
+                :class="$style.navBar"
+                md-sync-route
+            >
+                <md-tab
+                    id="tab-dashboard"
+                    md-icon="dashboard"
+                    md-label="Dashboard"
+                    to="Dashboard"
+                />
+                <md-tab
+                    id="tab-books"
+                    md-icon="book"
+                    md-label="Bibliothek"
+                    to="Books"
+                />
+                <md-tab
+                    id="tab-authors"
+                    md-icon="history_edu"
+                    md-label="Autoren"
+                    to="Authors"
+                />
+                <md-tab
+                    id="tab-favorites"
+                    md-icon="favorite"
+                    md-label="Favoriten"
+                    to="Favorites"
+                />
+            </md-tabs>
+            <span :class="$style.msg">Hallo, {{ username }}</span>
+            <md-ripple :class="$style.menuRipple" class="md-elevation-3">
+                <md-menu
+                    :md-offset-x="0"
+                    :md-offset-y="10"
+                    :class="$style.avatar"
+                >
+                    <img
+                        md-menu-trigger
+                        src="@/assets/avatar.png"
+                        v-if="navBar.profileSrc != ''"
+                    />
+                    <img
+                        :src="navBar.profileSrc"
+                        md-menu-trigger
+                        v-else
+                    />
+
+                    <md-menu-content>
+                        <md-menu-item @click="$router.replace('profile')">
+                            <md-icon>face</md-icon>
+                            <span>Profil</span>
+                        </md-menu-item>
+                        <md-menu-item @click="$router.replace('settings')">
+                            <md-icon>settings</md-icon>
+                            <span>Einstellungen</span>
+                        </md-menu-item>
+                        <md-menu-item class="md-accent" @click="logout()">
+                            <md-icon class="md-accent">exit_to_app</md-icon>
+                            <span>Abmelden</span>
+                        </md-menu-item>
+                    </md-menu-content>
+                </md-menu>
+            </md-ripple>
+        </div>
         <router-view :class="$style.routerView" />
     </div>
 </template>

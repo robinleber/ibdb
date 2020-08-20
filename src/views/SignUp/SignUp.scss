@@ -42,6 +42,10 @@
                 width: 80%;
                 margin: 0 10% 15px 0;
             }
+
+            .cardActions {
+                padding: 0;
+            }
         }
 
         .secondStep {
@@ -65,9 +69,10 @@
                 padding: 0;
                 margin-bottom: 15px;
 
-                .goBackBtn,
                 .completeBtn {
-                    width: 50%;
+                    width: 80%;
+                    position: relative;
+                    left: 10%;
                 }
             }
         }

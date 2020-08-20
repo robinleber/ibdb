@@ -1,8 +1,7 @@
 .dashboard {
     padding-top: 1em;
-    display: grid;
-    gap: 10px;
-    grid-template-columns: repeat(auto-fill, 325px);
+    display: flex;
+    height: 100%;
 
     [class="md-title"] {
         font-family: "Yantramanav Regular";
@@ -11,12 +10,14 @@
         font-family: "Roboto Slab Regular";
     }
 
-    .bookCount {
-        width: 300px;
+    .card {
+        height: 255px;
+        margin-right: 1em;
+
         .content {
             .counter {
                 font-size: 80pt;
-                line-height: 80pt;
+                line-height: 70pt;
             }
 
             .sub {
@@ -25,17 +26,21 @@
         }
     }
 
-    .pagesRead {
-        width: 400px;
-        .content {
-            .counter {
-                font-size: 80pt;
-                line-height: 80pt;
-            }
+    .bookCount {
+        width: 300px;
+    }
 
-            .sub {
-                text-align: right;
-            }
-        }
+    .pagesRead {
+        width: 425px;
+    }
+
+    .booksRead {
+        width: 300px;
+    }
+
+    .temp {
+        width: 300px;
+        background-color: #58B31E;
+        color: #fafafa;
     }
 }

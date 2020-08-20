@@ -9,6 +9,7 @@ export default class Home extends Vue {
 
     navBar = {
         search: "",
+        profileSrc: "@/assets/avatar.png",
     };
 
     mounted() {

@@ -15,83 +15,96 @@ a {
     padding: 1em 1em 0 1em;
     overflow: hidden;
 
-    .navBar {
-        align-items: center;
-        border-radius: 4px;
-        border: none !important;
-        color: #424242;
+    .menu {
         display: flex;
-        font-family: "Yantramanav Regular";
-        font-size: 12pt;
-        height: 60px;
+        height: 72px;
+        align-items: center;
         position: relative;
-        user-select: none;
-        width: 100%;
 
         .logo {
-            border-radius: 0;
-            border-radius: 3px 0 0 3px;
-            height: 60px;
-            left: -10px;
-            margin-right: 10px;
+            height: 100%;
             position: relative;
+            border-radius: 3px 0 0 3px;
         }
 
-        .navItem {
-            align-items: center;
-            display: flex;
-            height: 40px;
+        .navBar {
+            font-family: "Yantramanav Regular";
+            position: relative;
             user-select: none;
-            font-size: 12pt;
+            width: 100%;
 
-            &[class="is-active"] {
-                border: none !important;
-                background-color: red;
+            .navItem {
+                align-items: center;
+                display: flex;
+                height: 40px;
+                user-select: none;
+                font-size: 12pt;
+
+                &[class="is-active"] {
+                    border: none !important;
+                    background-color: red;
+                }
+
+                &:hover {
+                    background-color: transparent !important;
+                }
+
+                + .navItem {
+                    margin-left: 15px;
+                }
+
+                i {
+                    margin-right: 10px;
+                }
             }
 
-            &:hover {
-                background-color: transparent !important;
+            .searchInput {
+                width: 400px;
+                margin-left: 20px;
             }
 
-            + .navItem {
-                margin-left: 15px;
-            }
-
-            i {
-                margin-right: 10px;
-            }
-        }
-
-        .searchInput {
-            width: 400px;
-            margin-left: 20px;
-        }
-
-        .darkModeSwitch {
-            margin-left: 40px;
-        }
-
-        .lastItem {
-            align-items: center;
-            display: flex;
-            position: absolute;
-            right: 0;
-
-            span {
-                margin-right: 20px;
-            }
-
-            .avatarContent {
-                position: relative;
+            .lastItem {
+                align-items: center;
+                display: flex;
+                position: absolute;
                 right: 0;
-                width: 60px;
 
-                .avatar {
-                    border-radius: 0 3px 3px 0;
-                    cursor: pointer;
-                    height: 60px;
+                span {
+                    margin-right: 20px;
+                }
+
+                .avatarContent {
+                    position: relative;
+                    right: 0;
+                    width: 60px;
                 }
             }
         }
+
+        .msg {
+            position: absolute;
+            right: 100px;
+            font-family: "Yantramanav Regular";
+            font-size: 14pt;
+        }
+
+        .menuRipple {
+            border-radius: 0 3px 3px 0;
+            max-width: 72px;
+            min-width: 72px;
+
+            .avatar {
+                cursor: pointer;
+                width: 72px;
+
+                img {
+                    height: 72px;
+                }
+            }
+        }
+    }
+
+    .routerView {
+        height: calc(100vh - 100px);
     }
 }

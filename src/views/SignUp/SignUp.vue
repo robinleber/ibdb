@@ -1,20 +1,21 @@
 <template>
     <div :class="$style.signUp">
-        <form
-            @keyup.enter="createUser()"
-            class="md-layout md-elevation-10"
-            novalidate
-        >
-            <md-card :class="$style.signUpCard">
-                <img src="@/assets/logo.svg" :class="$style.logo" />
-                <div :class="$style.signUpTxt">Registrieren</div>
+        <md-card :class="$style.signUpCard">
+            <img src="@/assets/logo.svg" :class="$style.logo" />
+            <div :class="$style.signUpTxt">Registrieren</div>
 
-                <md-steppers :md-active-step.sync="activeStep">
-                    <md-step
-                        id="first"
-                        md-label="Benutzerdaten"
-                        :md-done.sync="steps[0].step"
-                        :class="$style.firstStep"
+            <md-steppers :md-active-step.sync="activeStep">
+                <md-step
+                    :class="$style.firstStep"
+                    :md-done.sync="steps[0].step"
+                    :md-editable="false"
+                    :md-error="firstStepError"
+                    id="first"
+                    md-label="Benutzerdaten"
+                >
+                    <form
+                        @keyup.enter="createUser()"
+                        novalidate
                     >
                         <md-field>
                             <label>E-Mail</label>
@@ -45,7 +46,7 @@
                             />
                         </md-field>
 
-                        <md-card-actions>
+                        <md-card-actions :class="$style.cardActions">
                             <md-button
                                 :class="$style.createAccountBtn"
                                 @click="createUser()"
@@ -54,19 +55,24 @@
                                 Account erstellen
                             </md-button>
                         </md-card-actions>
-                    </md-step>
+                    </form>
+                </md-step>
 
-                    <md-step
-                        id="second"
-                        md-label="Profil"
-                        :md-done.sync="steps[1].step"
-                        :class="$style.secondStep"
+                <md-step
+                    :class="$style.secondStep"
+                    :md-done.sync="steps[1].step"
+                    id="second"
+                    md-label="Profil"
+                >
+                    <form
+                        @keyup.enter="completeSignUp()"
+                        novalidate
                     >
                         <div :class="$style.addProfilePicture">
                             <md-icon>face</md-icon>
                         </div>
                         <md-button class="md-raised md-primary"
-                            >Profilbild hinzufügen</md-button
+                            >Profilbild hochladen</md-button
                         >
                         <md-field>
                             <label>Name</label>
@@ -78,13 +84,6 @@
                         </md-field>
                         <md-card-actions :class="$style.cardActions">
                             <md-button
-                                :class="$style.goBackBtn"
-                                @click="goBack()"
-                                class="md-raised"
-                            >
-                                Zurück
-                            </md-button>
-                            <md-button
                                 :class="$style.completeBtn"
                                 @click="completeSignUp()"
                                 class="md-raised md-accent"
@@ -92,22 +91,20 @@
                                 Fertigstellen
                             </md-button>
                         </md-card-actions>
-                    </md-step>
-                </md-steppers>
+                    </form>
+                </md-step>
+            </md-steppers>
 
-                <md-divider />
+            <md-divider v-if="activeStep != 'second'" />
 
-                <div :class="$style.alreadyAMemberTxt">
-                    Du hast schon einen Account?
-                    <br />
-                    <el-link
-                        :underline="false"
-                        @click="$router.replace('Login')"
-                        >Zum Login</el-link
-                    >
-                </div>
-            </md-card>
-        </form>
+            <div v-if="activeStep != 'second'" :class="$style.alreadyAMemberTxt">
+                Du hast schon einen Account?
+                <br />
+                <el-link :underline="false" @click="$router.replace('Login')"
+                    >Zum Login</el-link
+                >
+            </div>
+        </md-card>
     </div>
 </template>
 

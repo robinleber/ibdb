@@ -114,6 +114,7 @@ export default class Books extends Vue {
     filters = [
         {
             label: "Genre",
+            value: "",
             children: [
                 {
                     label: "Action",
@@ -128,6 +129,7 @@ export default class Books extends Vue {
         },
         {
             label: "Autoren",
+            value: "",
             children: [
                 {
                     label: "Christopher Paolini",
@@ -145,6 +147,7 @@ export default class Books extends Vue {
         },
         {
             label: "Franchise",
+            value: "",
             children: [
                 {
                     label: "Tolkien's Welt",

@@ -25,7 +25,7 @@ const routes: Array<RouteConfig> = [
         path: "/home",
         redirect: "Dashboard",
         meta: {
-            requiresAuth: true,
+            requiresAuth: false,
         },
         children: [
             {
@@ -79,21 +79,21 @@ const router = new VueRouter({
     routes,
 });
 
-router.beforeEach((to, from, next) => {
-    const currentUser = firebase.auth().currentUser;
-    const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
-    // If path requires authentication and no user is logged in, route to login
-    // => Home-Page can't be opened when no user is logged in
-    if (requiresAuth && !currentUser) {
-        next("Login");
-    }
-    // If path don't requires authentication and a user is logged in, route to moneytor
-    // => Login- and Sign-Up-Page can't be opened when a user is logged in
-    else if (!requiresAuth && currentUser) {
-        next("Home");
-    } else {
-        next();
-    }
-});
+// router.beforeEach((to, from, next) => {
+//     const currentUser = firebase.auth().currentUser;
+//     const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
+//     // If path requires authentication and no user is logged in, route to login
+//     // => Home-Page can't be opened when no user is logged in
+//     if (requiresAuth && !currentUser) {
+//         next("Login");
+//     }
+//     // If path don't requires authentication and a user is logged in, route to moneytor
+//     // => Login- and Sign-Up-Page can't be opened when a user is logged in
+//     else if (!requiresAuth && currentUser) {
+//         next("Home");
+//     } else {
+//         next();
+//     }
+// });
 
 export default router;

@@ -6,6 +6,7 @@ import { mainEventBus } from "@/components/mainEventBus.ts";
 export default class Dashbaord extends Vue {
     bookCount: string = this.getBookCount(244);
     pagesRead = "132.440";
+    booksRead = this.getBookCount(239);
 
     getBookCount(count: number): string {
         let stringCount = `${count}`;
