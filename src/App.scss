@@ -6,8 +6,8 @@
 }
 
 #app {
-    background-image: linear-gradient(to top, #fafafabb, #fafafabb),
-        url("assets/bg4.png");
+    background-image: linear-gradient(to top, #424242bb, #424242bb),
+        url("assets/img/bg4.png");
     background-position: center;
     background-repeat: no-repeat;
     -webkit-background-size: cover;
@@ -44,7 +44,7 @@
         top: 0;
         width: 100vw;
         z-index: 99999;
-        
+
         .loading-message {
             color: #fafafa;
             margin-top: 20px;

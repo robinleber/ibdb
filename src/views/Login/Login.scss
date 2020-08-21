@@ -27,9 +27,6 @@
         }
 
         .loginText {
-            font-family: "Yantramanav Medium", sans-serif;
-            font-size: 24pt;
-            font-weight: 500;
             margin-top: 90px;
             text-align: center;
             text-transform: uppercase;
@@ -71,13 +68,17 @@
 
             button {
                 height: 45px;
+                width: 100%;
+
+                &.googleBtn {
+                    background-color: #e44134 !important;
+                    color: #fafafa;
+                }
 
                 &.fbBtn {
                     background-color: #3b5998;
                     color: #fafafa !important;
                 }
-
-                width: 100%;
 
                 i {
                     font-size: 15pt;

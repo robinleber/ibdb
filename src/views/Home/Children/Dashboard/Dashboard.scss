@@ -1,46 +1,65 @@
 .dashboard {
-    padding-top: 1em;
-    display: flex;
-    height: 100%;
+    margin-top: 2em;
+    max-height: 80%;
 
-    [class="md-title"] {
-        font-family: "Yantramanav Regular";
-    }
-    [class="md-subhead"] {
-        font-family: "Roboto Slab Regular";
-    }
+    .statistics {
+        .header {
+            .headerCard {
+                padding: 1em;
+                margin-top: -30px;
+                width: 300px;
 
-    .card {
-        height: 255px;
-        margin-right: 1em;
-
-        .content {
-            .counter {
-                font-size: 80pt;
-                line-height: 70pt;
-            }
-
-            .sub {
-                text-align: right;
+                .headerIcon {
+                    vertical-align: -4px;
+                    color: #fafafa;
+                }
             }
         }
-    }
 
-    .bookCount {
-        width: 300px;
-    }
+        .content {
+            display: flex;
 
-    .pagesRead {
-        width: 425px;
-    }
+            .card {
+                height: 255px;
+                margin-right: 1em;
 
-    .booksRead {
-        width: 300px;
-    }
+                .content {
+                    display: flex;
+                    flex-direction: column;
 
-    .temp {
-        width: 300px;
-        background-color: #58B31E;
-        color: #fafafa;
+                    .counter {
+                        line-height: 40pt;
+                    }
+
+                    .sub {
+                        text-align: right;
+                    }
+                }
+            }
+
+            .bookCount {
+                width: 300px;
+
+                .counter {
+                    color: #448aff;
+                }
+            }
+
+            .pagesRead {
+                width: 425px;
+
+                .counter {
+                    color: #ff4242;
+                }
+            }
+
+            .booksRead {
+                width: 300px;
+
+                .counter {
+                    color: #50bb62;
+                }
+            }
+        }
     }
 }

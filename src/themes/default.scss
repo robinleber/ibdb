@@ -1,0 +1,17 @@
+:root {
+    --primary: red;
+    --primary-hue: A200;
+    --accent: blue;
+    --accent-hue: A200;
+    --theme: dark;
+}
+
+@import "~vue-material/dist/theme/engine"; // Import the theme engine
+
+@include md-register-theme("default", (
+  primary: md-get-palette-color(purple, A200), // The primary color of your application
+  accent: md-get-palette-color(pink, A700), // The accent or secondary color
+  theme: dark
+));
+
+@import "~vue-material/dist/theme/all"; // Apply the theme

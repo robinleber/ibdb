@@ -10,20 +10,26 @@
     height: 100%;
 
     .filter {
-        height: 100%;
+        height: 95%;
+        margin-top: 2em;
 
         .filterHeader {
-            font-family: "Yantramanav Regular";
-            .filterIcon {
-                color: black;
-                margin-right: 10px;
-                vertical-align: -5px;
-            }
-        }
+            .filterHeaderCard {
+                box-sizing: content-box;
+                margin-top: -30px;
+                padding: 1em 2em;
+                text-align: center;
 
-        .filterContent {
-            .filterTree {
-                font-family: "Roboto Slab Regular", serif;
+                .filterIcon {
+                    color: #fafafa;
+                    font-size: 32pt !important;
+                    margin-bottom: 10px;
+                    margin-top: 10px;
+                }
+
+                .filterTxt {
+                    text-transform: uppercase;
+                }
             }
         }
     }
@@ -31,110 +37,120 @@
     .mainView {
         height: 100%;
 
-        .fnBar {
-            margin-left: -8px;
-            margin-top: 8px;
-            position: relative;
-
-            .filteredTxt {
-                position: absolute;
-                bottom: 5px;
-                font-family: "Roboto Black Italic";
-                color: #ff5252;
-                font-size: 12pt;
-            }
-        }
-
         .emptyState {
             margin-top: 10%;
 
             [class="md-empty-state-description"] {
-                font-family: "Roboto Regular", sans-serif;
                 width: 80%;
-                color: #fafafa;
             }
         }
 
-        .bookWrapper {
-            background: none !important;
-            display: grid;
-            gap: 10px;
-            grid-template-columns: repeat(auto-fill, 175px);
-            margin-top: 10px;
+                    .fnBar {
+                        position: relative;
 
-            .book {
-                border-radius: 0.25em;
-                cursor: pointer;
-                font-size: 10pt;
-                height: 275px;
-                margin-bottom: 8px;
-                overflow: hidden;
-                position: relative;
-                transition: transform 200ms ease;
-                user-select: none;
-                border-radius: 0.25em;
+                        .addBookBtn,
+                        .sortBtn {
+                            position: absolute;
+                        }
 
-                .cover {
-                    border-radius: 0.25em;
-                    height: 100%;
+                        .addBookBtn {
+                            bottom: 9px;
+                            left: -10px !important;
+                        }
 
-                    img {
-                        height: 275px;
-                        border-radius: 0.25em;
-                        object-fit: cover;
-                    }
-                }
-
-                .info {
-                    background-color: #4489ffe3;
-                    border-radius: 0.25em;
-                    color: #fafafa;
-                    height: 100%;
-                    left: 0;
-                    opacity: 0;
-                    padding: 1em;
-                    position: absolute;
-                    top: 0;
-                    transition: opacity 200ms ease-out,
-                        background-image 200ms ease-out, margin 200ms ease-out,
-                        transform 200ms ease-out;
-                    width: 100%;
-                    z-index: 1;
-                    transform: scale(1.05);
-
-                    &:hover {
-                        opacity: 1;
-                        transform: scale(1);
-                    }
-
-                    .title {
-                        font-weight: 700;
-                    }
-
-                    .author {
-                        margin-top: 5px;
-                    }
-
-                    .genreWrapper {
-                        margin-top: 10px;
-
-                        .genre {
-                            border: transparent;
-                            margin: 1px;
+                        .sortBtn {
+                            bottom: 15px;
+                            left: 180px;
                         }
                     }
 
-                    .lastItems {
+        .bookCard {
+            background: none !important;
+            height: 89.2%;
+            margin-top: 2em;
+
+            .bookWrapper {
+                display: grid;
+                gap: 10px;
+                grid-template-columns: repeat(auto-fill, 175px);
+                margin-top: 10px;
+                overflow: auto;
+                max-height: 100%;
+
+                .book {
+                    border-radius: 0.25em;
+                    cursor: pointer;
+                    font-size: 10pt;
+                    height: 275px;
+                    margin-bottom: 8px;
+                    overflow: hidden;
+                    position: relative;
+                    transition: transform 200ms ease;
+                    user-select: none;
+                    border-radius: 0.25em;
+
+                    .cover {
+                        border-radius: 0.25em;
+                        height: 100%;
+
+                        img {
+                            height: 275px;
+                            border-radius: 0.25em;
+                            object-fit: cover;
+                        }
+                    }
+
+                    .info {
+                        background-color: #4489ffe3;
+                        border-radius: 0.25em;
+                        color: #fafafa;
+                        height: 100%;
+                        left: 0;
+                        opacity: 0;
+                        padding: 1em;
                         position: absolute;
-                        bottom: 1em;
+                        top: 0;
+                        transition: opacity 200ms ease-out,
+                            background-image 200ms ease-out,
+                            margin 200ms ease-out, transform 200ms ease-out;
+                        width: 100%;
+                        z-index: 1;
+                        transform: scale(1.05);
+
+                        &:hover {
+                            opacity: 1;
+                            transform: scale(1);
+                        }
+
+                        .title {
+                            font-weight: 700;
+                        }
+
+                        .author {
+                            margin-top: 5px;
+                        }
+
+                        .genreWrapper {
+                            margin-top: 10px;
+
+                            .genre {
+                                border: transparent;
+                                margin: 1px;
+                            }
+                        }
+
+                        .lastItems {
+                            position: absolute;
+                            bottom: 1em;
+                        }
                     }
                 }
-            }
 
-            .progress {
-                position: absolute;
-                bottom: 0;
-                z-index: 10;
+                .progress {
+                    position: absolute;
+                    bottom: 0;
+                    z-index: 10;
+                }
             }
         }
 

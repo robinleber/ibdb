@@ -1,8 +1,10 @@
 <template>
     <div :class="$style.signUp">
         <md-card :class="$style.signUpCard">
-            <img src="@/assets/logo.svg" :class="$style.logo" />
-            <div :class="$style.signUpTxt">Registrieren</div>
+            <img src="@/assets/img/logo.svg" :class="$style.logo" />
+            <div :class="$style.signUpTxt" class="md-display-1">
+                Registrieren
+            </div>
 
             <md-steppers :md-active-step.sync="activeStep">
                 <md-step
@@ -13,10 +15,7 @@
                     id="first"
                     md-label="Benutzerdaten"
                 >
-                    <form
-                        @keyup.enter="createUser()"
-                        novalidate
-                    >
+                    <form @keyup.enter="createUser()" novalidate>
                         <md-field>
                             <label>E-Mail</label>
                             <md-input
@@ -64,10 +63,7 @@
                     id="second"
                     md-label="Profil"
                 >
-                    <form
-                        @keyup.enter="completeSignUp()"
-                        novalidate
-                    >
+                    <form @keyup.enter="completeSignUp()" novalidate>
                         <div :class="$style.addProfilePicture">
                             <md-icon>face</md-icon>
                         </div>
@@ -97,7 +93,10 @@
 
             <md-divider v-if="activeStep != 'second'" />
 
-            <div v-if="activeStep != 'second'" :class="$style.alreadyAMemberTxt">
+            <div
+                v-if="activeStep != 'second'"
+                :class="$style.alreadyAMemberTxt"
+            >
                 Du hast schon einen Account?
                 <br />
                 <el-link :underline="false" @click="$router.replace('Login')"

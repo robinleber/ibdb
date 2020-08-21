@@ -5,12 +5,6 @@
     padding: 0;
 }
 
-a {
-    color: black;
-    font-family: "Roboto Regular", sans-serif;
-    text-decoration: none;
-}
-
 .home {
     padding: 1em 1em 0 1em;
     overflow: hidden;
@@ -28,50 +22,15 @@ a {
         }
 
         .navBar {
-            font-family: "Yantramanav Regular";
             position: relative;
             user-select: none;
             width: 100%;
-
-            .navItem {
-                align-items: center;
-                display: flex;
-                height: 40px;
-                user-select: none;
-                font-size: 12pt;
-
-                &[class="is-active"] {
-                    border: none !important;
-                    background-color: red;
-                }
-
-                &:hover {
-                    background-color: transparent !important;
-                }
-
-                + .navItem {
-                    margin-left: 15px;
-                }
-
-                i {
-                    margin-right: 10px;
-                }
-            }
-
-            .searchInput {
-                width: 400px;
-                margin-left: 20px;
-            }
 
             .lastItem {
                 align-items: center;
                 display: flex;
                 position: absolute;
                 right: 0;
-
-                span {
-                    margin-right: 20px;
-                }
 
                 .avatarContent {
                     position: relative;
@@ -84,14 +43,20 @@ a {
         .msg {
             position: absolute;
             right: 100px;
-            font-family: "Yantramanav Regular";
+            color: #fafafa;
+            text-transform: uppercase;
             font-size: 14pt;
+
+            .sub {
+                font-size: 10pt;
+            }
         }
 
         .menuRipple {
+            background-color: #448aff;
             border-radius: 0 3px 3px 0;
-            max-width: 72px;
             min-width: 72px;
+            max-width: 72px;
 
             .avatar {
                 cursor: pointer;
@@ -105,6 +70,7 @@ a {
     }
 
     .routerView {
-        height: calc(100vh - 100px);
+        height: calc(100vh - 90px);
+        width: calc(100vw - 50px);
     }
 }

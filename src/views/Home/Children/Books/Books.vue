@@ -1,16 +1,19 @@
 <template>
     <div :class="$style.books">
-        <md-card :class="$style.filter" style="margin-top: 1em; height: 80vh;">
+        <md-card :class="$style.filter">
             <md-card-header :class="$style.filterHeader">
-                <md-icon :class="$style.filterIcon">filter_alt</md-icon>
-                <span :class="$style.filterTitle" class="md-title"
-                    >Bücher filtern</span
-                >
+                <md-card class="md-primary" :class="$style.filterHeaderCard">
+                    <md-icon :class="$style.filterIcon">filter_alt</md-icon>
+                    <br />
+                    <span class="md-subheading" :class="$style.filterTxt"
+                        >Filter</span
+                    >
+                </md-card>
             </md-card-header>
             <md-card-content :class="$style.filterContent">
-                <md-field class="md-accent">
+                <md-field>
                     <label>Suche</label>
-                    <md-input></md-input>
+                    <md-input v-model="filter" />
                 </md-field>
                 <md-field>
                     <label>Genre</label>
@@ -26,7 +29,12 @@
                 </md-field>
                 <md-field>
                     <label>Autoren</label>
-                    <md-select v-model="filters[1].value" multiple md-dense clearable>
+                    <md-select
+                        v-model="filters[1].value"
+                        multiple
+                        md-dense
+                        clearable
+                    >
                         <md-option
                             :key="index"
                             v-for="(author, index) in filters[1].children"
@@ -39,21 +47,40 @@
             </md-card-content>
         </md-card>
         <div :class="$style.mainView">
+            <md-empty-state
+                :class="$style.emptyState"
+                class="md-accent"
+                md-description="Du hast noch keine Bücher in deiner Bibliothek"
+                md-icon="collections_bookmark"
+                md-label="Gähnende Leere"
+                md-rounded
+                v-if="bookList.length < 1"
+            >
+                <md-button
+                    class="md-primary md md-raised"
+                    @click="showAddBookDialog()"
+                >
+                    <md-icon>library_add</md-icon>
+                    <span>&nbsp;Buch hinzufügen</span>
+                </md-button>
+            </md-empty-state>
+
             <div :class="$style.fnBar" v-if="bookList.length > 0">
                 <md-button
-                    class="md-primary md-raised"
+                    :class="$style.addBookBtn"
+                    class="md-accent md-raised"
                     @click="showAddBookDialog()"
                 >
                     <md-icon>library_add</md-icon>
                     <span>&nbsp;Buch hinzufügen</span>
                 </md-button>
 
-                <md-menu :md-offset-x="0" :md-offset-y="10">
-                    <md-button
-                        class="md-raised md-primary"
-                        md-menu-trigger
-                        style="margin-top: 6px; margin-right: 8px;"
-                    >
+                <md-menu
+                    :md-offset-x="0"
+                    :md-offset-y="10"
+                    :class="$style.sortBtn"
+                >
+                    <md-button class="md-raised md-accent" md-menu-trigger>
                         <md-icon>filter_list</md-icon>
                         <span>&nbsp;Sortieren</span>
                     </md-button>
@@ -110,32 +137,21 @@
                         </md-menu-item>
                     </md-menu-content>
                 </md-menu>
-
-                <span v-if="filters[0].value != '' || filters[1].value != '' || filters[2].value != ''" :class="$style.filteredTxt">
-                    * gefiltert *
-                </span>
             </div>
-
-            <md-empty-state
-                :class="$style.emptyState"
-                class="md-accent"
-                md-description="Du hast noch keine Bücher in deiner Bibliothek"
-                md-icon="collections_bookmark"
-                md-label="Gähnende Leere"
-                md-rounded
-                v-if="bookList.length < 1"
+            <span
+                v-if="
+                    filter != '' ||
+                        filters[0].value != '' ||
+                        filters[1].value != '' ||
+                        filters[2].value != ''
+                "
+                :class="$style.filteredTxt"
             >
-                <md-button
-                    class="md-primary md md-raised"
-                    @click="showAddBookDialog()"
-                >
-                    <md-icon>library_add</md-icon>
-                    <span>&nbsp;Buch hinzufügen</span>
-                </md-button>
-            </md-empty-state>
+                * gefiltert *
+            </span>
 
             <md-content
-                :class="$style.bookWrapper"
+                :class="$style.bookCard"
                 v-if="bookList.length > 0"
                 class="md-scrollbar"
             >
@@ -147,6 +163,7 @@
                         )}%`
                     "
                     :key="index"
+                    :class="$style.bookWrapper"
                     effect="light"
                     v-for="(book, index) in bookList"
                 >

@@ -6,8 +6,8 @@
             novalidate
         >
             <md-card :class="$style.loginCard" class="md-layout-item">
-                <img src="@/assets/logo.svg" :class="$style.logo" />
-                <div :class="$style.loginText">Login</div>
+                <img src="@/assets/img/logo.svg" :class="$style.logo" />
+                <div :class="$style.loginText" class="md-display-1">Login</div>
 
                 <md-card-content :class="$style.content">
                     <md-field>
@@ -29,7 +29,11 @@
                             v-model="signIn.pass"
                         />
                     </md-field>
-                    <el-link :underline="false" @click="resetPass()" :class="$style.forgotPass">
+                    <el-link
+                        :underline="false"
+                        @click="resetPass()"
+                        :class="$style.forgotPass"
+                    >
                         Passwort vergessen?
                     </el-link>
                     <md-checkbox :class="$style.rememberMe" v-model="rememberMe"

@@ -12,7 +12,7 @@
         >
             <img
                 :class="$style.logo"
-                src="@/assets/logo_no_borders.svg"
+                src="@/assets/img/logo_no_borders.svg"
                 style="margin-left: 10px"
             />
             <el-menu-item index="1" :class="$style.navItem" route="Dashboard">
@@ -50,7 +50,7 @@
                             v-if="false"
                         />
                         <img
-                            src="@/assets/avatar_default.png"
+                            src="@/assets/img/avatar_default.png"
                             :class="$style.avatar"
                             md-menu-trigger
                             v-if="navBar.profileSrc"
@@ -75,14 +75,8 @@
             </div>
         </el-menu> -->
         <div :class="$style.menu" class="md-elevation-3">
-            <img
-                :class="$style.logo"
-                src="@/assets/logo_no_borders.svg"
-            />
-            <md-tabs
-                :class="$style.navBar"
-                md-sync-route
-            >
+            <img :class="$style.logo" src="@/assets/img/logo_no_borders.svg" />
+            <md-tabs :class="$style.navBar" md-sync-route>
                 <md-tab
                     id="tab-dashboard"
                     md-icon="dashboard"
@@ -108,7 +102,11 @@
                     to="Favorites"
                 />
             </md-tabs>
-            <span :class="$style.msg">Hallo, {{ username }}</span>
+            <span :class="$style.msg">
+                <span class="md-title"> Hallo, {{ username }} </span>
+                <br />
+                <span class="md-subheading" :class="$style.sub">Willkommen zurück</span>
+            </span>
             <md-ripple :class="$style.menuRipple" class="md-elevation-3">
                 <md-menu
                     :md-offset-x="0"
@@ -117,14 +115,10 @@
                 >
                     <img
                         md-menu-trigger
-                        src="@/assets/avatar.png"
+                        src="@/assets/img/avatar.png"
                         v-if="navBar.profileSrc != ''"
                     />
-                    <img
-                        :src="navBar.profileSrc"
-                        md-menu-trigger
-                        v-else
-                    />
+                    <img :src="navBar.profileSrc" md-menu-trigger v-else />
 
                     <md-menu-content>
                         <md-menu-item @click="$router.replace('profile')">

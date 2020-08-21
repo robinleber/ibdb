@@ -10,4 +10,7 @@
 
 <script lang="ts" src="./App.ts"></script>
 
+<style lang="scss" src="./themes/default.scss">
+</style>
+
 <style lang="scss" src="./App.scss"></style>
