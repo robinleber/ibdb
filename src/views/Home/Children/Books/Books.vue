@@ -54,7 +54,7 @@
                 md-icon="collections_bookmark"
                 md-label="Gähnende Leere"
                 md-rounded
-                v-if="bookList.length < 1"
+                v-if="bookList.length < 1 && !isLoading"
             >
                 <md-button
                     class="md-primary md md-raised"
@@ -64,6 +64,11 @@
                     <span>&nbsp;Buch hinzufügen</span>
                 </md-button>
             </md-empty-state>
+
+            <div :class="$style.loadingScreen" v-if="isLoading">
+                <md-progress-spinner md-mode="indeterminate" />
+                <span :class="$style.loadingMessage">Lade Bibliothek</span>
+            </div>
 
             <div :class="$style.fnBar" v-if="bookList.length > 0">
                 <md-button
@@ -151,7 +156,7 @@
             </span>
 
             <md-content
-                :class="$style.bookCard"
+                :class="$style.bookWrapper"
                 v-if="bookList.length > 0"
                 class="md-scrollbar"
             >
@@ -163,8 +168,8 @@
                         )}%`
                     "
                     :key="index"
-                    :class="$style.bookWrapper"
-                    effect="light"
+                    :class="$style.book"
+                    effect="dark"
                     v-for="(book, index) in bookList"
                 >
                     <md-card :class="$style.book">
@@ -173,7 +178,7 @@
                                 <md-card-media ratio="5:3">
                                     <img
                                         :src="
-                                            `https://pictures.abebooks.com/isbn/${isbnList[index]}-us.jpg`
+                                            `http://covers.openlibrary.org/b/isbn/${isbnList[index]}-L.jpg`
                                         "
                                     />
                                 </md-card-media>

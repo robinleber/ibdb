@@ -2,6 +2,8 @@
 import { Component, Vue, Prop } from "vue-property-decorator";
 import AddBookDialog from "@/components/AddBookDialog/AddBookDialog.vue";
 import { mainEventBus } from "@/components/mainEventBus.ts";
+import { validationMixin } from "vuelidate";
+import { between } from "vuelidate/lib/validators";
 
 @Component({
     components: {
@@ -9,31 +11,28 @@ import { mainEventBus } from "@/components/mainEventBus.ts";
     },
 })
 export default class Books extends Vue {
-    @Prop()
-    label = "name";
-    children = "zones";
-    isLeaf = "leaf";
+    isLoading = false;
 
     // Google API Authentification Key
     readonly AUTH_KEY = "AIzaSyBgOAglMk-N5JQWU6BYRuo5GpyXZKOSRD8";
 
     isbnList = [
-        // "9783734162121",
-        // "9783734162145",
-        // "9783734162169",
-        // "9783734162190",
-        // "3551551677",
-        // "3551354022",
-        // "3551551693",
-        // "3551551936",
-        // "9783551354051",
-        // "9783551354068",
-        // "9783551354075",
-        // "9781983699748",
-        // "1983699748",
-        // "9783608939811",
-        // "9783608939828",
-        // "9783608939835",
+        "9783734162121",
+        "9783734162145",
+        "9783734162169",
+        "9783734162190",
+        "3551551677",
+        "3551354022",
+        "3551551693",
+        "3551551936",
+        "9783551354051",
+        "9783551354068",
+        "9783551354075",
+        "9781983699748",
+        "1983699748",
+        "9783608939811",
+        "9783608939828",
+        "9783608939835",
     ];
 
     // Set Booklist array structure
@@ -165,34 +164,9 @@ export default class Books extends Vue {
         },
     ];
 
-    // label: "Genre",
-    // label: "Autor",
-    // label: "Seitenzahl",
-
-    loadNode(node: any, resolve: any) {
-        if (node.level === 0) {
-            return resolve([{ name: "region" }]);
-        }
-        if (node.level > 1) return resolve([]);
-
-        setTimeout(() => {
-            const data = [
-                {
-                    name: "leaf",
-                    leaf: true,
-                },
-                {
-                    name: "zone",
-                },
-            ];
-
-            resolve(data);
-        }, 500);
-    }
-
     async getBook() {
         // Show loading screen
-        mainEventBus.$emit("changeMainLoading", true, "Lade Bibliothek");
+        this.isLoading = true;
 
         // Clear Booklist while keeping array structure
         this.bookList = [];
@@ -208,12 +182,12 @@ export default class Books extends Vue {
                         // Add book to bookList
                         this.bookList.push(response.data.items[0].volumeInfo);
                     })
-                    .catch((e) => console.error(console.trace(e)));
+                    .catch((e) => console.error(`Error: ${e.message}`));
             }
         }
 
         // Hide loading screen
-        mainEventBus.$emit("changeMainLoading", false, "");
+        // this.isLoading = false;
     }
 
     beforeMount(): void {

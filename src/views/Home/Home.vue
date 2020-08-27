@@ -76,7 +76,7 @@
         </el-menu> -->
         <div :class="$style.menu" class="md-elevation-3">
             <img :class="$style.logo" src="@/assets/img/logo_no_borders.svg" />
-            <md-tabs :class="$style.navBar" md-sync-route>
+            <md-tabs :class="$style.navBar" md-sync-route class="md-primary">
                 <md-tab
                     id="tab-dashboard"
                     md-icon="dashboard"

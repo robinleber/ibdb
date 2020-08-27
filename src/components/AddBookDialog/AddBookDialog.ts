@@ -6,17 +6,6 @@ export default class AddBookDialog extends Vue {
     isAddBookDialogVisible = false;
     isbnInput = "9783608939811";
     activeStep = "first";
-    steps = [
-        {
-            step: false,
-        },
-        {
-            step: false,
-        },
-        {
-            step: false,
-        },
-    ];
 
     bookInfo = {
         kind: "books#volume",
@@ -96,14 +85,17 @@ export default class AddBookDialog extends Vue {
     }
 
     setDone(id: number, index: string): void {
-        this.steps[id].step = true;
-
         if (index) this.activeStep = index;
     }
 
     cancel(): void {
-        this.isbnInput = "";
         this.isAddBookDialogVisible = false;
+    }
+
+    clearDialog(): void {
+        this.isbnInput = "";
+        this.activeStep = "first";
+        this.bookInfo = this.bookInfoStructure;
     }
 
     mounted(): void {
@@ -111,19 +103,5 @@ export default class AddBookDialog extends Vue {
             this.isAddBookDialogVisible = true;
             this.clearDialog();
         });
-    }
-
-    clearDialog(): void {
-        this.isbnInput = "";
-        this.activeStep = "first";
-        this.steps = [
-            {
-                step: false,
-            },
-            {
-                step: false,
-            },
-        ];
-        this.bookInfo = this.bookInfoStructure;
     }
 }

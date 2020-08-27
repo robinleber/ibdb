@@ -48,6 +48,12 @@ firebase.initializeApp(firebaseConfig);
 // Export database-configuration
 export const db = firebase.firestore();
 
+/**
+ * Import Vuelidate
+ */
+import Vuelidate from "vuelidate";
+Vue.use(Vuelidate);
+
 Vue.config.productionTip = false;
 
 new Vue({

@@ -2,6 +2,7 @@
     <div :class="$style.login">
         <form
             @keyup.enter="login()"
+            @submit.prevent="login()"
             class="md-layout md-elevation-10"
             novalidate
         >
@@ -10,29 +11,40 @@
                 <div :class="$style.loginText" class="md-display-1">Login</div>
 
                 <md-card-content :class="$style.content">
-                    <md-field>
+                    <md-field :class="getValidationClass('email')">
                         <label>E-Mail</label>
                         <md-input
-                            type="email"
-                            id="email"
                             autocomplete="email"
+                            clearable
+                            id="email"
+                            type="email"
                             v-model="signIn.email"
                         />
+                        <span class="md-error" v-if="!$v.signIn.email.required">
+                            E-Mail erforderlich
+                        </span>
+                        <span class="md-error" v-if="!$v.signIn.email.email">
+                            E-Mail ist ungültig
+                        </span>
                     </md-field>
 
-                    <md-field>
+                    <md-field :class="getValidationClass('pass')">
                         <label>Passwort</label>
                         <md-input
-                            type="password"
-                            id="password"
                             autocomplete="password"
+                            clearable
+                            id="password"
+                            type="password"
                             v-model="signIn.pass"
                         />
+                        <span class="md-error" v-if="!$v.signIn.pass.required">
+                            Passwort erforderlich
+                        </span>
                     </md-field>
                     <el-link
+                        :class="$style.forgotPass"
                         :underline="false"
                         @click="resetPass()"
-                        :class="$style.forgotPass"
                     >
                         Passwort vergessen?
                     </el-link>
@@ -48,17 +60,17 @@
 
                 <md-card-actions :class="$style.btnGrp">
                     <md-button
-                        class="md-primary md-raised"
-                        @click="login()"
                         :class="$style.loginBtn"
+                        @click="login()"
+                        class="md-primary md-raised"
                         >Anmelden</md-button
                     >
                 </md-card-actions>
                 <div :class="$style.loginWithTxt">Oder anmelden mit</div>
                 <md-card-actions :class="$style.socialBtnGrp">
                     <md-button
-                        class="md-accent md-raised"
                         :class="$style.googleBtn"
+                        class="md-accent md-raised"
                     >
                         <i class="fab fa-google" />
                         &nbsp;Google

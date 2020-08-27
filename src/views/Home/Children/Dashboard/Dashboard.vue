@@ -14,7 +14,7 @@
                     class="md-elevation-0"
                     :class="[$style.card, $style.bookCount]"
                 >
-                    <md-card-header>
+                    <md-card-header :class="$style.header" class="md-elevation-3s">
                         <md-card-header-text>
                             <div class="md-title">Bücher</div>
                             <div class="md-subhead">Anzahl Bücher</div>
@@ -33,7 +33,7 @@
                     class="md-elevation-0"
                     :class="[$style.card, $style.pagesRead]"
                 >
-                    <md-card-header>
+                    <md-card-header :class="$style.header" class="md-elevation-3s">
                         <md-card-header-text>
                             <div class="md-title">Seiten</div>
                             <div class="md-subhead">Seiten gelesen</div>
@@ -50,7 +50,7 @@
                     class="md-elevation-0"
                     :class="[$style.card, $style.booksRead]"
                 >
-                    <md-card-header>
+                    <md-card-header :class="$style.header" class="md-elevation-3s">
                         <md-card-header-text>
                             <div class="md-title">Bücher</div>
                             <div class="md-subhead">Bücher gelesen</div>

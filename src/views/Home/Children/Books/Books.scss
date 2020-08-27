@@ -36,6 +36,27 @@
 
     .mainView {
         height: 100%;
+        position: relative;
+        margin-top: 1em;
+
+        .loadingScreen {
+            align-items: center;
+            backdrop-filter: blur(6px);
+            background-color: #fffb;
+            border-radius: 3px;
+            display: flex;
+            flex-direction: column;
+            height: 96.7%;
+            justify-content: center;
+            position: absolute;
+            top: 0;
+            width: 100%;
+            z-index: 999;
+
+            .loadingMessage {
+                margin-top: 20px;
+            }
+        }
 
         .emptyState {
             margin-top: 10%;
@@ -45,112 +66,93 @@
             }
         }
 
-                    .fnBar {
-                        position: relative;
+        .fnBar {
+            position: relative;
+            left: 0 !important;
+            top: 0 !important;
+        }
 
-                        .addBookBtn,
-                        .sortBtn {
-                            position: absolute;
-                        }
-
-                        .addBookBtn {
-                            bottom: 9px;
-                            left: -10px !important;
-                        }
-
-                        .sortBtn {
-                            bottom: 15px;
-                            left: 180px;
-                        }
-                    }
-
-        .bookCard {
+        .bookWrapper {
             background: none !important;
-            height: 89.2%;
-            margin-top: 2em;
+            display: grid;
+            gap: 10px;
+            grid-template-columns: repeat(auto-fill, 175px);
+            max-height: 100%;
+            overflow: auto;
 
-            .bookWrapper {
-                display: grid;
-                gap: 10px;
-                grid-template-columns: repeat(auto-fill, 175px);
-                margin-top: 10px;
-                overflow: auto;
-                max-height: 100%;
+            .book {
+                border-radius: 0.25em;
+                cursor: pointer;
+                font-size: 10pt;
+                height: 275px;
+                margin-bottom: 8px;
+                overflow: hidden;
+                position: relative;
+                transition: transform 200ms ease;
+                user-select: none;
+                border-radius: 0.25em;
 
-                .book {
+                .cover {
                     border-radius: 0.25em;
-                    cursor: pointer;
-                    font-size: 10pt;
-                    height: 275px;
-                    margin-bottom: 8px;
-                    overflow: hidden;
-                    position: relative;
-                    transition: transform 200ms ease;
-                    user-select: none;
-                    border-radius: 0.25em;
+                    height: 100%;
 
-                    .cover {
+                    img {
+                        height: 275px;
                         border-radius: 0.25em;
-                        height: 100%;
-
-                        img {
-                            height: 275px;
-                            border-radius: 0.25em;
-                            object-fit: cover;
-                        }
-                    }
-
-                    .info {
-                        background-color: #4489ffe3;
-                        border-radius: 0.25em;
-                        color: #fafafa;
-                        height: 100%;
-                        left: 0;
-                        opacity: 0;
-                        padding: 1em;
-                        position: absolute;
-                        top: 0;
-                        transition: opacity 200ms ease-out,
-                            background-image 200ms ease-out,
-                            margin 200ms ease-out, transform 200ms ease-out;
-                        width: 100%;
-                        z-index: 1;
-                        transform: scale(1.05);
-
-                        &:hover {
-                            opacity: 1;
-                            transform: scale(1);
-                        }
-
-                        .title {
-                            font-weight: 700;
-                        }
-
-                        .author {
-                            margin-top: 5px;
-                        }
-
-                        .genreWrapper {
-                            margin-top: 10px;
-
-                            .genre {
-                                border: transparent;
-                                margin: 1px;
-                            }
-                        }
-
-                        .lastItems {
-                            position: absolute;
-                            bottom: 1em;
-                        }
+                        object-fit: cover;
                     }
                 }
 
-                .progress {
+                .info {
+                    background-color: #4489ffe3;
+                    border-radius: 0.25em;
+                    color: #fafafa;
+                    height: 100%;
+                    left: 0;
+                    opacity: 0;
+                    padding: 1em;
                     position: absolute;
-                    bottom: 0;
-                    z-index: 10;
+                    top: 0;
+                    transform: scale(1.05);
+                    transition: opacity 200ms ease-out background-image 200ms
+                            ease-out,
+                        margin 200ms ease-out, transform 200ms ease-out;
+                    width: 100%;
+                    z-index: 1;
+
+                    &:hover {
+                        opacity: 1;
+                        transform: scale(1);
+                    }
+
+                    .title {
+                        font-weight: 700;
+                    }
+
+                    .author {
+                        margin-top: 5px;
+                    }
+
+                    .genreWrapper {
+                        margin-top: 10px;
+
+                        .genre {
+                            border: transparent;
+                            margin: 1px;
+                        }
+                    }
+
+                    .lastItems {
+                        position: absolute;
+                        bottom: 1em;
+                    }
                 }
+            }
+
+            .progress {
+                position: absolute;
+                bottom: 0;
+                z-index: 10;
             }
         }
 

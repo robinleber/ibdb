@@ -27,49 +27,80 @@
         }
 
         .signUpTxt {
-            color: #424242;
             margin-bottom: 40px;
-            margin-top: 90px;
+            margin-top: 80px;
             text-align: center;
             text-transform: uppercase;
         }
 
-        .firstStep {
-            .createAccountBtn {
-                width: 80%;
-                margin: 0 10% 15px 0;
-            }
+        .steps {
+            margin-top: -10px;
 
-            .cardActions {
-                padding: 0;
-            }
-        }
+            .firstStep {
+                .createAccountBtn {
+                    width: 80%;
+                    margin: 0 10% 15px 0;
+                }
 
-        .secondStep {
-            text-align: center;
-
-            .addProfilePicture {
-                border: dashed #0000008a 5px;
-                height: 150px;
-                width: 150px;
-                display: flex;
-                margin-left: 50px;
-
-                i {
-                    font-size: 50pt !important;
+                .cardActions {
+                    padding: 0;
                 }
             }
 
-            .cardActions {
-                display: flex;
-                justify-content: stretch;
-                padding: 0;
-                margin-bottom: 15px;
+            .secondStep {
+                text-align: center;
 
-                .completeBtn {
-                    width: 80%;
+                .profilePictureBorder {
+                    border: dashed #757575 5px;
+                }
+
+                .addProfilePicture {
+                    height: 150px;
+                    margin-left: 52px;
                     position: relative;
-                    left: 10%;
+                    width: 150px;
+
+                    .imageLoadingOverlay {
+                        align-items: center;
+                        background-color: #fafafaaa;
+                        display: flex;
+                        height: 100%;
+                        justify-content: center;
+                        position: absolute;
+                        width: 100%;
+                        z-index: 11;
+                    }
+
+                    .face {
+                        font-size: 50pt !important;
+                        position: absolute;
+                        left: 35%;
+                        top: 35%;
+                    }
+
+                    .add {
+                        background-color: #fff;
+                        box-sizing: content-box;
+                        font-size: 30pt !important;
+                        left: 50%;
+                        padding: 7px;
+                        position: absolute;
+                        top: 50%;
+                        z-index: 10;
+                    }
+                }
+
+                .cardActions {
+                    display: flex;
+                    justify-content: stretch;
+                    padding: 0;
+                    margin-bottom: 15px;
+
+                    .completeBtn {
+                        width: 80%;
+                        position: relative;
+                        left: 10%;
+                    }
                 }
             }
         }

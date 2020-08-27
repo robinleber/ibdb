@@ -15,7 +15,7 @@ Vue.use(VueRouter);
 const routes: Array<RouteConfig> = [
     {
         path: "*",
-        redirect: "/login",
+        redirect: "Login",
     },
     {
         path: "/",
@@ -25,7 +25,7 @@ const routes: Array<RouteConfig> = [
         path: "/home",
         redirect: "Dashboard",
         meta: {
-            requiresAuth: false,
+            requiresAuth: true,
         },
         children: [
             {
@@ -66,7 +66,7 @@ const routes: Array<RouteConfig> = [
     },
     {
         path: "/signUp",
-        name: "signUp",
+        name: "SignUp",
         meta: {
             requiresAuth: false,
         },
