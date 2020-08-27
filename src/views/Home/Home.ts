@@ -5,15 +5,28 @@ import firebase from "firebase";
 
 @Component
 export default class Home extends Vue {
-    username = firebase.auth().currentUser?.displayName;
-
-    navBar = {
-        search: "",
-        profileSrc: "@/assets/img/avatar.png",
-    };
+    username: any;
+    profileSrc: any = null;
 
     mounted() {
         mainEventBus.$emit("changeMainLoading", false, "");
+        this.getProfileImage();
+        this.username = firebase.auth().currentUser.displayName;
+    }
+
+    getProfileImage(): void {
+        const user = firebase.auth().currentUser;
+
+        // Create a reference with an initial file path and name
+        let storage = firebase.storage();
+        let pathRef = storage.ref(`profileImages/${user.uid}_${user.displayName.toLowerCase()}-profileImage`);
+
+        // Get the download URL
+        pathRef.getDownloadURL()
+        .then(url => this.profileSrc = url)
+        .catch(function(e) {
+            console.error(`Error: ${e.message}`);
+        })
     }
 
     logout(): void {

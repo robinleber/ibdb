@@ -84,11 +84,11 @@ export default class Login extends Vue {
     }
 
     pickImage() {
-        this.$refs.imageInput.$el.click();
-        this.isImageLoading = true;
+        this.$refs.imageInput.click();
     }
 
     onImagePicked(e: any) {
+        this.isImageLoading = true;
         const files = e.target.files;
         if (files[0] !== undefined) {
             this.imageName = files[0].name;
@@ -149,25 +149,26 @@ export default class Login extends Vue {
                             // When username-update was successfull
                             .then(() => {
                                 // Upload image to firebase-storage
+
+                                // Create storage reference
                                 const ref = firebase.storage().ref();
+
+                                // Get metadata
                                 const metaData = {
                                     contentType: this.imageFile.type,
                                 };
+
                                 // Set imageName => userUID + userNAME + profileImage
                                 this.imageName = `${
                                     firebase.auth().currentUser.uid
-                                }_${
-                                    firebase.auth().currentUser.displayName.toLowerCase()
-                                    }-profileImage`;
-                                const task = ref
-                                    .child(this.imageName)
-                                    .put(this.imageFile, metaData);
+                                }_${firebase
+                                    .auth()
+                                    .currentUser.displayName.toLowerCase()}-profileImage`;
 
-                                task.then((snapshot) =>
-                                    snapshot.ref.getDownloadURL()
-                                ).then((url) => {
-                                    console.log(url);
-                                });
+                                // Upload image
+                                ref.child(
+                                    `profileImages/${this.imageName}`
+                                ).put(this.imageFile, metaData);
 
                                 // Hide loading screen
                                 mainEventBus.$emit(
@@ -176,13 +177,13 @@ export default class Login extends Vue {
                                     ""
                                 );
 
-                                // Go to home
-                                this.$router.replace("Home");
-
                                 // Show success message
                                 Message.success(
                                     `Account erfolgreich erstellt. Herzlich Willkommen!`
                                 );
+
+                                // Go to home
+                                this.$router.replace("Home");
                             })
                             // When username-update was unsuccessfull
                             .catch((e: any) => {

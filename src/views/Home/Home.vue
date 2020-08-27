@@ -34,7 +34,7 @@
                 role="search"
             >
                 <label>Suchen</label>
-                <md-input v-model="navBar.search" />
+                <md-input v-model="search" />
             </md-field>
             <md-button class="md-icon-button md-primary md md-raised">
                 <md-icon>search</md-icon>
@@ -44,7 +44,7 @@
                 <md-ripple :class="$style.avatarContent">
                     <md-menu :md-offset-x="0" :md-offset-y="10">
                         <img
-                            :src="navBar.profileSrc"
+                            :src="profileSrc"
                             :class="$style.avatar"
                             md-menu-trigger
                             v-if="false"
@@ -53,7 +53,7 @@
                             src="@/assets/img/avatar_default.png"
                             :class="$style.avatar"
                             md-menu-trigger
-                            v-if="navBar.profileSrc"
+                            v-if="profileSrc"
                         />
 
                         <md-menu-content>
@@ -105,7 +105,9 @@
             <span :class="$style.msg">
                 <span class="md-title"> Hallo, {{ username }} </span>
                 <br />
-                <span class="md-subheading" :class="$style.sub">Willkommen zurück</span>
+                <span class="md-subheading" :class="$style.sub"
+                    >Willkommen zurück</span
+                >
             </span>
             <md-ripple :class="$style.menuRipple" class="md-elevation-3">
                 <md-menu
@@ -115,10 +117,10 @@
                 >
                     <img
                         md-menu-trigger
-                        src="@/assets/img/avatar.png"
-                        v-if="navBar.profileSrc != ''"
+                        src="@/assets/img/avatar_default.png"
+                        v-if="!profileSrc"
                     />
-                    <img :src="navBar.profileSrc" md-menu-trigger v-else />
+                    <img :src="profileSrc" md-menu-trigger v-else />
 
                     <md-menu-content>
                         <md-menu-item @click="$router.replace('profile')">
