@@ -31,6 +31,7 @@
                                 autocomplete="email"
                                 autofocus
                                 id="email"
+                                ref="emailInput"
                                 type="email"
                                 v-model="signUp.email"
                             />
@@ -154,9 +155,18 @@
                             </md-icon>
                             <img
                                 :src="imageUrl"
-                                v-if="imageUrl"
+                                :title="imageName"
                                 class="md-elevation-3"
+                                v-if="imageUrl"
                             />
+                            <md-button
+                                :class="$style.deleteImageBtn"
+                                @click="imageUrl = null"
+                                class="md-accent md-fab md-raised md-dense"
+                                v-if="imageUrl"
+                            >
+                                <md-icon>delete</md-icon>
+                            </md-button>
                         </div>
                         <md-button
                             class="md-raised md-primary"
@@ -178,6 +188,7 @@
                                 autocomplete="given-name"
                                 type="text"
                                 v-model="profile.user"
+                                ref="nameInput"
                             />
                             <span
                                 class="md-error"

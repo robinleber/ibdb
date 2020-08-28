@@ -48,12 +48,12 @@
                     >
                         Passwort vergessen?
                     </el-link>
-                    <md-checkbox :class="$style.rememberMe" v-model="rememberMe"
+                    <md-checkbox :class="$style.rememberMe" v-model="signIn.rememberMe"
                         >E-Mail-Adresse merken</md-checkbox
                     >
                     <md-checkbox
                         :class="$style.stayLoggedIn"
-                        v-model="stayLoggedIn"
+                        v-model="signIn.remainLoggedIn"
                         >Angemeldet bleiben</md-checkbox
                     >
                 </md-card-content>

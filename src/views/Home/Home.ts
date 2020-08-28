@@ -5,8 +5,8 @@ import firebase from "firebase";
 
 @Component
 export default class Home extends Vue {
-    username: any;
-    profileSrc: any = null;
+    username: any = null;
+    profileUrl: any = null;
 
     mounted() {
         mainEventBus.$emit("changeMainLoading", false, "");
@@ -19,11 +19,11 @@ export default class Home extends Vue {
 
         // Create a reference with an initial file path and name
         let storage = firebase.storage();
-        let pathRef = storage.ref(`profileImages/${user.uid}_${user.displayName.toLowerCase()}-profileImage`);
+        let pathRef = storage.ref(`profileImages/${user.uid}_${user.displayName.toLowerCase()}`);
 
         // Get the download URL
         pathRef.getDownloadURL()
-        .then(url => this.profileSrc = url)
+        .then(url => this.profileUrl = url)
         .catch(function(e) {
             console.error(`Error: ${e.message}`);
         })

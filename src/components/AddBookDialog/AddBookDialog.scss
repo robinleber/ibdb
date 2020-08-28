@@ -5,6 +5,7 @@
                 padding: 1em;
                 display: flex;
                 align-items: center;
+                justify-content: center;
                 flex-direction: column;
 
                 .scanIsbnBtnContainer {
@@ -26,6 +27,32 @@
 
                 .submitIsbnBtn {
                     width: 100%;
+                }
+
+                .isbnList {
+                    .listContent {
+                        max-height: 150px;
+                        overflow: auto;
+                        padding-right: 15px;
+
+                        .listItem {
+                            display: flex;
+                            justify-content: space-between;
+                            width: 250px;
+
+                            + .listItem {
+                                border-top: 1px solid lightgray;
+                            }
+
+                            .selectIsbnBtn{
+                                font-size: 12pt;
+                            }
+
+                            .deleteItemBtn {
+                                width: 10px !important;
+                            }
+                        }
+                    }
                 }
             }
         }

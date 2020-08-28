@@ -187,7 +187,7 @@ export default class Books extends Vue {
         }
 
         // Hide loading screen
-        // this.isLoading = false;
+        this.isLoading = false;
     }
 
     beforeMount(): void {

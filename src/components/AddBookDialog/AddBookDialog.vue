@@ -4,36 +4,38 @@
         <md-steppers :class="$style.stepper" md-alternative>
             <md-step :class="$style.firstStep" id="first" md-label="ISBN">
                 <div class="md-layout">
-                    <div class="md-layout-item">
-                        <div
-                            md-dynamic-height
-                            :class="$style.scanIsbnBtnContainer"
-                        >
-                            <label :class="$style.isbnInputLabel"
-                                >ISBN einscannen</label
-                            >
-                            <md-button
-                                name="scanIsbnBtn"
-                                class="md-accent md-raised"
-                                :class="$style.scanIsbnBtn"
-                            >
-                                <i class="fas fa-barcode" />
-                            </md-button>
-                        </div>
-                    </div>
-                    <div class="md-layout-item">
+                    <div
+                        class="md-layout-item"
+                        style="border-right: 1px solid darkgray"
+                    >
                         <md-field :class="$style.isbnInputField">
                             <label>ISBN</label>
                             <md-input @input="isNumber()" v-model="isbnInput" />
                         </md-field>
-                        <md-button
-                            :class="$style.submitIsbnBtn"
-                            @click="setDone(0, 'second')"
-                            class="md-raised md-primary"
-                            :disabled="isbnInput == ''"
-                        >
-                            <md-icon>check</md-icon>Bestätigen
-                        </md-button>
+                    </div>
+                    <div class="md-layout-item">
+                        <md-list :class="$style.isbnList">
+                            <md-content
+                                :class="$style.listContent"
+                                class="md-scrollbar"
+                            >
+                                <md-list-item
+                                    :class="$style.listItem"
+                                    :key="item"
+                                    v-for="item in 10"
+                                >
+                                    <md-button class="md-primary md-dense" :class="$style.selectIsbnBtn"
+                                        >9783608939811</md-button
+                                    >
+                                    <md-button
+                                        :class="$style.deleteItemBtn"
+                                        class="md-accent md-dense md-icon-button"
+                                    >
+                                        <md-icon>delete</md-icon>
+                                    </md-button>
+                                </md-list-item>
+                            </md-content>
+                        </md-list>
                     </div>
                 </div>
             </md-step>

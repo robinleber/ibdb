@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { Component, Vue } from "vue-property-decorator";
+import { Component, Vue, Watch } from "vue-property-decorator";
 import { mainEventBus } from "@/components/mainEventBus.ts";
 import firebase from "firebase";
 import { Message } from "element-ui";
@@ -37,6 +37,10 @@ import {
     },
 })
 export default class Login extends Vue {
+    /**
+     * Data
+     */
+
     // SignUp-Form
     signUp = {
         email: "",
@@ -68,6 +72,17 @@ export default class Login extends Vue {
         },
     ];
 
+    // Cast imageInput as HTML-Element !IMPORTANT!
+    $refs!: {
+        imageInput: HTMLFormElement;
+        nameInput: HTMLFormElement;
+        emailInput: HTMLFormElement;
+    };
+
+    /**
+     * Methods
+     */
+
     nextStep(): void {
         // Check signUp-form
         this.$v.signUp.$touch();
@@ -84,31 +99,42 @@ export default class Login extends Vue {
     }
 
     pickImage() {
+        // Focus on file-input for profile-image
         this.$refs.imageInput.click();
     }
 
     onImagePicked(e: any) {
+        // Hide loading-screen
         this.isImageLoading = true;
+
+        // Get selected files
         const files = e.target.files;
         if (files[0] !== undefined) {
+            // Get file-name
             this.imageName = files[0].name;
+
+            // Check file-format
             if (this.imageName.lastIndexOf(".") <= 0) {
                 Message.error("Keine gültige Datei!");
                 return;
             }
+
+            // Get image-url
             const fr = new FileReader();
             fr.addEventListener("load", () => {
                 this.imageUrl = fr.result;
             });
+
+            // Get image-file
             fr.readAsDataURL(files[0]);
             this.imageFile = files[0];
         }
 
-        this.isImageLoading = false;
-    }
+        // Clear imageInput
+        e.target.files = null;
 
-    mounted() {
-        console.log(this.$refs);
+        // Hide loading-screen
+        this.isImageLoading = false;
     }
 
     createAccount(): void {
@@ -158,14 +184,14 @@ export default class Login extends Vue {
                                     contentType: this.imageFile.type,
                                 };
 
-                                // Set imageName => userUID + userNAME + profileImage
+                                // Set imageName => userUID _ userNAME
                                 this.imageName = `${
                                     firebase.auth().currentUser.uid
                                 }_${firebase
                                     .auth()
-                                    .currentUser.displayName.toLowerCase()}-profileImage`;
+                                    .currentUser.displayName.toLowerCase()}`;
 
-                                // Upload image
+                                // Upload image to "profileImages"
                                 ref.child(
                                     `profileImages/${this.imageName}`
                                 ).put(this.imageFile, metaData);
@@ -244,5 +270,12 @@ export default class Login extends Vue {
                 };
             }
         }
+    }
+
+    // Watch Steps
+    @Watch("steps", { immediate: true })
+    handler(value): void {
+        if (value[0].step) this.$refs.nameInput.click();
+        else this.$refs.emailInput.click();
     }
 }
