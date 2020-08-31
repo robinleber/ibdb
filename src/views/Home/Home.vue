@@ -36,11 +36,7 @@
                 >
             </span>
             <md-ripple :class="$style.menuRipple" class="md-elevation-3">
-                <md-menu
-                    :md-offset-x="0"
-                    :md-offset-y="10"
-                    :class="$style.avatar"
-                >
+                <md-menu :md-offset-y="15" :class="$style.avatar">
                     <img :src="profileUrl" md-menu-trigger v-if="profileUrl" />
                     <img
                         md-menu-trigger

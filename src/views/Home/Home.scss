@@ -6,9 +6,6 @@
 }
 
 .home {
-    padding: 1em 1em 0 1em;
-    overflow: hidden;
-
     .menu {
         display: flex;
         height: 72px;
@@ -18,7 +15,6 @@
         .logo {
             height: 100%;
             position: relative;
-            border-radius: 3px 0 0 3px;
         }
 
         .navBar {
@@ -54,7 +50,6 @@
 
         .menuRipple {
             background-color: #448aff;
-            border-radius: 0 3px 3px 0;
             min-width: 72px;
             max-width: 72px;
 
@@ -72,5 +67,6 @@
     .routerView {
         height: calc(100vh - 90px);
         width: calc(100vw - 50px);
+        padding: 1em;
     }
 }

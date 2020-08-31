@@ -10,8 +10,8 @@
     height: 100%;
 
     .filter {
-        height: 95%;
-        margin-top: 2em;
+        height: 100%;
+        margin-top: 1em;
 
         .filterHeader {
             .filterHeaderCard {
@@ -37,7 +37,6 @@
     .mainView {
         height: 100%;
         position: relative;
-        margin-top: 1em;
 
         .loadingScreen {
             align-items: center;

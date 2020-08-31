@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { Component, Vue, Prop } from "vue-property-decorator";
+import { Component, Vue, Prop, Watch } from "vue-property-decorator";
 import AddBookDialog from "@/components/AddBookDialog/AddBookDialog.vue";
 import { mainEventBus } from "@/components/mainEventBus.ts";
 import { validationMixin } from "vuelidate";
@@ -17,22 +17,22 @@ export default class Books extends Vue {
     readonly AUTH_KEY = "AIzaSyBgOAglMk-N5JQWU6BYRuo5GpyXZKOSRD8";
 
     isbnList = [
-        "9783734162121",
-        "9783734162145",
-        "9783734162169",
-        "9783734162190",
-        "3551551677",
-        "3551354022",
-        "3551551693",
-        "3551551936",
-        "9783551354051",
-        "9783551354068",
-        "9783551354075",
-        "9781983699748",
-        "1983699748",
-        "9783608939811",
-        "9783608939828",
-        "9783608939835",
+        // "9783734162121",
+        // "9783734162145",
+        // "9783734162169",
+        // "9783734162190",
+        // "3551551677",
+        // "3551354022",
+        // "3551551693",
+        // "3551551936",
+        // "9783551354051",
+        // "9783551354068",
+        // "9783551354075",
+        // "9781983699748",
+        // "1983699748",
+        // "9783608939811",
+        // "9783608939828",
+        // "9783608939835",
     ];
 
     // Set Booklist array structure
@@ -104,7 +104,7 @@ export default class Books extends Vue {
     ];
 
     // List of selected sorting conditions
-    sortSelected = "";
+    sortSelected = "added";
     sort(value: string): void {
         this.sortSelected = value;
     }
@@ -127,7 +127,7 @@ export default class Books extends Vue {
             ],
         },
         {
-            label: "Autoren",
+            label: "Autor",
             value: "",
             children: [
                 {
@@ -143,6 +143,29 @@ export default class Books extends Vue {
                     label: "exurb1a",
                 },
             ],
+        },
+        {
+            label: "Verlag",
+            value: "",
+            children: [
+                {
+                    label: "Cosmia Press",
+                },
+                {
+                    label: "Carlsen",
+                },
+                {
+                    label: "Klett Cotta",
+                },
+                {
+                    label: "cbj-Verlag",
+                },
+            ],
+        },
+        {
+            label: "Länge",
+            maxValue: "",
+            minValue: "",
         },
         {
             label: "Franchise",
@@ -163,6 +186,8 @@ export default class Books extends Vue {
             ],
         },
     ];
+
+    clearFilters = this.filters;
 
     async getBook() {
         // Show loading screen
@@ -188,10 +213,6 @@ export default class Books extends Vue {
 
         // Hide loading screen
         this.isLoading = false;
-    }
-
-    beforeMount(): void {
-        this.getBook();
     }
 
     getProgress(pages: number, atPage: number): number {
@@ -228,5 +249,45 @@ export default class Books extends Vue {
 
     showAddBookDialog(): void {
         mainEventBus.$emit("showAddBookDialog");
+    }
+
+    $refs!: {
+        inputRef: HTMLInputElement;
+    };
+
+    validateInput(input: string): void {
+        const minValue = parseInt(this.filters[3].minValue);
+        const maxValue = parseInt(this.filters[3].maxValue);
+
+        switch (input) {
+            case "minValue":
+                this.filters[3].minValue = this.filters[3].minValue.replace(
+                    /[\D]/g,
+                    (u) => u.replace(u, "")
+                );
+
+                if (minValue > maxValue && minValue != 0)
+                    this.filters[3].maxValue = this.filters[3].minValue;
+            case "maxValue":
+                this.filters[3].maxValue = this.filters[3].maxValue.replace(
+                    /[\D]/g,
+                    (u) => u.replace(u, "")
+                );
+        }
+    }
+
+    checkBookLength(): void {
+        const minValue = parseInt(this.filters[3].minValue);
+        const maxValue = parseInt(this.filters[3].maxValue);
+        if (minValue > maxValue && minValue != 0)
+            this.filters[3].maxValue = this.filters[3].minValue;
+    }
+
+    resetFilter(): void {
+        this.filters = this.clearFilters;
+    }
+
+    beforeMount(): void {
+        this.getBook();
     }
 }
