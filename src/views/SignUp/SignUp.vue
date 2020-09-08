@@ -28,7 +28,6 @@
                         >
                             <label>E-Mail</label>
                             <md-input
-                                autocomplete="email"
                                 autofocus
                                 id="email"
                                 ref="emailInput"
@@ -52,7 +51,6 @@
                         <md-field :class="getValidationClass('signUp', 'pass')">
                             <label for="email">Passwort</label>
                             <md-input
-                                autocomplete="password"
                                 id="pass"
                                 type="password"
                                 v-model="signUp.pass"
@@ -76,7 +74,6 @@
                         >
                             <label>Passwort wiederholen</label>
                             <md-input
-                                autocomplete="password"
                                 id="repeatPass"
                                 type="password"
                                 v-model="signUp.passRepeat"
@@ -148,10 +145,7 @@
                                 />
                             </div>
                             <md-icon v-if="!imageUrl" :class="$style.face">
-                                face
-                            </md-icon>
-                            <md-icon v-if="!imageUrl" :class="$style.add">
-                                add_box
+                                person_add
                             </md-icon>
                             <img
                                 :src="imageUrl"
@@ -185,7 +179,6 @@
                         >
                             <label>Anzeigename</label>
                             <md-input
-                                autocomplete="given-name"
                                 type="text"
                                 v-model="profile.user"
                                 ref="nameInput"
@@ -212,7 +205,7 @@
                         <md-card-actions :class="$style.cardActions">
                             <md-button
                                 :class="$style.completeBtn"
-                                :disabled="profile.user == ''"
+                                :disabled="profile.user == '' && isSignUpDisabled"
                                 @click="createAccount()"
                                 class="md-raised md-accent"
                             >

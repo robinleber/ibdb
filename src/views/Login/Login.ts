@@ -16,6 +16,7 @@ import { required, email } from "vuelidate/lib/validators";
 export default class Login extends Vue {
     rememberMe = false;
     stayLoggedIn = false;
+    isLoginDisabled = false;
 
     signIn = {
         email: "",
@@ -26,6 +27,7 @@ export default class Login extends Vue {
 
     login(): void {
         mainEventBus.$emit("changeMainLoading", true, "Anmelden...");
+        this.isLoginDisabled = true;
 
         this.$v.$touch();
         if (!this.$v.$invalid) {
@@ -82,11 +84,13 @@ export default class Login extends Vue {
 
                             // Hide loading-screen
                             mainEventBus.$emit("changeMainLoading", false, "");
+                            this.isLoginDisabled = false;
                         });
                 })
                 .catch((e) => {
                     // Hide loading-screen
                     mainEventBus.$emit("changeMainLoading", false, "");
+                    this.isLoginDisabled = false;
 
                     // Show error message
                     Message.error(`Fehler! - ${e.message}`);
@@ -94,6 +98,7 @@ export default class Login extends Vue {
         } else {
             // Hide loading-screen
             mainEventBus.$emit("changeMainLoading", false, "");
+            this.isLoginDisabled = false;
         }
     }
 

@@ -60,6 +60,9 @@
                     position: relative;
                     width: 150px;
                     border-radius: 3px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
 
                     img {
                         border-radius: 3px;
@@ -77,21 +80,7 @@
                     }
 
                     .face {
-                        font-size: 50pt !important;
-                        position: absolute;
-                        left: 35%;
-                        top: 35%;
-                    }
-
-                    .add {
-                        background-color: #fff;
-                        box-sizing: content-box;
-                        font-size: 30pt !important;
-                        left: 50%;
-                        padding: 7px;
-                        position: absolute;
-                        top: 50%;
-                        z-index: 10;
+                        font-size: 70pt !important;
                     }
 
                     .deleteImageBtn {

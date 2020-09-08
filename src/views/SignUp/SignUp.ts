@@ -47,6 +47,7 @@ export default class Login extends Vue {
         pass: "",
         passRepeat: "",
     };
+    isSignUpDisabled = false;
 
     // Profile-Form
     profile = {
@@ -138,6 +139,8 @@ export default class Login extends Vue {
     }
 
     createAccount(): void {
+        this.isSignUpDisabled = true;
+
         // check profile-form
         this.$v.profile.$touch();
 
@@ -219,15 +222,18 @@ export default class Login extends Vue {
                                     false,
                                     ""
                                 );
+                                this.isSignUpDisabled = false;
 
                                 // Show error message
-                                Message.error(e.message);
+                                Message.error(`Error: ${e.message}`);
                             });
                     })
                     // When user-account-creation was unsuccessfull
                     .catch((e: any) => {
                         // Hide loading-screen
                         mainEventBus.$emit("changeMainLoading", false, "");
+                        this.isSignUpDisabled = false;
+
                         // Go to first step
                         this.steps[0].step = false;
                         this.activeStep = "first";
@@ -242,9 +248,10 @@ export default class Login extends Vue {
                 this.steps[0].step = false;
                 this.activeStep = "first";
 
+                this.isSignUpDisabled = false;
+
                 // Show error message
                 this.firstStepError = "Fehler!";
-                console.log("Bla");
             }
         } else {
             // Show error message
