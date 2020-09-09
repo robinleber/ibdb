@@ -89,11 +89,8 @@
                 font-size: 10pt;
                 height: 275px;
                 margin-bottom: 8px;
-                overflow: hidden;
                 position: relative;
-                transition: transform 200ms ease;
                 user-select: none;
-                border-radius: 0.25em;
 
                 .cover {
                     border-radius: 0.25em;
@@ -116,16 +113,12 @@
                     padding: 1em;
                     position: absolute;
                     top: 0;
-                    transform: scale(1.05);
-                    transition: opacity 200ms ease-out background-image 200ms
-                            ease-out,
-                        margin 200ms ease-out, transform 200ms ease-out;
+                    transition: opacity 200ms ease-out;
                     width: 100%;
                     z-index: 1;
 
                     &:hover {
                         opacity: 1;
-                        transform: scale(1);
                     }
 
                     .title {
@@ -149,6 +142,11 @@
                         position: absolute;
                         bottom: 1em;
                     }
+                }
+
+                .bottom {
+                    position: absolute;
+                    bottom: -40px;
                 }
             }
 

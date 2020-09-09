@@ -98,8 +98,14 @@
                     </md-select>
                 </md-field>
             </md-card-content>
-            <md-card-actions style="position: absolute; width: 100%; bottom: 0;">
-                <md-button @click="resetFilter()" class="md-raised md-accent" style="width: 100%;">
+            <md-card-actions
+                style="position: absolute; width: 100%; bottom: 0;"
+            >
+                <md-button
+                    @click="resetFilter()"
+                    class="md-raised md-accent"
+                    style="width: 100%;"
+                >
                     Filter zurücksetzen
                 </md-button>
             </md-card-actions>
@@ -220,8 +226,8 @@
             >
                 <md-card
                     :class="$style.book"
-                    v-for="(book, index) in bookList"
                     :key="index"
+                    v-for="(book, index) in bookList"
                 >
                     <md-ripple>
                         <md-card-media-cover :class="$style.cover">
@@ -235,8 +241,6 @@
                         </md-card-media-cover>
 
                         <div :class="$style.info">
-                            <span :class="$style.title">{{ book.title }}</span>
-                            <br />
                             <span v-if="book.subtitle">{{
                                 book.subtitle
                             }}</span>
@@ -276,6 +280,10 @@
                                 0
                             )}%`
                         }}</md-tooltip>
+
+                        <div :class="$style.bottom">
+                            <span :class="$style.title">{{ book.title }}</span>
+                        </div>
 
                         <md-progress-bar
                             md-mode="determinate"

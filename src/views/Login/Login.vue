@@ -11,7 +11,7 @@
                 <div :class="$style.loginText" class="md-display-1">Login</div>
 
                 <md-card-content :class="$style.content">
-                    <md-card-actions :class="$style.socialBtnGrp">
+                    <md-card-actions :class="$style.cardActions">
                         <md-button
                             :class="$style.googleBtn"
                             class="md-accent md-raised"
@@ -20,7 +20,7 @@
                             &nbsp;Mit Google anmelden
                         </md-button>
                     </md-card-actions>
-                    <div :class="$style.loginWithTxt">Oder anmelden mit E-Mail</div>
+                    <div :class="$style.loginWithTxt">Oder mit E-Mail anmelden</div>
 
                     <md-field :class="getValidationClass('email')">
                         <label>E-Mail</label>

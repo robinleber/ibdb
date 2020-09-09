@@ -17,9 +17,9 @@ export default class Books extends Vue {
     readonly AUTH_KEY = "AIzaSyBgOAglMk-N5JQWU6BYRuo5GpyXZKOSRD8";
 
     isbnList = [
-        // "9783734162121",
-        // "9783734162145",
-        // "9783734162169",
+        "9783734162121",
+        "9783734162145",
+        "9783734162169",
         // "9783734162190",
         // "3551551677",
         // "3551354022",
@@ -35,73 +35,7 @@ export default class Books extends Vue {
         // "9783608939835",
     ];
 
-    // Set Booklist array structure
-    bookList = [
-        {
-            kind: "books#volume",
-            id: "FCPSvQEACAAJ",
-            etag: "I8t98GatYmk",
-            selfLink:
-                "https://www.googleapis.com/books/v1/volumes/FCPSvQEACAAJ",
-            volumeInfo: {
-                title: "Eragon - Der Auftrag des Ältesten",
-                authors: ["Christopher Paolini"],
-                publishedDate: "2019-01-21",
-                industryIdentifiers: [
-                    {
-                        type: "ISBN_10",
-                        identifier: "3734162149",
-                    },
-                    {
-                        type: "ISBN_13",
-                        identifier: "9783734162145",
-                    },
-                ],
-                readingModes: {
-                    text: false,
-                    image: false,
-                },
-                pageCount: 800,
-                printType: "BOOK",
-                maturityRating: "NOT_MATURE",
-                allowAnonLogging: false,
-                contentVersion: "preview-1.0.0",
-                panelizationSummary: {
-                    containsEpubBubbles: false,
-                    containsImageBubbles: false,
-                },
-                language: "de",
-                previewLink:
-                    "http://books.google.de/books?id=FCPSvQEACAAJ&dq=isbn%3D9783734162145&hl=&cd=1&source=gbs_api",
-                infoLink:
-                    "http://books.google.de/books?id=FCPSvQEACAAJ&dq=isbn%3D9783734162145&hl=&source=gbs_api",
-                canonicalVolumeLink:
-                    "https://books.google.com/books/about/Eragon_Der_Auftrag_des_%C3%84ltesten.html?hl=&id=FCPSvQEACAAJ",
-            },
-            saleInfo: {
-                country: "DE",
-                saleability: "NOT_FOR_SALE",
-                isEbook: false,
-            },
-            accessInfo: {
-                country: "DE",
-                viewability: "NO_PAGES",
-                embeddable: false,
-                publicDomain: false,
-                textToSpeechPermission: "ALLOWED",
-                epub: {
-                    isAvailable: false,
-                },
-                pdf: {
-                    isAvailable: false,
-                },
-                webReaderLink:
-                    "http://play.google.com/books/reader?id=FCPSvQEACAAJ&hl=&printsec=frontcover&source=gbs_api",
-                accessViewStatus: "NONE",
-                quoteSharingAllowed: false,
-            },
-        },
-    ];
+    bookList: any | null;
 
     // List of selected sorting conditions
     sortSelected = "added";

@@ -85,6 +85,9 @@ export default class Login extends Vue {
                             // Hide loading-screen
                             mainEventBus.$emit("changeMainLoading", false, "");
                             this.isLoginDisabled = false;
+            
+                            // Show error message
+                            Message.error(`Error: ${e.message}`);
                         });
                 })
                 .catch((e) => {
@@ -94,6 +97,9 @@ export default class Login extends Vue {
 
                     // Show error message
                     Message.error(`Fehler! - ${e.message}`);
+            
+            // Show error message
+            Message.error(`Error: ${e.message}`);
                 });
         } else {
             // Hide loading-screen

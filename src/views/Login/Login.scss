@@ -32,6 +32,23 @@
             text-transform: uppercase;
         }
 
+        .cardActions {
+            display: flex;
+            justify-content: stretch;
+
+            .googleBtn {
+                // height: 45px;
+                width: 100%;
+                color: #fafafa !important;
+
+                i {
+                    font-size: 15pt;
+                    margin-right: 10px;
+                    vertical-align: -2px;
+                }
+            }
+        }
+
         .forgotPass {
             margin-bottom: 20px;
         }
@@ -46,7 +63,7 @@
 
         .loginBtn {
             margin: -10px 0 20px 0;
-            width: 80%;
+            width: 90%;
         }
 
         .loginWithTxt {
@@ -59,32 +76,6 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
-        }
-
-        .socialBtnGrp {
-            display: flex;
-            justify-content: stretch;
-
-            button {
-                height: 45px;
-                width: 100%;
-
-                &.googleBtn {
-                    // background-color: #e44134 !important;
-                    color: #fafafa !important;
-                }
-
-                &.fbBtn {
-                    background-color: #3b5998;
-                    color: #fafafa !important;
-                }
-
-                i {
-                    font-size: 15pt;
-                    margin-right: 10px;
-                    vertical-align: -2px;
-                }
-            }
         }
 
         .notAMemberTxt {
