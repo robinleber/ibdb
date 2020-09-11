@@ -7,20 +7,22 @@
             novalidate
         >
             <md-card :class="$style.loginCard" class="md-layout-item">
-                <img src="@/assets/img/logo.svg" :class="$style.logo" />
-                <div :class="$style.loginText" class="md-display-1">Login</div>
+                <div :class="$style.logo">IBDb</div>
 
                 <md-card-content :class="$style.content">
-                    <md-card-actions :class="$style.cardActions">
-                        <md-button
-                            :class="$style.googleBtn"
-                            class="md-accent md-raised"
-                        >
-                            <i class="fab fa-google" />
-                            &nbsp;Mit Google anmelden
-                        </md-button>
-                    </md-card-actions>
-                    <div :class="$style.loginWithTxt">Oder mit E-Mail anmelden</div>
+                    <md-button
+                        :class="$style.googleBtn"
+                        class="md-accent md-raised"
+                    >
+                        <img
+                            :class="$style.googleIcon"
+                            src="@/assets/img/google.svg"
+                        />
+                        Mit Google anmelden
+                    </md-button>
+                    <div :class="$style.loginWithTxt">
+                        Oder mit E-Mail anmelden
+                    </div>
 
                     <md-field :class="getValidationClass('email')">
                         <label>E-Mail</label>
@@ -71,7 +73,7 @@
                     >
                 </md-card-content>
 
-                <md-card-actions :class="$style.btnGrp">
+                <md-card-actions :class="$style.btnGrp" md-alignment="centered">
                     <md-button
                         :class="$style.loginBtn"
                         :disabled="isLoginDisabled"

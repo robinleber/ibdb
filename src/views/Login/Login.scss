@@ -17,36 +17,49 @@
         position: relative;
 
         .logo {
-            border-radius: 5px;
+            border-radius: 3px 3px 0 0;
             height: 100px;
-            left: 50%;
-            position: absolute;
-            top: -50px;
-            transform: translateX(-50%);
             user-select: none;
+            background-color: #448aff;
+            width: 100%;
+            display: grid;
+            place-items: center;
+            font-size: 42pt;
+            font-family: "Roboto Slab Bold";
+            color: #fafafa;
         }
 
-        .loginText {
-            margin-top: 80px;
-            text-align: center;
-            text-transform: uppercase;
-        }
+        .googleBtn {
+            width: 100%;
+            margin: 0;
+            color: #fafafa !important;
+            height: 40px;
 
-        .cardActions {
-            display: flex;
-            justify-content: stretch;
+            [class="md-ripple"] {
+                justify-content: left;
+                padding: 5px;
 
-            .googleBtn {
-                // height: 45px;
-                width: 100%;
-                color: #fafafa !important;
-
-                i {
-                    font-size: 15pt;
-                    margin-right: 10px;
-                    vertical-align: -2px;
+                [class="md-button-content"] {
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
                 }
             }
+
+            .googleIcon {
+                height: 30px;
+                width: 30px;
+                background-color: #fafafa;
+                padding: 5px;
+                border-radius: 3px;
+                margin-right: 10px;
+            }
+        }
+
+        .loginWithTxt {
+            color: gray;
+            margin: 20px 0;
+            text-align: center;
         }
 
         .forgotPass {
@@ -61,21 +74,13 @@
             margin-top: -20px;
         }
 
-        .loginBtn {
-            margin: -10px 0 20px 0;
-            width: 90%;
-        }
-
-        .loginWithTxt {
-            color: gray;
-            margin-top: 20px;
-            text-align: center;
-        }
-
         .btnGrp {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
+            padding: 16px;
+
+            .loginBtn {
+                margin: -30px 0 10px 0;
+                width: 100%;
+            }
         }
 
         .notAMemberTxt {
