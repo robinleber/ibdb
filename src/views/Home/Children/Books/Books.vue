@@ -62,35 +62,38 @@
                         </md-option>
                     </md-select>
                 </md-field>
-                <md-field>
-                    <label>Min. Buchlänge</label>
-                    <md-input
-                        v-model="filters[3].minValue"
-                        @input="validateInput('minValue')"
-                    />
-                    <span class="md-suffix">Seiten</span>
-                </md-field>
-                <md-field>
-                    <label>Max. Buchlänge</label>
-                    <md-input
-                        v-model="filters[3].maxValue"
-                        @input="validateInput('maxValue')"
-                        @click="event.target.setSelectionRange(0, 1)"
-                        @blur="checkBookLength()"
-                    />
-                    <span class="md-suffix">Seiten</span>
-                </md-field>
+                <div :class="$style.pagesWrapper">
+                    <md-field :class="$style.pagesInput">
+                        <label>Min. Seiten</label>
+                        <md-input
+                            @input="
+                                validateInput('minValue'), checkBookLength()
+                            "
+                            v-model="filters[3].value"
+                            type="number"
+                        ></md-input>
+                    </md-field>
+                    <md-field :class="$style.pagesInput">
+                        <label>Max. Seiten</label>
+                        <md-input
+                            @input="validateInput('maxValue')"
+                            @blur="checkBookLength()"
+                            v-model="filters[4].value"
+                            type="number"
+                        ></md-input>
+                    </md-field>
+                </div>
                 <md-field>
                     <label>Franchise</label>
                     <md-select
-                        v-model="filters[4].value"
+                        v-model="filters[5].value"
                         multiple
                         md-dense
                         clearable
                     >
                         <md-option
                             :key="index"
-                            v-for="(franchise, index) in filters[4].children"
+                            v-for="(franchise, index) in filters[5].children"
                             :value="franchise.label"
                         >
                             {{ franchise.label }}
@@ -111,7 +114,7 @@
             </md-card-actions>
         </md-card>
         <div :class="$style.mainView">
-            <md-empty-state
+            <!-- <md-empty-state
                 :class="$style.emptyState"
                 class="md-accent"
                 md-description="Du hast noch keine Bücher in deiner Bibliothek"
@@ -120,21 +123,18 @@
                 md-rounded
                 v-if="bookList.length < 1 && !isLoading"
             >
-                <md-button
-                    class="md-primary md md-raised"
-                    @click="showAddBookDialog()"
-                >
-                    <md-icon>library_add</md-icon>
-                    <span>&nbsp;Buch hinzufügen</span>
-                </md-button>
-            </md-empty-state>
+            </md-empty-state> -->
 
-            <div :class="$style.loadingScreen" v-if="isLoading">
+            <div
+                :class="$style.loadingScreen"
+                class="md-elevation-3"
+                v-if="isLoading"
+            >
                 <md-progress-spinner md-mode="indeterminate" />
                 <span :class="$style.loadingMessage">Lade Bibliothek</span>
             </div>
 
-            <div :class="$style.fnBar" v-if="bookList.length > 0">
+            <div :class="$style.fnBar">
                 <md-button
                     :class="$style.addBookBtn"
                     class="md-accent md-raised"
@@ -206,102 +206,47 @@
                         </md-menu-item>
                     </md-menu-content>
                 </md-menu>
-            </div>
-            <span
-                v-if="
-                    filter != '' ||
-                        filters[0].value != '' ||
-                        filters[1].value != '' ||
-                        filters[2].value != ''
-                "
-                :class="$style.filteredTxt"
-            >
-                * gefiltert *
-            </span>
 
-            <md-content
-                :class="$style.bookWrapper"
-                v-if="bookList.length > 0"
-                class="md-scrollbar"
-            >
-                <md-card
+                <div :class="$style.readingStateWrapper">
+                    <md-radio
+                        :class="$style.readingState"
+                        v-model="readingState"
+                        value="read"
+                        >Gelesen</md-radio
+                    >
+                    <md-radio
+                        :class="$style.readingState"
+                        v-model="readingState"
+                        value="reading"
+                        >Am Lesen</md-radio
+                    >
+                    <md-radio
+                        :class="$style.readingState"
+                        v-model="readingState"
+                        value="notRead"
+                        >Nicht gelesen</md-radio
+                    >
+                </div>
+
+                <span v-if="isFilter" :class="$style.filteredTxt">
+                    * gefiltert *
+                </span>
+            </div>
+
+            <md-content :class="$style.bookGallery" class="md-scrollbar">
+                <div
                     :class="$style.book"
+                    v-for="(isbn, index) in isbnList"
                     :key="index"
-                    v-for="(book, index) in bookList"
+                    class="md-elevation-3"
                 >
                     <md-ripple>
-                        <md-card-media-cover :class="$style.cover">
-                            <md-card-media ratio="5:3">
-                                <img
-                                    :src="
-                                        `http://covers.openlibrary.org/b/isbn/${isbnList[index]}-L.jpg`
-                                    "
-                                />
-                            </md-card-media>
-                        </md-card-media-cover>
-
-                        <div :class="$style.info">
-                            <span v-if="book.subtitle">{{
-                                book.subtitle
-                            }}</span>
-                            <div :class="$style.author">
-                                {{ getAuthors(book.authors) }}
-                            </div>
-
-                            <div :class="$style.genreWrapper">
-                                <el-tag
-                                    :class="$style.genre"
-                                    :color="getGenreColor(genre)"
-                                    :key="index"
-                                    effect="dark"
-                                    size="small"
-                                    v-for="(genre, index) in book.categories"
-                                    >{{ genre }}</el-tag
-                                >
-                            </div>
-                            <div :class="$style.lastItems">
-                                <span :class="$style.publisher">{{
-                                    book.publisher
-                                }}</span>
-                                <el-rate
-                                    :class="$style.rating"
-                                    disabled
-                                    score-template="{value}"
-                                    show-score
-                                    text-color="#ffbb00"
-                                    v-model="book.averageRating"
-                                />
-                            </div>
-                        </div>
-
-                        <md-tooltip>{{
-                            `${0}/${book.pageCount} | ${getProgress(
-                                book.pageCount,
-                                0
-                            )}%`
-                        }}</md-tooltip>
-
-                        <div :class="$style.bottom">
-                            <span :class="$style.title">{{ book.title }}</span>
-                        </div>
-
-                        <md-progress-bar
-                            md-mode="determinate"
-                            :md-value="12"
-                            :class="$style.progress"
+                        <img
+                            src="https://marketplace.canva.com/EAD7WWWtKSQ/1/0/251w/canva-purple-and-red-leaves-illustration-children%27s-book-cover-hNI7HYnNVQQ.jpg"
                         />
                     </md-ripple>
-                </md-card>
+                </div>
             </md-content>
-
-            <el-pagination
-                :class="$style.pagination"
-                :page-size="18"
-                :total="bookList.length"
-                background
-                hide-on-single-page
-                layout="prev, pager, next"
-            />
         </div>
 
         <add-book-dialog />

@@ -1,9 +1,8 @@
 /* eslint-disable */
 import { Component, Vue } from "vue-property-decorator";
 import { mainEventBus } from "@/components/mainEventBus.ts";
-import firebase from "firebase";
-import { Message } from "element-ui";
 import { required, email } from "vuelidate/lib/validators";
+import { Message } from "element-ui";
 
 @Component({
     validations: {
@@ -26,96 +25,45 @@ export default class Login extends Vue {
     };
 
     login(): void {
-        mainEventBus.$emit("changeMainLoading", true, "Anmelden...");
-        this.isLoginDisabled = true;
-
         this.$v.$touch();
         if (!this.$v.$invalid) {
+            mainEventBus.$emit("changeMainLoading", true, "Anmelden...");
+            this.isLoginDisabled = true;
             // Remember Me
             if (typeof Storage !== "undefined") {
                 // Check if local storage is supported
                 localStorage.setItem("email", this.signIn.email);
                 if (this.signIn.rememberMe)
                     // Check if user wants to save email
-                    // Save email to local storage
                     localStorage.setItem("email", this.signIn.email);
+                // Save email to local storage
                 else {
-                    if (localStorage.getItem("email"))
-                        localStorage.removeItem("email");
+                    if (localStorage.getItem("email")) localStorage.removeItem("email");
                 }
             } else {
                 // When local storage is not supported
-                // Uncheck remember-me
-                this.signIn.rememberMe = false;
+                this.signIn.rememberMe = false; // Uncheck remember-me
 
-                // Show error message
-                Message.error(
-                    "Fehler! - E-Mail-Adresse konnte nicht gespeichert werden!"
-                );
+                Message.error("Fehler! - E-Mail-Adresse konnte nicht gespeichert werden!");
             }
-
-            let authPersistance = this.signIn.remainLoggedIn
-                ? firebase.auth.Auth.Persistence.SESSION
-                : firebase.auth.Auth.Persistence.LOCAL;
-
-            // Set Authentication State Persistance
-            firebase
-                .auth()
-                .setPersistence(authPersistance)
-                .then(() => {
-                    // Login
-                    firebase
-                        .auth()
-                        .signInWithEmailAndPassword(
-                            this.signIn.email,
-                            this.signIn.pass
-                        )
-                        // When sign-in was successfull
-                        .then(() => {
-                            // Hide loading-screen
-                            mainEventBus.$emit("changeMainLoading", false, "");
-
-                            // Go to home
-                            this.$router.replace("Home");
-                        })
-                        // When sign-in was unsuccessfull
-                        .catch((e) => {
-                            console.log(`Error: ${e.code} - ${e.message}`);
-
-                            // Hide loading-screen
-                            mainEventBus.$emit("changeMainLoading", false, "");
-                            this.isLoginDisabled = false;
-            
-                            // Show error message
-                            Message.error(`Error: ${e.message}`);
-                        });
-                })
-                .catch((e) => {
-                    // Hide loading-screen
-                    mainEventBus.$emit("changeMainLoading", false, "");
-                    this.isLoginDisabled = false;
-
-                    // Show error message
-                    Message.error(`Fehler! - ${e.message}`);
-            
-            // Show error message
-            Message.error(`Error: ${e.message}`);
+            try {
+                this.$store.dispatch("login", {
+                    email: this.signIn.email,
+                    pass: this.signIn.pass,
+                    rememberMe: this.signIn.rememberMe,
+                    remainLoggedIn: this.signIn.remainLoggedIn,
                 });
-        } else {
-            // Hide loading-screen
-            mainEventBus.$emit("changeMainLoading", false, "");
-            this.isLoginDisabled = false;
+            } catch (e) {
+                this.isLoginDisabled = false;
+                mainEventBus.$emit("changeMainLoading", false, "");
+            }
         }
     }
 
     getValidationClass(fieldName: string): any {
         const field = this.$v.signIn[fieldName];
 
-        if (field) {
-            return {
-                "md-invalid": field.$invalid && field.$dirty,
-            };
-        }
+        if (field) return { "md-invalid": field.$invalid && field.$dirty };
     }
 
     getEmailFromLocalStorage(): void {

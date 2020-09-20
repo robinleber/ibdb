@@ -5,110 +5,141 @@
     padding: 0;
 }
 
-.signUp {
+#signUp {
     align-items: center;
     display: flex;
     height: 100%;
     justify-content: center;
     width: 100%;
 
-    .signUpCard {
-        width: 300px;
-        position: relative;
+    .col1 {
+        background-color: #448aff;
+        color: #fafafa;
+        display: grid;
+        height: 100vh;
+        max-width: 35vw;
+        place-items: center;
 
-        .logo {
-            border-radius: 5px;
-            height: 100px;
-            left: 50%;
-            position: absolute;
-            top: -50px;
-            transform: translateX(-50%);
-            user-select: none;
-        }
+        .container {
+            width: 50%;
 
-        .signUpTxt {
-            margin-bottom: 40px;
-            margin-top: 80px;
-            text-align: center;
-            text-transform: uppercase;
-        }
-
-        .steps {
-            margin-top: -10px;
-
-            .firstStep {
-                .createAccountBtn {
-                    width: 80%;
-                    margin: 0 10% 15px 0;
-                }
-
-                .cardActions {
-                    padding: 0;
-                }
+            .logo {
+                color: #e7e7e7;
+                font-family: "Roboto Slab Bold", serif;
+            }
+            .caption {
+                color: #e7e7e7;
+                font-size: 12pt;
+                letter-spacing: 2.5px;
+                text-transform: uppercase;
             }
 
-            .secondStep {
-                text-align: center;
+            .introduction {
+                margin-top: 20px;
+            }
+        }
+    }
 
-                .profilePictureBorder {
-                    border: dashed #757575 5px;
-                }
+    .col2 {
+        display: grid;
+        place-items: center;
+        width: 65vw;
 
-                .addProfilePicture {
-                    height: 150px;
-                    margin-left: 52px;
-                    position: relative;
-                    width: 150px;
-                    border-radius: 3px;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
+        .signUpCard {
+            width: 300px;
+            position: relative;
 
-                    img {
-                        border-radius: 3px;
-                    }
+            .signUpTxt {
+                background-color: #448aff;
+                border-radius: 3px 3px 0 0;
+                color: #e7e7e7;
+                display: grid;
+                font-family: "Roboto Slab Black";
+                font-size: 26pt;
+                height: 125px;
+                place-items: center;
+                text-transform: uppercase;
+                user-select: none;
+                width: 100%;
+            }
 
-                    .imageLoadingOverlay {
-                        align-items: center;
-                        background-color: #fafafaaa;
-                        display: flex;
-                        height: 100%;
-                        justify-content: center;
-                        position: absolute;
-                        width: 100%;
-                        z-index: 11;
-                    }
+            .steps {
+                margin-top: -10px;
 
-                    .face {
-                        font-size: 70pt !important;
-                    }
-
-                    .deleteImageBtn {
-                        position: absolute;
-                        bottom: 0;
-                        right: 0;
-                    }
-                }
-
-                .cardActions {
-                    display: flex;
-                    justify-content: stretch;
-                    padding: 0;
-                    margin-bottom: 15px;
-
-                    .completeBtn {
+                .firstStep {
+                    .createAccountBtn {
                         width: 80%;
+                        margin: 0 10% 15px 0;
+                    }
+
+                    .cardActions {
+                        padding: 0;
+                    }
+                }
+
+                .secondStep {
+                    text-align: center;
+
+                    .profilePictureBorder {
+                        border: dashed #757575 5px;
+                    }
+
+                    .addProfilePicture {
+                        height: 150px;
+                        margin-left: 52px;
                         position: relative;
-                        left: 10%;
+                        width: 150px;
+                        border-radius: 3px;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+
+                        img {
+                            border-radius: 3px;
+                        }
+
+                        .imageLoadingOverlay {
+                            align-items: center;
+                            background-color: #fafafaaa;
+                            display: flex;
+                            height: 100%;
+                            justify-content: center;
+                            position: absolute;
+                            width: 100%;
+                            z-index: 11;
+                        }
+
+                        .face {
+                            font-size: 70pt !important;
+                        }
+
+                        .deleteImageBtn {
+                            position: absolute;
+                            bottom: 0;
+                            right: 0;
+                        }
+                    }
+
+                    .cardActions {
+                        display: flex;
+                        justify-content: stretch;
+                        padding: 0;
+                        margin-bottom: 15px;
+
+                        .completeBtn {
+                            width: 80%;
+                            position: relative;
+                            left: 10%;
+                        }
                     }
                 }
             }
-        }
 
-        .alreadyAMemberTxt {
-            color: gray;
-            margin: 20px 0;
-            text-align: center;
+            .alreadyAMemberTxt {
+                color: gray;
+                margin: 20px 0;
+                text-align: center;
+            }
         }
     }
 }

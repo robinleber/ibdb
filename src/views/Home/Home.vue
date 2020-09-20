@@ -1,7 +1,7 @@
 <template>
     <div :class="$style.home">
         <div :class="$style.menu" class="md-elevation-3">
-            <img :class="$style.logo" src="@/assets/img/logo_no_borders.svg" />
+            <div :class="$style.logo">IBDb</div>
             <md-tabs :class="$style.navBar" md-sync-route class="md-primary">
                 <md-tab
                     id="tab-dashboard"

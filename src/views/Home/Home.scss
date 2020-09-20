@@ -13,8 +13,15 @@
         position: relative;
 
         .logo {
+            background-color: #448aff;
+            color: #fafafa;
+            display: grid;
+            font-family: "Roboto Slab Bold";
+            font-size: 42pt;
             height: 100%;
-            position: relative;
+            place-items: center;
+            user-select: none;
+            width: 200px;
         }
 
         .navBar {
@@ -65,8 +72,8 @@
     }
 
     .routerView {
-        height: calc(100vh - 90px);
-        width: calc(100vw - 50px);
+        height: calc(100vh - 72px);
+        width: 100vw;
         padding: 1em;
     }
 }

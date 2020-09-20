@@ -19,14 +19,15 @@ export default class Home extends Vue {
 
         // Create a reference with an initial file path and name
         let storage = firebase.storage();
-        let pathRef = storage.ref(`profileImages/${user.uid}_${user.displayName.toLowerCase()}`);
+        let pathRef = storage.ref(
+            `profileImages/${user.uid}_${user.displayName.toLowerCase()}`
+        );
 
         // Get the download URL
-        pathRef.getDownloadURL()
-        .then(url => this.profileUrl = url)
-        .catch(function(e) {
-            console.error(`Error: ${e.message}`);
-        })
+        pathRef
+            .getDownloadURL()
+            .then((url) => (this.profileUrl = url))
+            .catch((e) => console.error(`Error: ${e.message}`));
     }
 
     logout(): void {

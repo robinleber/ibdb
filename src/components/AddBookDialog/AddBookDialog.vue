@@ -1,7 +1,7 @@
 <template>
-    <md-dialog :md-active.sync="isAddBookDialogVisible" :class="$style.addBook">
-        <md-dialog-title>Buch hinzufügen</md-dialog-title>
-        <md-steppers :class="$style.stepper" md-alternative>
+    <!-- <md-dialog :md-active.sync="isAddBookDialogsVisible" :class="$style.addBook"> -->
+        <!-- <md-dialog-title>Buch hinzufügen</md-dialog-title> -->
+        <!-- <md-steppers :class="$style.stepper" md-alternative>
             <md-step :class="$style.firstStep" id="first" md-label="ISBN">
                 <div class="md-layout">
                     <div
@@ -82,8 +82,8 @@
                     </div>
                 </div>
             </md-step>
-        </md-steppers>
-        <div :class="$style.btns">
+        </md-steppers> -->
+        <!-- <div :class="$style.btns">
             <md-button
                 class="md-accent md-raised"
                 :class="$style.cancelBtn"
@@ -101,8 +101,25 @@
                     >Fertig!</md-button
                 >
             </div>
-        </div>
-    </md-dialog>
+        </div> -->
+        <!-- <md-field>
+            <label for="ISBN"></label>
+            <md-input v-model="isbnInput"></md-input>
+        </md-field>
+        <md-dialog-actions>
+            <md-button class="md-raised md-accent">Abbrechen</md-button>
+            <md-button class="md-raised md-primary">Bestätigen</md-button>
+        </md-dialog-actions> -->
+    <!-- </md-dialog> -->
+    <md-dialog-prompt
+      :md-active.sync="isAddBookDialogVisible"
+      @md-confirm="onConfirm"
+      md-cancel-text="Abbrechen"
+      md-confirm-text="Bestätigen"
+      md-input-maxlength="13"
+      md-input-placeholder="ISBN"
+      md-title="Buch mit ISBN hinzufügen"
+      v-model="isbnInput" />
 </template>
 
 <script src="./AddBookDialog.ts" lang="ts"></script>
