@@ -38,25 +38,23 @@ export default class Login extends Vue {
                     localStorage.setItem("email", this.signIn.email);
                 // Save email to local storage
                 else {
-                    if (localStorage.getItem("email")) localStorage.removeItem("email");
+                    if (localStorage.getItem("email"))
+                        localStorage.removeItem("email");
                 }
             } else {
                 // When local storage is not supported
                 this.signIn.rememberMe = false; // Uncheck remember-me
 
-                Message.error("Fehler! - E-Mail-Adresse konnte nicht gespeichert werden!");
+                Message.error(
+                    "Fehler! - E-Mail-Adresse konnte nicht gespeichert werden!"
+                );
             }
-            try {
-                this.$store.dispatch("login", {
-                    email: this.signIn.email,
-                    pass: this.signIn.pass,
-                    rememberMe: this.signIn.rememberMe,
-                    remainLoggedIn: this.signIn.remainLoggedIn,
-                });
-            } catch (e) {
-                this.isLoginDisabled = false;
-                mainEventBus.$emit("changeMainLoading", false, "");
-            }
+            this.$store.dispatch("login", {
+                email: this.signIn.email,
+                pass: this.signIn.pass,
+                rememberMe: this.signIn.rememberMe,
+                remainLoggedIn: this.signIn.remainLoggedIn,
+            });
         }
     }
 
@@ -79,5 +77,8 @@ export default class Login extends Vue {
 
     mounted(): void {
         this.getEmailFromLocalStorage();
+        mainEventBus.$on("enableLoginButton", isLoginDisabled => {
+            this.isLoginDisabled = isLoginDisabled;
+        })
     }
 }

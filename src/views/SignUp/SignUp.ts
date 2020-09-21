@@ -3,9 +3,19 @@ import { Component, Vue, Watch } from "vue-property-decorator";
 import { mainEventBus } from "@/components/mainEventBus.ts";
 import firebase from "firebase";
 import { Message } from "element-ui";
-import { required, email, minLength, maxLength, sameAs } from "vuelidate/lib/validators";
+import {
+    required,
+    email,
+    minLength,
+    maxLength,
+    sameAs,
+} from "vuelidate/lib/validators";
+import { Cropper } from "vue-advanced-cropper";
 
 @Component({
+    components: {
+        Cropper,
+    },
     validations: {
         signUp: {
             email: {
@@ -49,9 +59,11 @@ export default class Login extends Vue {
     };
 
     // Image upload
+    isUploadImageDialog = false;
     isImageLoading = false;
     imageName: any = null;
     imageUrl: any = null;
+    imageUrlCropped: any = null;
     imageFile: any = null;
 
     // Stepper
@@ -62,9 +74,11 @@ export default class Login extends Vue {
 
     // Cast imageInput as HTML-Element !IMPORTANT!
     $refs!: {
+        imageInputForm: HTMLFormElement;
         imageInput: HTMLFormElement;
         nameInput: HTMLFormElement;
         emailInput: HTMLFormElement;
+        cropper: HTMLFormElement;
     };
 
     /**
@@ -84,13 +98,13 @@ export default class Login extends Vue {
         }
     }
 
-    pickImage() {
+    pickImage(): void {
         this.$refs.imageInput.click(); // Focus on file-input for profile-image
+        this.isImageLoading = true;
     }
 
-    onImagePicked(e: any) {
-        // Hide loading-screen
-        this.isImageLoading = true;
+    onImagePicked(e: any): void {
+        this.isUploadImageDialog = true;
 
         // Get selected files
         const files = e.target.files;
@@ -103,14 +117,30 @@ export default class Login extends Vue {
             }
             // Get image-url
             const fr = new FileReader();
-            fr.addEventListener("load", () => {
-                this.imageUrl = fr.result;
-            });
+            fr.onload = (e) => {
+                this.imageUrl = e.target.result;
+            };
             // Get image-file
             fr.readAsDataURL(files[0]);
             this.imageFile = files[0];
         }
-        e.target.files = null; // Clear imageInput
+        this.$refs.imageInputForm.reset();
+    }
+
+    cancelCrop(): void {
+        this.isImageLoading = false;
+        this.isUploadImageDialog = false;
+    }
+    
+    editImage(): void {
+        this.isUploadImageDialog = true;
+        this.isImageLoading = true;
+    }
+
+    cropImage(): void {
+        const { coordinates, canvas } = this.$refs.cropper.getResult();
+        this.imageUrlCropped = canvas.toDataURL();
+        this.isUploadImageDialog = false;
         this.isImageLoading = false; // Hide loading-screen
     }
 
@@ -124,8 +154,12 @@ export default class Login extends Vue {
             this.$v.signUp.$touch(); // check signUp-form
             if (!this.$v.signUp.$invalid) {
                 // When signUp-form is valid
-                mainEventBus.$emit("changeMainLoading", true, "Erstelle Account!"); // Show loading screen
-                this.$store.dispatch("signUp", this.signUp, this.profile); // Create user-account
+                mainEventBus.$emit(
+                    "changeMainLoading",
+                    true,
+                    "Erstelle Account!"
+                ); // Show loading screen
+                this.$store.dispatch("signUp", this.signUp); // Create user-account
             } else {
                 // When signUp-form is invalid
                 this.steps[0].step = false; // Go to first step
@@ -152,7 +186,7 @@ export default class Login extends Vue {
     // Watch Steps
     @Watch("steps", { immediate: true })
     handler(value): void {
-        if (value[0].step) this.$refs.nameInput.click();
-        else this.$refs.emailInput.click();
+        if (value[0].step) this.$refs.emailInput.focus();
+        else this.$refs.nameInput.focus();
     }
 }

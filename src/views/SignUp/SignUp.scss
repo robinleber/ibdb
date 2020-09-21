@@ -5,6 +5,54 @@
     padding: 0;
 }
 
+@media only screen and (max-width: 770px) {
+    #signUp {
+        .col1 {
+            display: none !important;
+        }
+    }
+}
+
+@media only screen and (max-width: 411px) {
+    #signUp {
+        .col2 {
+            width: 100vw !important;
+            height: 100vh;
+
+            .signUpCard {
+                width: 100% !important;
+                height: 100%;
+                border-radius: 0 !important;
+
+                .signUpTxt {
+                    border-radius: 0 !important;
+                }
+            }
+        }
+    }
+}
+
+.uploadImageDialog {
+    .content {
+        overflow: hidden;
+        padding: 8px;
+
+        .imgCropper {
+            height: 100%;
+            width: 300px;
+            max-height: 600px;
+            background: #d5d5d5;
+            z-index: 0;
+        }
+
+        .uploadImageBtn {
+            width: 300px;
+            margin: 0;
+            border-radius: 0 0 3px 3px !important;
+        }
+    }
+}
+
 #signUp {
     align-items: center;
     display: flex;
@@ -22,6 +70,7 @@
 
         .container {
             width: 50%;
+            min-width: 250px;
 
             .logo {
                 color: #e7e7e7;
@@ -80,22 +129,25 @@
                 .secondStep {
                     text-align: center;
 
-                    .profilePictureBorder {
-                        border: dashed #757575 5px;
-                    }
-
                     .addProfilePicture {
+                        border-radius: 3px;
+                        display: grid;
                         height: 150px;
                         margin-left: 52px;
+                        max-height: 150px;
+                        max-width: 150px;
+                        place-items: center;
                         position: relative;
                         width: 150px;
-                        border-radius: 3px;
-                        display: flex;
-                        justify-content: center;
-                        align-items: center;
+
+                        &.profilePictureBorder {
+                            border: dashed #757575 5px;
+                        }
 
                         img {
                             border-radius: 3px;
+                            object-fit: cover;
+                            width: 100%;
                         }
 
                         .imageLoadingOverlay {
@@ -106,18 +158,18 @@
                             justify-content: center;
                             position: absolute;
                             width: 100%;
-                            z-index: 11;
                         }
 
                         .face {
                             font-size: 70pt !important;
                         }
+                    }
 
-                        .deleteImageBtn {
-                            position: absolute;
-                            bottom: 0;
-                            right: 0;
-                        }
+                    .imageBtnGrp {
+                        align-items: center;
+                        display: flex;
+                        justify-content: center;
+                        margin-top: -22px;
                     }
 
                     .cardActions {

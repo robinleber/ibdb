@@ -5,6 +5,13 @@
     --header: "Roboto Slab Regular";
 }
 
+@media only screen and (max-width: 411px) {
+    #app {
+        background-color: #fafafa;
+        background-image: none !important;
+    }
+}
+
 #app {
     background-image: linear-gradient(to top, #fafafabb, #fafafabb),
         url("assets/img/bg4.png");

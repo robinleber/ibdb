@@ -1,14 +1,54 @@
 <template>
     <div :id="$style.signUp">
+        <md-dialog
+            :class="$style.uploadImageDialog"
+            :md-active.sync="isUploadImageDialog"
+        >
+            <md-dialog-title>Bild hochladen</md-dialog-title>
+            <md-dialog-content :class="$style.content">
+                <cropper
+                    :class="$style.imgCropper"
+                    :stencil-props="{ aspectRatio: 1 / 1 }"
+                    :src="imageUrl"
+                    v-if="true"
+                    ref="cropper"
+                />
+                <md-button
+                    class="md-raised md-primary"
+                    :class="$style.uploadImageBtn"
+                    @click="pickImage()"
+                >
+                    Bild ändern
+                </md-button>
+            </md-dialog-content>
+            <md-dialog-actions>
+                <md-button
+                    :class="$style.buttonAsd"
+                    @click="cancelCrop()"
+                    class="md-accent md-raised"
+                    >Abbrechen</md-button
+                >
+                <md-button
+                    :class="$style.buttonAsd"
+                    class="md-primary md-raised"
+                    @click="cropImage()"
+                >
+                    Speichern
+                </md-button>
+            </md-dialog-actions>
+        </md-dialog>
         <div class="md-layout">
             <div class="md-layout-item md-elevation-10" :class="$style.col1">
                 <div :class="$style.container">
                     <div class="md-display-4" :class="$style.logo">IBDb</div>
-                    <span class="md-caption" :class="$style.caption">Dein digitales Bücherregal</span>
+                    <span class="md-caption" :class="$style.caption"
+                        >Dein digitales Bücherregal</span
+                    >
                     <div :class="$style.introduction">
-                        Auch gibt es niemanden, der den Schmerz an sich liebt, sucht oder wünscht, nur, weil er Schmerz
-                        ist, es sei denn, es kommt zu zufälligen Umständen, in denen Mühen und Schmerz ihm große Freude
-                        bereiten können.
+                        Auch gibt es niemanden, der den Schmerz an sich liebt,
+                        sucht oder wünscht, nur, weil er Schmerz ist, es sei
+                        denn, es kommt zu zufälligen Umständen, in denen Mühen
+                        und Schmerz ihm große Freude bereiten können.
                     </div>
                 </div>
             </div>
@@ -16,9 +56,13 @@
                 <md-card :class="$style.signUpCard">
                     <div :class="$style.signUpTxt" class="md-display-1">
                         Registrieren
-                    </div>  
+                    </div>
 
-                    <md-steppers :md-active-step.sync="activeStep" md-alternative :class="$style.steps">
+                    <md-steppers
+                        :md-active-step.sync="activeStep"
+                        md-alternative
+                        :class="$style.steps"
+                    >
                         <md-step
                             :class="$style.firstStep"
                             :md-done.sync="steps[0].step"
@@ -26,8 +70,16 @@
                             id="first"
                             md-label="Benutzerdaten"
                         >
-                            <form @keyup.enter="nextStep()" @submit.prevent="nextStep()" novalidate>
-                                <md-field :class="getValidationClass('signUp', 'email')">
+                            <form
+                                @keyup.enter="nextStep()"
+                                @submit.prevent="nextStep()"
+                                novalidate
+                            >
+                                <md-field
+                                    :class="
+                                        getValidationClass('signUp', 'email')
+                                    "
+                                >
                                     <label>E-Mail</label>
                                     <md-input
                                         autofocus
@@ -36,34 +88,71 @@
                                         type="email"
                                         v-model="signUp.email"
                                     />
-                                    <span class="md-error" v-if="!$v.signUp.email.required">
+                                    <span
+                                        class="md-error"
+                                        v-if="!$v.signUp.email.required"
+                                    >
                                         E-Mail erforderlich
                                     </span>
-                                    <span class="md-error" v-if="!$v.signUp.email.email">
+                                    <span
+                                        class="md-error"
+                                        v-if="!$v.signUp.email.email"
+                                    >
                                         E-Mail ungültig
                                     </span>
                                 </md-field>
 
-                                <md-field :class="getValidationClass('signUp', 'pass')">
+                                <md-field
+                                    :class="
+                                        getValidationClass('signUp', 'pass')
+                                    "
+                                >
                                     <label for="email">Passwort</label>
-                                    <md-input id="pass" type="password" v-model="signUp.pass" />
-                                    <span class="md-error" v-if="!$v.signUp.pass.required">
+                                    <md-input
+                                        id="pass"
+                                        type="password"
+                                        v-model="signUp.pass"
+                                    />
+                                    <span
+                                        class="md-error"
+                                        v-if="!$v.signUp.pass.required"
+                                    >
                                         Passwort erforderlich
                                     </span>
-                                    <span class="md-error" v-if="!$v.signUp.pass.minLength">
+                                    <span
+                                        class="md-error"
+                                        v-if="!$v.signUp.pass.minLength"
+                                    >
                                         Passwort muss min. 8 Zeichen enthalten
                                     </span>
                                 </md-field>
 
-                                <md-field :class="getValidationClass('signUp', 'passRepeat')">
+                                <md-field
+                                    :class="
+                                        getValidationClass(
+                                            'signUp',
+                                            'passRepeat'
+                                        )
+                                    "
+                                >
                                     <label>Passwort wiederholen</label>
-                                    <md-input id="repeatPass" type="password" v-model="signUp.passRepeat" />
-                                    <span class="md-error" v-if="!$v.signUp.passRepeat.required">
+                                    <md-input
+                                        id="repeatPass"
+                                        type="password"
+                                        v-model="signUp.passRepeat"
+                                    />
+                                    <span
+                                        class="md-error"
+                                        v-if="!$v.signUp.passRepeat.required"
+                                    >
                                         Passwort wiederholen
                                     </span>
                                     <span
                                         class="md-error"
-                                        v-if="!$v.signUp.passRepeat.sameAsPass && $v.signUp.passRepeat.required"
+                                        v-if="
+                                            !$v.signUp.passRepeat.sameAsPass &&
+                                                $v.signUp.passRepeat.required
+                                        "
                                     >
                                         Passwörter stimmen nicht überein
                                     </span>
@@ -72,12 +161,18 @@
                                 <md-card-actions :class="$style.cardActions">
                                     <md-button
                                         :class="$style.createAccountBtn"
-                                        :disabled="signUp.email == '' || signUp.pass == '' || signUp.passRepeat == ''"
+                                        :disabled="
+                                            signUp.email == '' ||
+                                                signUp.pass == '' ||
+                                                signUp.passRepeat == ''
+                                        "
                                         @click="nextStep()"
                                         class="md-accent md-raised"
                                     >
                                         Nächster Schritt
-                                        <md-icon style="vertical-align: -7px;">navigate_next</md-icon>
+                                        <md-icon style="vertical-align: -7px;"
+                                            >navigate_next</md-icon
+                                        >
                                     </md-button>
                                 </md-card-actions>
                             </form>
@@ -90,59 +185,111 @@
                             id="second"
                             md-label="Profil"
                         >
-                            <form @keyup.enter="createAccount()" @submit.prevent="createAccount()" novalidate>
+                            <form
+                                @keyup.enter="createAccount()"
+                                @submit.prevent="createAccount()"
+                                novalidate
+                            >
                                 <div
                                     :class="[
                                         $style.addProfilePicture,
-                                        !imageUrl || isImageLoading ? $style.profilePictureBorder : '',
+                                        !imageUrlCropped || isImageLoading
+                                            ? $style.profilePictureBorder
+                                            : '',
                                     ]"
                                 >
-                                    <div :class="$style.imageLoadingOverlay" v-if="isImageLoading">
+                                    <div
+                                        :class="$style.imageLoadingOverlay"
+                                        v-if="isImageLoading"
+                                    >
                                         <md-progress-spinner
                                             md-mode="indeterminate"
                                             :class="$style.imageLoadingSpinner"
                                         />
                                     </div>
-                                    <md-icon v-if="!imageUrl" :class="$style.face">
-                                        person_add
+                                    <md-icon
+                                        v-if="!imageUrlCropped"
+                                        :class="$style.face"
+                                    >
+                                        person
                                     </md-icon>
-                                    <img :src="imageUrl" :title="imageName" class="md-elevation-3" v-if="imageUrl" />
+                                    <img
+                                        :src="imageUrlCropped"
+                                        :title="imageName"
+                                        class="md-elevation-3"
+                                        v-if="imageUrlCropped"
+                                    />
+                                </div>
+                                <div :class="$style.imageBtnGrp">
                                     <md-button
-                                        :class="$style.deleteImageBtn"
-                                        @click="imageUrl = null"
+                                        @click="pickImage()"
+                                        v-if="!imageUrlCropped"
+                                        class="md-raised md-primary md-icon-button"
+                                    >
+                                        <md-icon>add</md-icon>
+                                    </md-button>
+                                    <md-button
+                                        v-else
+                                        @click="editImage()"
+                                        class="md-raised md-primary md-icon-button"
+                                    >
+                                        <md-icon>create</md-icon>
+                                    </md-button>
+                                    <md-button
+                                        @click="imageUrlCropped = null"
                                         class="md-accent md-fab md-raised md-dense"
-                                        v-if="imageUrl"
+                                        v-if="imageUrlCropped"
                                     >
                                         <md-icon>delete</md-icon>
                                     </md-button>
                                 </div>
-                                <md-button class="md-raised md-primary" @click="pickImage()"
-                                    >Profilbild hochladen</md-button
+                                <form @keyup.prevent style="display: none;" ref="imageInputForm">
+                                    <input
+                                        @change="onImagePicked"
+                                        accept="image/*"
+                                        ref="imageInput"
+                                        type="file"
+                                    />
+                                </form>
+                                <md-field
+                                    :class="
+                                        getValidationClass('profile', 'user')
+                                    "
                                 >
-                                <input
-                                    @change="onImagePicked"
-                                    accept="image/*"
-                                    ref="imageInput"
-                                    style="display: none;"
-                                    type="file"
-                                />
-                                <md-field :class="getValidationClass('profile', 'user')">
                                     <label>Anzeigename</label>
-                                    <md-input type="text" v-model="profile.user" ref="nameInput" />
-                                    <span class="md-error" v-if="!$v.profile.user.required">
+                                    <md-input
+                                        type="text"
+                                        v-model="profile.user"
+                                        ref="nameInput"
+                                    />
+                                    <span
+                                        class="md-error"
+                                        v-if="!$v.profile.user.required"
+                                    >
                                         Anzeigename erforderlich
                                     </span>
-                                    <span class="md-error" v-if="!$v.profile.user.minLength">
-                                        Anzeigename muss min. 3 Zeichen enthalten
+                                    <span
+                                        class="md-error"
+                                        v-if="!$v.profile.user.minLength"
+                                    >
+                                        Anzeigename muss min. 3 Zeichen
+                                        enthalten
                                     </span>
-                                    <span class="md-error" v-if="!$v.profile.user.maxLength">
-                                        Anzeigename darf max. 32 Zeichen enthalten
+                                    <span
+                                        class="md-error"
+                                        v-if="!$v.profile.user.maxLength"
+                                    >
+                                        Anzeigename darf max. 32 Zeichen
+                                        enthalten
                                     </span>
                                 </md-field>
                                 <md-card-actions :class="$style.cardActions">
                                     <md-button
                                         :class="$style.completeBtn"
-                                        :disabled="profile.user == '' && isSignUpDisabled"
+                                        :disabled="
+                                            profile.user == '' &&
+                                                isSignUpDisabled
+                                        "
                                         @click="createAccount()"
                                         class="md-raised md-accent"
                                     >
@@ -156,9 +303,13 @@
                     <md-divider />
 
                     <div :class="$style.alreadyAMemberTxt">
-                        Du hast schon einen Account?
+                        Schon registriert?
                         <br />
-                        <el-link :underline="false" @click="$router.replace('Login')">Zum Login</el-link>
+                        <el-link
+                            :underline="false"
+                            @click="$router.replace('Login')"
+                            >Zum Login</el-link
+                        >
                     </div>
                 </md-card>
             </div>

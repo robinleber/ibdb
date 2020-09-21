@@ -62,7 +62,7 @@
                             </md-field>
                             <el-link :class="$style.forgotPass" :underline="false" @click="resetPass()">
                                 Passwort vergessen?
-                            </el-link>
+                            </el-link><br />
                             <md-checkbox :class="$style.rememberMe" v-model="signIn.rememberMe"
                                 >E-Mail-Adresse merken</md-checkbox
                             >

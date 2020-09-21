@@ -17,6 +17,7 @@ firebase.initializeApp(FIREBASE_CONFIG);
 // Utilieties
 const DB = firebase.firestore();
 const AUTH = firebase.auth;
+const STORAGE = firebase.storage();
 
 // Collection references
 const USERS_COLLECTION = DB.collection("users");
@@ -29,6 +30,7 @@ const FAVORITES_COLLECTION = DB.collection("favorites");
 export {
     DB,
     AUTH,
+    STORAGE,
     USERS_COLLECTION,
     BOOKS_COLLECTION,
     COVERS_COLLECTIONS,
