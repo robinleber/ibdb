@@ -3,7 +3,7 @@ import { mainEventBus } from "@/components/mainEventBus.ts";
 
 @Component
 export default class AddBookDialog extends Vue {
-    isAddBookDialogVisible = true;
+    isAddBookDialogVisible = false;
     isbnInput = "";
     activeStep = "first";
 

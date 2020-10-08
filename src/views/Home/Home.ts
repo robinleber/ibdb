@@ -2,35 +2,39 @@
 import { Component, Vue } from "vue-property-decorator";
 import { mainEventBus } from "@/components/mainEventBus.ts";
 import firebase from "firebase";
+import { mapState } from "vuex";
+import * as fb from "@/firebase";
 
-@Component
+@Component({
+    computed: {
+        ...mapState({
+            userName(state: any) {
+                return state.name;
+            },
+            async profileUrl(state: any) {
+                console.log(state.userProfile);
+                let profileUrl = "";
+                // Get the download URL
+                await fb.STORAGE
+                    .ref()
+                    .child(state.userProfile.prof_src)
+                    .getDownloadURL()
+                    .then(url => (this.profileImage.push(url)))
+                    .catch(e => console.error(`Error: ${e.message}`));
+            },
+        }),
+    },
+})
 export default class Home extends Vue {
-    username: any = null;
-    profileUrl: any = null;
+    // mapState variables
+    public userprofile!: any;
+    public books!: any;
 
-    mounted() {
-        mainEventBus.$emit("changeMainLoading", false, "");
-        this.getProfileImage();
-        this.username = firebase.auth().currentUser.displayName;
-    }
+    public profileImage = [];
 
-    getProfileImage(): void {
-        const user = firebase.auth().currentUser;
+    // public get username
 
-        // Create a reference with an initial file path and name
-        let storage = firebase.storage();
-        let pathRef = storage.ref(
-            `profileImages/${user.uid}_${user.displayName.toLowerCase()}`
-        );
-
-        // Get the download URL
-        pathRef
-            .getDownloadURL()
-            .then((url) => (this.profileUrl = url))
-            .catch((e) => console.error(`Error: ${e.message}`));
-    }
-
-    logout(): void {
+    public logout(): void {
         mainEventBus.$emit("changeMainLoading", true, "Auf Wiedersehen!");
         firebase
             .auth()
@@ -39,6 +43,10 @@ export default class Home extends Vue {
                 this.$router.replace("Login");
                 mainEventBus.$emit("changeMainLoading", false, "");
             })
-            .catch((e) => console.error(`${e.code} - ${e.message}`));
+            .catch(e => console.error(`${e.code} - ${e.message}`));
+    }
+
+    public mounted() {
+        mainEventBus.$emit("changeMainLoading", false, "");
     }
 }

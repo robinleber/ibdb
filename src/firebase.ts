@@ -4,7 +4,7 @@ import "firebase/firestore";
 
 // Configure firebase connection
 const FIREBASE_CONFIG = {
-    apiKey: "AIzaSyCx2AB7A8mV7wceJa1o7fGetUTLtBdk180",
+    apiKey: `${process.env.VUE_APP_FIREBASE_API_KEY}`,
     authDomain: "ibdb-a3662.firebaseapp.com",
     databaseURL: "https://ibdb-a3662.firebaseio.com",
     projectId: "ibdb-a3662",
@@ -16,7 +16,8 @@ firebase.initializeApp(FIREBASE_CONFIG);
 
 // Utilieties
 const DB = firebase.firestore();
-const AUTH = firebase.auth;
+const AUTH = firebase.auth();
+const _AUTH = firebase.auth;
 const STORAGE = firebase.storage();
 
 // Collection references
@@ -30,6 +31,7 @@ const FAVORITES_COLLECTION = DB.collection("favorites");
 export {
     DB,
     AUTH,
+    _AUTH,
     STORAGE,
     USERS_COLLECTION,
     BOOKS_COLLECTION,

@@ -6,13 +6,19 @@
         >
             <md-dialog-title>Bild hochladen</md-dialog-title>
             <md-dialog-content :class="$style.content">
-                <cropper
-                    :class="$style.imgCropper"
-                    :stencil-props="{ aspectRatio: 1 / 1 }"
-                    :src="imageUrl"
-                    v-if="true"
-                    ref="cropper"
-                />
+                <div class="cropper-wrapper">
+                    <div
+                        class="cropper-background"
+                        :style="{ backgroundImage: 'url(' + imageUrl + ')' }"
+                    />
+                    <cropper
+                        :class="$style.imgCropper"
+                        :stencil-props="{ aspectRatio: 1 / 1 }"
+                        :src="imageUrl"
+                        v-if="true"
+                        ref="cropper"
+                    />
+                </div>
                 <md-button
                     class="md-raised md-primary"
                     :class="$style.uploadImageBtn"
@@ -215,7 +221,6 @@
                                     </md-icon>
                                     <img
                                         :src="imageUrlCropped"
-                                        :title="imageName"
                                         class="md-elevation-3"
                                         v-if="imageUrlCropped"
                                     />
@@ -243,10 +248,14 @@
                                         <md-icon>delete</md-icon>
                                     </md-button>
                                 </div>
-                                <form @keyup.prevent style="display: none;" ref="imageInputForm">
+                                <form
+                                    @keyup.prevent
+                                    style="display: none;"
+                                    ref="imageInputForm"
+                                >
                                     <input
                                         @change="onImagePicked"
-                                        accept="image/*"
+                                        accept="image/png, image/jpg, image/jpeg"
                                         ref="imageInput"
                                         type="file"
                                     />
@@ -259,25 +268,25 @@
                                     <label>Anzeigename</label>
                                     <md-input
                                         type="text"
-                                        v-model="profile.user"
+                                        v-model="signUp.user"
                                         ref="nameInput"
                                     />
                                     <span
                                         class="md-error"
-                                        v-if="!$v.profile.user.required"
+                                        v-if="!$v.signUp.user.required"
                                     >
                                         Anzeigename erforderlich
                                     </span>
                                     <span
                                         class="md-error"
-                                        v-if="!$v.profile.user.minLength"
+                                        v-if="!$v.signUp.user.minLength"
                                     >
                                         Anzeigename muss min. 3 Zeichen
                                         enthalten
                                     </span>
                                     <span
                                         class="md-error"
-                                        v-if="!$v.profile.user.maxLength"
+                                        v-if="!$v.signUp.user.maxLength"
                                     >
                                         Anzeigename darf max. 32 Zeichen
                                         enthalten
@@ -287,7 +296,7 @@
                                     <md-button
                                         :class="$style.completeBtn"
                                         :disabled="
-                                            profile.user == '' &&
+                                            signUp.user == '' &&
                                                 isSignUpDisabled
                                         "
                                         @click="createAccount()"

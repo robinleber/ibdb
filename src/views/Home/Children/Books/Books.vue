@@ -11,9 +11,9 @@
                 </md-card>
             </md-card-header>
             <md-card-content :class="$style.filterContent">
-                <md-field style="margin-bottom: 40px;">
+                <md-field style="margin-bottom: 40px;" md-clearable>
                     <label>Suchen</label>
-                    <md-input v-model="filter" />
+                    <md-input v-model="searchInput" />
                 </md-field>
                 <md-divider style="position: absolute; left: 0; right: 0;" />
                 <md-field style="margin-top: 55px;">
@@ -63,20 +63,22 @@
                     </md-select>
                 </md-field>
                 <div :class="$style.pagesWrapper">
-                    <md-field :class="$style.pagesInput">
+                    <md-field :class="$style.pagesField" md-clearable>
                         <label>Min. Seiten</label>
                         <md-input
-                            @input="
+                            :class="$style.pagesInput"
+                            @keyup="
                                 validateInput('minValue'), checkBookLength()
                             "
                             v-model="filters[3].value"
                             type="number"
                         ></md-input>
                     </md-field>
-                    <md-field :class="$style.pagesInput">
+                    <md-field :class="$style.pagesField" md-clearable>
                         <label>Max. Seiten</label>
                         <md-input
-                            @input="validateInput('maxValue')"
+                            :class="$style.pagesInput"
+                            @keyup="validateInput('maxValue')"
                             @blur="checkBookLength()"
                             v-model="filters[4].value"
                             type="number"
@@ -114,16 +116,16 @@
             </md-card-actions>
         </md-card>
         <div :class="$style.mainView">
-            <!-- <md-empty-state
+            <md-empty-state
                 :class="$style.emptyState"
                 class="md-accent"
                 md-description="Du hast noch keine Bücher in deiner Bibliothek"
                 md-icon="collections_bookmark"
                 md-label="Gähnende Leere"
                 md-rounded
-                v-if="bookList.length < 1 && !isLoading"
+                v-if="books.length < 1 && !isLoading"
             >
-            </md-empty-state> -->
+            </md-empty-state>
 
             <div
                 :class="$style.loadingScreen"
@@ -136,17 +138,58 @@
 
             <div :class="$style.fnBar">
                 <md-button
+                    v-if="!isIsbnInput"
                     :class="$style.addBookBtn"
                     class="md-accent md-raised"
-                    @click="showAddBookDialog()"
+                    @click="showAddBook()"
                 >
                     <md-icon>library_add</md-icon>
                     <span>&nbsp;Buch hinzufügen</span>
                 </md-button>
 
+                <md-field
+                    v-if="isIsbnInput"
+                    :class="[$style.isbnInputField, getValidationClass('isbn')]"
+                >
+                    <!-- <span :class="$style.prefix">ISBN</span> -->
+                    <label>ISBN</label>
+                    <md-input
+                        v-model="isbnInput"
+                        maxlength="13"
+                        ref="isbnInput"
+                        @keyup="checkIsbnValidity()"
+                        @blur="checkIsbnValidity()"
+                        @keyup.enter="addBook()"
+                    />
+                    <span class="md-error" v-if="!$v.isbnInput.required"
+                        >Bitte eine ISBN eingeben</span
+                    >
+                    <span class="md-error" v-if="!$v.isbnInput.between"
+                        >ISBN muss entweder 10 oder 13 Zeichen enthalten</span
+                    >
+                </md-field>
+
+                <md-button
+                    class="md-accent md-raised"
+                    v-if="isIsbnInput"
+                    @click="cancelAddBook()"
+                >
+                    Abbrechen
+                </md-button>
+
+                <md-button
+                    v-if="isIsbnInput"
+                    @click="addBook()"
+                    class="md-primary md-raised"
+                    :disabled="isbnInput == ''"
+                >
+                    Hinzufügen
+                </md-button>
+
                 <md-menu
                     :md-offset-x="0"
                     :md-offset-y="10"
+                    v-if="!isIsbnInput"
                     :class="$style.sortBtn"
                 >
                     <md-button class="md-raised md-accent" md-menu-trigger>
@@ -207,7 +250,7 @@
                     </md-menu-content>
                 </md-menu>
 
-                <div :class="$style.readingStateWrapper">
+                <div v-if="!isIsbnInput" :class="$style.readingStateWrapper">
                     <md-radio
                         :class="$style.readingState"
                         v-model="readingState"
@@ -228,7 +271,10 @@
                     >
                 </div>
 
-                <span v-if="isFilter" :class="$style.filteredTxt">
+                <span
+                    v-if="isFilter && !isIsbnInput"
+                    :class="$style.filteredTxt"
+                >
                     * gefiltert *
                 </span>
             </div>
@@ -236,14 +282,20 @@
             <md-content :class="$style.bookGallery" class="md-scrollbar">
                 <div
                     :class="$style.book"
-                    v-for="(isbn, index) in isbnList"
+                    v-for="(book, index) in books"
                     :key="index"
                     class="md-elevation-3"
                 >
-                    <md-ripple>
-                        <img
-                            src="https://marketplace.canva.com/EAD7WWWtKSQ/1/0/251w/canva-purple-and-red-leaves-illustration-children%27s-book-cover-hNI7HYnNVQQ.jpg"
-                        />
+                    <md-ripple :class="$style.bookContent">
+                        <div :class="$style.imageNotFoundContainer" v-if="!coverPics">
+                            <md-empty-state
+                                :class="$style.imageNotFound"
+                                class="md-primary"
+                                md-icon="image_not_supported"
+                                md-label="Bild konnte nicht geladen werden"
+                            />
+                        </div>
+                        <img :class="$style.bookCover" :src="coverPics[index]" v-else />
                     </md-ripple>
                 </div>
             </md-content>

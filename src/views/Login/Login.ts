@@ -13,18 +13,18 @@ import { Message } from "element-ui";
     },
 })
 export default class Login extends Vue {
-    rememberMe = false;
-    stayLoggedIn = false;
-    isLoginDisabled = false;
+    public rememberMe = false;
+    public stayLoggedIn = false;
+    public isLoginDisabled = false;
 
-    signIn = {
+    public signIn = {
         email: "",
         pass: "",
         rememberMe: false,
         remainLoggedIn: false,
     };
 
-    login(): void {
+    public login(): void {
         this.$v.$touch();
         if (!this.$v.$invalid) {
             mainEventBus.$emit("changeMainLoading", true, "Anmelden...");
@@ -58,13 +58,13 @@ export default class Login extends Vue {
         }
     }
 
-    getValidationClass(fieldName: string): any {
+    public getValidationClass(fieldName: string): any {
         const field = this.$v.signIn[fieldName];
 
         if (field) return { "md-invalid": field.$invalid && field.$dirty };
     }
 
-    getEmailFromLocalStorage(): void {
+    public getEmailFromLocalStorage(): void {
         if (localStorage.getItem("email")) {
             // Does email exist in local storage
             // Get email from local storage
@@ -75,7 +75,7 @@ export default class Login extends Vue {
         }
     }
 
-    mounted(): void {
+    public mounted(): void {
         this.getEmailFromLocalStorage();
         mainEventBus.$on("enableLoginButton", isLoginDisabled => {
             this.isLoginDisabled = isLoginDisabled;

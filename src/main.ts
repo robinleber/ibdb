@@ -29,7 +29,7 @@ Vue.config.productionTip = false;
 import { AUTH } from "./firebase";
 
 const app = "";
-AUTH().onAuthStateChanged(() => {
+AUTH.onAuthStateChanged(user => {
     if (!app) {
         new Vue({
             router,
@@ -37,4 +37,6 @@ AUTH().onAuthStateChanged(() => {
             render: (h) => h(App),
         }).$mount("#app");
     }
+
+    if (user) store.dispatch("fetchUserProfile", user);
 });

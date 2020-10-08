@@ -30,8 +30,6 @@ import { Cropper } from "vue-advanced-cropper";
                 required,
                 sameAsPass: sameAs("pass"),
             },
-        },
-        profile: {
             user: {
                 required,
                 minLength: minLength(3),
@@ -40,40 +38,37 @@ import { Cropper } from "vue-advanced-cropper";
         },
     },
 })
-export default class Login extends Vue {
+export default class SignUp extends Vue {
     /**
      * Data
      */
 
     // SignUp-Form
-    signUp = {
-        email: "",
-        pass: "",
-        passRepeat: "",
+    public signUp = {
+        email: "robin.leber@itacsoftware.com",
+        pass: "zh5#c2S3^jLa",
+        passRepeat: "zh5#c2S3^jLa",
+        user: "Robin",
     };
-    isSignUpDisabled = true;
-
-    // Profile-Form
-    profile = {
-        user: "",
-    };
+    public isSignUpDisabled = true;
 
     // Image upload
-    isUploadImageDialog = false;
-    isImageLoading = false;
-    imageName: any = null;
-    imageUrl: any = null;
-    imageUrlCropped: any = null;
-    imageFile: any = null;
+    public isUploadImageDialog = false;
+    public isImageLoading = false;
+    public imageUrl: any = null;
+    public imageUrlCropped: any = null;
+    public imageFile: any = null;
+
+    public zoom = 0;
 
     // Stepper
-    activeStep = "first";
-    firstStepError = "";
-    secondStepError = "";
-    steps = [{ step: false }, { step: false }];
+    public activeStep = "first";
+    public firstStepError = "";
+    public secondStepError = "";
+    public steps = [{ step: false }, { step: false }];
 
     // Cast imageInput as HTML-Element !IMPORTANT!
-    $refs!: {
+    public $refs!: {
         imageInputForm: HTMLFormElement;
         imageInput: HTMLFormElement;
         nameInput: HTMLFormElement;
@@ -85,9 +80,15 @@ export default class Login extends Vue {
      * Methods
      */
 
-    nextStep(): void {
-        this.$v.signUp.$touch(); // Check signUp-form
-        if (!this.$v.signUp.$invalid) {
+    public nextStep(): void {
+        this.$v.signUp.email.$touch(); // Check signUp-form
+        this.$v.signUp.pass.$touch(); // Check signUp-form
+        this.$v.signUp.passRepeat.$touch(); // Check signUp-form
+        if (
+            !this.$v.signUp.email.$invalid ||
+            !this.$v.signUp.pass.$invalid ||
+            !this.$v.signUp.passRepeat.$invalid
+        ) {
             // When signUp-form is valid
             this.steps[0].step = true;
             this.activeStep = "second";
@@ -98,58 +99,62 @@ export default class Login extends Vue {
         }
     }
 
-    pickImage(): void {
+    public pickImage(): void {
         this.$refs.imageInput.click(); // Focus on file-input for profile-image
         this.isImageLoading = true;
     }
 
-    onImagePicked(e: any): void {
-        this.isUploadImageDialog = true;
-
+    public onImagePicked(e: any): void {
         // Get selected files
         const files = e.target.files;
         if (files[0] !== undefined) {
-            this.imageName = files[0].name; // Get file-name
+            let imageName = files[0].name; // Get file-name
             // Check file-format
-            if (this.imageName.lastIndexOf(".") <= 0) {
+            if (imageName.lastIndexOf(".") <= 0) {
                 Message.error("Keine gültige Datei!");
+                this.isImageLoading = false;
                 return; // if image type is invalid
             }
+            this.isUploadImageDialog = true;
             // Get image-url
             const fr = new FileReader();
-            fr.onload = (e) => {
+            fr.onload = e => {
                 this.imageUrl = e.target.result;
             };
-            // Get image-file
+            // Get image-fileTURTLE 34rw1g CRICKET cru5h3d
             fr.readAsDataURL(files[0]);
             this.imageFile = files[0];
         }
         this.$refs.imageInputForm.reset();
     }
 
-    cancelCrop(): void {
+    public zoomImage(): void {
+        this.$refs.cropper.zoom(this.zoomValue);
+    }
+
+    public cancelCrop(): void {
         this.isImageLoading = false;
         this.isUploadImageDialog = false;
     }
-    
-    editImage(): void {
+
+    public editImage(): void {
         this.isUploadImageDialog = true;
         this.isImageLoading = true;
     }
 
-    cropImage(): void {
+    public cropImage(): void {
         const { coordinates, canvas } = this.$refs.cropper.getResult();
         this.imageUrlCropped = canvas.toDataURL();
         this.isUploadImageDialog = false;
         this.isImageLoading = false; // Hide loading-screen
     }
 
-    createAccount(): void {
+    public createAccount(): void {
         this.isSignUpDisabled = true;
         // check profile-form
-        this.$v.profile.$touch();
+        this.$v.signUp.user.$touch();
         // when profile-form is valid
-        if (!this.$v.profile.$invalid) {
+        if (!this.$v.signUp.user.$invalid) {
             this.secondStepError = null; // hide step-error
             this.$v.signUp.$touch(); // check signUp-form
             if (!this.$v.signUp.$invalid) {
@@ -159,7 +164,7 @@ export default class Login extends Vue {
                     true,
                     "Erstelle Account!"
                 ); // Show loading screen
-                this.$store.dispatch("signUp", this.signUp); // Create user-account
+                this.$store.dispatch("signUp", [this.signUp, this.imageFile]); // Create user-account
             } else {
                 // When signUp-form is invalid
                 this.steps[0].step = false; // Go to first step
@@ -171,22 +176,19 @@ export default class Login extends Vue {
         } else this.secondStepError = "Fehler!";
     }
 
-    getValidationClass(form: string, fieldName: string): any {
-        if (form == "signUp") {
-            // Set signUp field error, when field is invalid
-            const field = this.$v.signUp[fieldName];
-            if (field) return { "md-invalid": field.$invalid && field.$dirty };
-        } else if (form == "profile") {
-            // Set profile field error, when field is invalid
-            const field = this.$v.profile[fieldName];
-            if (field) return { "md-invalid": field.$invalid && field.$dirty };
-        }
+    public getValidationClass(form: string, fieldName: string): any {
+        const field = this.$v.signUp[fieldName];
+        if (field) return { "md-invalid": field.$invalid && field.$dirty };
+    }
+
+    public get zoomValue(): number {
+        return this.zoom / 100;
     }
 
     // Watch Steps
     @Watch("steps", { immediate: true })
     handler(value): void {
-        if (value[0].step) this.$refs.emailInput.focus();
-        else this.$refs.nameInput.focus();
+        if (value[0].step) this.$nextTick(() => this.$refs.emailInput.focus());
+        else this.$nextTick(() => this.$refs.nameInput.focus());
     }
 }

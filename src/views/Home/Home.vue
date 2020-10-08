@@ -29,7 +29,7 @@
                 />
             </md-tabs>
             <span :class="$style.msg">
-                <span class="md-title"> Hallo, {{ username }} </span>
+                <span class="md-title"> Hallo, {{ userName }} </span>
                 <br />
                 <span class="md-subheading" :class="$style.sub"
                     >Willkommen zurück</span
@@ -37,12 +37,10 @@
             </span>
             <md-ripple :class="$style.menuRipple" class="md-elevation-3">
                 <md-menu :md-offset-y="15" :class="$style.avatar">
-                    <img :src="profileUrl" md-menu-trigger v-if="profileUrl" />
-                    <img
-                        md-menu-trigger
-                        src="@/assets/img/avatar_default.png"
-                        v-else
-                    />
+                    <div style="height: 100%; width: 100%;" md-menu-trigger>
+                        <img :src="profileImage[0]" v-if="profileImage" />
+                        <img src="@/assets/img/avatar_default.png" v-else />
+                    </div>
 
                     <md-menu-content>
                         <md-menu-item @click="$router.replace('profile')">

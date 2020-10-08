@@ -1,5 +1,5 @@
 <template>
-    <div :class="$style.dashboard">
+    <div :id="$style.dashboard">
         <md-card :class="$style.statistics">
             <md-card-header :class="$style.header">
                 <md-card class="md-accent" :class="$style.headerCard">

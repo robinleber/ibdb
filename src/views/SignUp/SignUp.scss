@@ -50,6 +50,38 @@
             margin: 0;
             border-radius: 0 0 3px 3px !important;
         }
+
+        .rotateContainer {
+            display: flex;
+            margin-top: 8px;
+            justify-content: space-evenly;
+            align-items: center;
+        }
+
+        .zoomSliderContainer {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+
+            .zoomSlider {
+                width: 80%;
+                appearance: none;
+                height: 10px;
+                border-radius: 5px;
+                background-color: #448aff;
+            }
+
+            .zoomSlider::-webkit-slider-thumb {
+                background-color: #fafafa;
+                appearance: none;
+                height: 15px;
+                width: 25px;
+                border: 0;
+                border-radius: 50px;
+                box-shadow: 0px 0px 2px #000000;
+                cursor: pointer;
+            }
+        }
     }
 }
 

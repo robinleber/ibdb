@@ -6,6 +6,7 @@ import SignUp from "@/views/SignUp/SignUp.vue";
 import Dashboard from "@/views/Home/Children/Dashboard/Dashboard.vue";
 import Books from "@/views/Home/Children/Books/Books.vue";
 import Authors from "@/views/Home/Children/Authors/Authors.vue";
+import Favorites from '@/views/Home/Children/Favorites/Favorites';
 import Profile from "@/views/Home/Children/Profile/Profile.vue";
 import Settings from "@/views/Home/Children/Settings/Settings.vue";
 import firebase from "firebase";
@@ -42,6 +43,11 @@ const routes: Array<RouteConfig> = [
                 path: "/authors",
                 name: "Authors",
                 component: Authors,
+            },
+            {
+                path: "/favorites",
+                name: "Favorites",
+                component: Favorites,
             },
             {
                 path: "/profile",

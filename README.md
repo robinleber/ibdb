@@ -5,6 +5,11 @@
 npm install
 ```
 
+### Add your Google Books Authentication Key in ".env.local"
+```
+VUE_APP_GOOGLE_AUTH_KEY = <your_auth_key>
+```
+
 ### Compiles and hot-reloads for development
 ```
 npm run serve
