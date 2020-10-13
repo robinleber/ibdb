@@ -1,6 +1,7 @@
 import * as firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
+import "firebase/storage";
 
 // Configure firebase connection
 const FIREBASE_CONFIG = {
@@ -14,28 +15,28 @@ const FIREBASE_CONFIG = {
 };
 firebase.initializeApp(FIREBASE_CONFIG);
 
-// Utilieties
-const DB = firebase.firestore();
+// Utilities
 const AUTH = firebase.auth();
-const _AUTH = firebase.auth;
+const DB = firebase.firestore();
 const STORAGE = firebase.storage();
+const _AUTH = firebase.auth;
 
 // Collection references
-const USERS_COLLECTION = DB.collection("users");
+const AUTHORS_COLLECTION = DB.collection("authos");
 const BOOKS_COLLECTION = DB.collection("books");
 const COVERS_COLLECTIONS = DB.collection("covers");
-const AUTHORS_COLLECTION = DB.collection("authos");
 const FAVORITES_COLLECTION = DB.collection("favorites");
+const USERS_COLLECTION = DB.collection("users");
 
 // export utils/refs
 export {
-    DB,
     AUTH,
-    _AUTH,
-    STORAGE,
-    USERS_COLLECTION,
+    AUTHORS_COLLECTION,
     BOOKS_COLLECTION,
     COVERS_COLLECTIONS,
-    AUTHORS_COLLECTION,
+    DB,
     FAVORITES_COLLECTION,
+    STORAGE,
+    USERS_COLLECTION,
+    _AUTH,
 };

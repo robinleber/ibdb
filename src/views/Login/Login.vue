@@ -23,7 +23,7 @@
 
                         <md-card-content :class="$style.content">
                             <md-button :class="$style.googleBtn" class="md-accent md-raised">
-                                <img :class="$style.googleIcon" src="@/assets/img/google.svg" />
+                                <img :class="$style.googleIcon" src="@/assets/images/google.svg" />
                                 Mit Google anmelden
                             </md-button>
                             <div :class="$style.loginWithTxt">

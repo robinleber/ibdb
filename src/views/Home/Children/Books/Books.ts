@@ -1,15 +1,11 @@
 /* eslint-disable */
 import { Component, Vue, Watch } from "vue-property-decorator";
-import AddBookDialog from "@/components/AddBookDialog/AddBookDialog.vue";
 import { mainEventBus } from "@/components/mainEventBus.ts";
 import { required, between } from "vuelidate/lib/validators";
 import { mapState } from "vuex";
 import * as fb from "@/firebase";
 
 @Component({
-    components: {
-        AddBookDialog,
-    },
     validations: {
         isbnInput: {
             required,

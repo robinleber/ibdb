@@ -300,8 +300,6 @@
                 </div>
             </md-content>
         </div>
-
-        <add-book-dialog />
     </div>
 </template>
 

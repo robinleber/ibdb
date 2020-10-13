@@ -1,11 +1,6 @@
 import { Component, Vue } from "vue-property-decorator";
-import AddBookDialog from "@/components/AddBookDialog/AddBookDialog.vue";
 
-@Component({
-    components: {
-        AddBookDialog
-    }
-})
+@Component
 
 export default class Books extends Vue {
     bookList = [

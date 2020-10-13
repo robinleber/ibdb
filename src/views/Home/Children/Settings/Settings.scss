@@ -1,0 +1,39 @@
+#settings {
+    display: grid;
+    place-items: center;
+
+    .mainContainer {
+        height: 90%;
+        width: 450px;
+
+        .header {
+            text-align: center;
+        }
+
+        .imageContainer {
+            display: grid;
+            place-items: center;
+            margin-bottom: 30px;
+
+            .wrapper {
+                width: 125px;
+                position: relative;
+
+                .image {
+                    border-radius: 3px;
+                }
+
+                .editImageBtn {
+                    position: absolute;
+                    bottom: -20px;
+                    right: -20px;
+                }
+            }
+        }
+
+        section {
+            display: flex;
+            align-items: baseline;
+        }
+    }
+}

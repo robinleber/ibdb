@@ -45,10 +45,10 @@ export default class SignUp extends Vue {
 
     // SignUp-Form
     public signUp = {
-        email: "robin.leber@itacsoftware.com",
-        pass: "zh5#c2S3^jLa",
-        passRepeat: "zh5#c2S3^jLa",
-        user: "Robin",
+        email: "sabrina@lynn.com",
+        pass: "123456789",
+        passRepeat: "123456789",
+        user: "Sabriny Lynn",
     };
     public isSignUpDisabled = true;
 
@@ -121,7 +121,7 @@ export default class SignUp extends Vue {
             fr.onload = e => {
                 this.imageUrl = e.target.result;
             };
-            // Get image-fileTURTLE 34rw1g CRICKET cru5h3d
+            // Get image-file
             fr.readAsDataURL(files[0]);
             this.imageFile = files[0];
         }
@@ -143,14 +143,15 @@ export default class SignUp extends Vue {
     }
 
     public cropImage(): void {
-        const { coordinates, canvas } = this.$refs.cropper.getResult();
+        const { canvas } = this.$refs.cropper.getResult();
         this.imageUrlCropped = canvas.toDataURL();
         this.isUploadImageDialog = false;
         this.isImageLoading = false; // Hide loading-screen
     }
 
-    public createAccount(): void {
+    public async createAccount(): Promise<void> {
         this.isSignUpDisabled = true;
+        let imageBlob = await fetch(this.imageUrlCropped).then(r => r.blob());
         // check profile-form
         this.$v.signUp.user.$touch();
         // when profile-form is valid
@@ -163,8 +164,11 @@ export default class SignUp extends Vue {
                     "changeMainLoading",
                     true,
                     "Erstelle Account!"
-                ); // Show loading screen
-                this.$store.dispatch("signUp", [this.signUp, this.imageFile]); // Create user-account
+                );
+                this.$store.dispatch("signUp", [
+                    this.signUp,
+                    imageBlob,
+                ]); // Create user-account
             } else {
                 // When signUp-form is invalid
                 this.steps[0].step = false; // Go to first step

@@ -11,13 +11,20 @@ const store = new Vuex.Store({
     state: {
         userProfile: {
             name: "",
-            prof_src: "",
+            displayImagePath: "",
         },
         books: [],
     },
     mutations: {
-        setUserProfile(state, val) {
-            state.userProfile = val;
+        async setUserProfile(state, val) {
+            state.userProfile.name = val.name;
+            state.userProfile.displayImagePath = await fb.STORAGE.ref()
+                .child(val.displayImagePath)
+                .getDownloadURL()
+                .then(url => url)
+                .catch(e =>
+                    Message.error(`Error loading profile image: ${e.message}`)
+                );
         },
         setBooks(state, val) {
             state.books = val;
@@ -44,6 +51,16 @@ const store = new Vuex.Store({
             }
         },
 
+        async logout() {
+            mainEventBus.$emit("changeMainLoading", true, "Auf Wiedersehen!");
+            fb.AUTH.signOut()
+                .then(() => {
+                    router.replace("Login");
+                    mainEventBus.$emit("changeMainLoading", false, "");
+                })
+                .catch(e => console.error(`${e.code} - ${e.message}`));
+        },
+
         async signUp({ dispatch }, data) {
             let form = data[0],
                 file = data[1];
@@ -55,16 +72,16 @@ const store = new Vuex.Store({
                     form.pass
                 );
 
-                // Upload Profile Image
+                // Upload Profile Image to Storage
                 const ref = fb.STORAGE.ref();
                 const metaData = { contentType: file.type };
-                let fileName = `prof_pics/${fb.AUTH.currentUser.uid}`;
+                let fileName = `${user.uid}/displayImage`;
                 ref.child(fileName).put(file, metaData);
 
-                // Add User to Collection
+                // Add User to Database
                 await fb.USERS_COLLECTION.doc(user!.uid).set({
                     name: form.user,
-                    prof_src: fileName,
+                    displayImagePath: fileName,
                 });
 
                 // Success!
