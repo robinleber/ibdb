@@ -1,0 +1,22 @@
+#cropperDialog {
+    .uploadImageDialog {
+        .content {
+            overflow: hidden;
+            padding: 8px;
+
+            .imgCropper {
+                height: 100%;
+                width: 300px;
+                max-height: 600px;
+                background: #d5d5d5;
+                z-index: 0;
+            }
+
+            .uploadImageBtn {
+                width: 300px;
+                margin: 0;
+                border-radius: 0 0 3px 3px !important;
+            }
+        }
+    }
+}

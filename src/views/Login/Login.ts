@@ -3,6 +3,7 @@ import { Component, Vue } from "vue-property-decorator";
 import { mainEventBus } from "@/components/mainEventBus.ts";
 import { required, email } from "vuelidate/lib/validators";
 import { Message } from "element-ui";
+import store from "@/store";
 
 @Component({
     validations: {
@@ -49,7 +50,7 @@ export default class Login extends Vue {
                     "Fehler! - E-Mail-Adresse konnte nicht gespeichert werden!"
                 );
             }
-            this.$store.dispatch("login", {
+            store.dispatch("login", {
                 email: this.signIn.email,
                 pass: this.signIn.pass,
                 rememberMe: this.signIn.rememberMe,

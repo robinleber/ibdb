@@ -7,9 +7,8 @@ import Dashboard from "@/views/Home/Children/Dashboard/Dashboard.vue";
 import Books from "@/views/Home/Children/Books/Books.vue";
 import Authors from "@/views/Home/Children/Authors/Authors.vue";
 import Favorites from '@/views/Home/Children/Favorites/Favorites';
-import Profile from "@/views/Home/Children/Profile/Profile.vue";
 import Settings from "@/views/Home/Children/Settings/Settings.vue";
-import firebase from "firebase";
+import * as fb from "@/firebase";
 
 Vue.use(VueRouter);
 
@@ -30,32 +29,27 @@ const routes: Array<RouteConfig> = [
         },
         children: [
             {
-                path: "/dashboard",
+                path: "/Dashboard",
                 name: "Dashboard",
                 component: Dashboard,
             },
             {
-                path: "/books",
+                path: "/Books",
                 name: "Books",
                 component: Books,
             },
             {
-                path: "/authors",
+                path: "/Authors",
                 name: "Authors",
                 component: Authors,
             },
             {
-                path: "/favorites",
+                path: "/Favorites",
                 name: "Favorites",
                 component: Favorites,
             },
             {
-                path: "/profile",
-                name: "Profile",
-                component: Profile,
-            },
-            {
-                path: "/settings",
+                path: "/Settings",
                 name: "Settings",
                 component: Settings,
             },
@@ -63,7 +57,7 @@ const routes: Array<RouteConfig> = [
         component: Home,
     },
     {
-        path: "/login",
+        path: "/Login",
         name: "Login",
         meta: {
             requiresAuth: false,
@@ -71,7 +65,7 @@ const routes: Array<RouteConfig> = [
         component: Login,
     },
     {
-        path: "/signUp",
+        path: "/SignUp",
         name: "SignUp",
         meta: {
             requiresAuth: false,
@@ -87,7 +81,7 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
     const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
-    const isAuthenticated = firebase.auth().currentUser;
+    const isAuthenticated = fb.AUTH.currentUser;
     if (isAuthenticated && to.path == "/") next("Home");
     if (isAuthenticated && !requiresAuth) next("Home");
     if (requiresAuth && !isAuthenticated) next("Login");

@@ -12,6 +12,7 @@ const store = new Vuex.Store({
         userProfile: {
             name: "",
             displayImagePath: "",
+            isDarkMode: false,
         },
         books: [],
     },
@@ -25,13 +26,14 @@ const store = new Vuex.Store({
                 .catch(e =>
                     Message.error(`Error loading profile image: ${e.message}`)
                 );
+            state.userProfile.isDarkMode = val.isDarkMode;
         },
         setBooks(state, val) {
             state.books = val;
         },
     },
     actions: {
-        async login({ dispatch }, form) {
+        async login({ dispatch }, form: any) {
             // Set Authentication State Persistance
             const AUTH_PERSISTENCE = form.remainLoggedIn
                 ? fb._AUTH.Auth.Persistence.SESSION
@@ -61,9 +63,8 @@ const store = new Vuex.Store({
                 .catch(e => console.error(`${e.code} - ${e.message}`));
         },
 
-        async signUp({ dispatch }, data) {
-            let form = data[0],
-                file = data[1];
+        async signUp({ dispatch }, data: any) {
+            let { form, file } = data;
 
             try {
                 // Create User
@@ -82,6 +83,7 @@ const store = new Vuex.Store({
                 await fb.USERS_COLLECTION.doc(user!.uid).set({
                     name: form.user,
                     displayImagePath: fileName,
+                    isDarkMode: false,
                 });
 
                 // Success!
@@ -93,7 +95,7 @@ const store = new Vuex.Store({
             }
         },
 
-        async fetchUserProfile({ commit }, user) {
+        async fetchUserProfile({ commit }, user: any) {
             const USER_PROFILE = await fb.USERS_COLLECTION.doc(user.uid).get();
             commit("setUserProfile", USER_PROFILE.data());
 
@@ -114,10 +116,10 @@ const store = new Vuex.Store({
                 router.currentRoute.path === "/Login" ||
                 router.currentRoute.path === "/SignUp"
             )
-                router.replace("/Home");
+                router.replace("Home");
         },
 
-        async fetchBook({ dispatch }, isbn) {
+        async fetchBook({ dispatch }, isbn: string) {
             // Google Books Api - Authentication Key
             const AUTH_KEY = process.env.VUE_APP_GOOGLE_AUTH_KEY;
 
@@ -178,6 +180,78 @@ const store = new Vuex.Store({
                 addedOn: new Date(),
                 cover: filename,
             });
+        },
+
+        async switchDarkMode({ dispatch }, isDarkMode: boolean) {
+            const user = await fb.AUTH.currentUser;
+            await fb.USERS_COLLECTION.doc(user!.uid).update({
+                isDarkMode: isDarkMode,
+            });
+            dispatch("fetchUserProfile", user);
+        },
+
+        async updateName({ dispatch }, name: string) {
+            if (name !== this.state.userProfile.name) {
+                const user = await fb.AUTH.currentUser;
+                await fb.USERS_COLLECTION.doc(user!.uid)
+                    .update({
+                        name,
+                    })
+                    .then(() => {
+                        Message.success("Name erfolgreich geändert!");
+                        dispatch("fetchUserProfile", user);
+                    })
+                    .catch(e => {
+                        Message.error("Name konnte nicht geändert werden!");
+                        console.error(`Error changing name: ${e.message}`);
+                    });
+            }
+        },
+
+        async updateEmail({ commit }, email: string) {
+            const user = await fb.AUTH.currentUser;
+            if (email !== user.email) {
+                user.updateEmail(email)
+                    .then(() => {
+                        Message.success("E-Mail-Adresse erfolgreich geändert!");
+                    })
+                    .catch(e => {
+                        Message.error(
+                            "E-Mail-Adresse konnte nicht geändert werden!"
+                        );
+                        console.error(`Error changing email: ${e.message}`);
+                    });
+            }
+        },
+
+        async updatePassword({ commit }, password: any) {
+            const user = await fb.AUTH.currentUser;
+            const { oldPass, newPass } = password;
+            const credential = fb._AUTH.EmailAuthProvider.credential(
+                user.email,
+                oldPass
+            );
+            user.reauthenticateWithCredential(credential)
+                .then(() => {
+                    user.updatePassword(newPass)
+                        .then(() => {
+                            Message.success("Passwort erfolgreich geändert!");
+                        })
+                        .catch(e => {
+                            Message.error(
+                                "Passwort konnte nicht geändert werden!"
+                            );
+                            console.error(
+                                `error changing password: ${e.message}`
+                            );
+                        });
+                })
+                .catch(e => {
+                    Message.error(
+                        "Benutzer konnte nicht re-authentifiziert werden!"
+                    );
+                    console.error(`error re-authenticating user: ${e.message}`);
+                });
         },
     },
     modules: {},

@@ -34,38 +34,36 @@
                 display: flex;
                 position: absolute;
                 right: 0;
-
-                .avatarContent {
-                    position: relative;
-                    right: 0;
-                    width: 60px;
-                }
             }
         }
 
-        .msg {
-            position: absolute;
-            right: 100px;
+        .append {
+            align-items: center;
             color: #fafafa;
-            text-transform: uppercase;
-            font-size: 14pt;
+            display: flex;
+            position: absolute;
+            right: 1em;
 
-            .sub {
-                font-size: 10pt;
+            .settingsLink {
+                margin: 0 1em 0 0;
             }
-        }
-
-        .menuRipple {
-            background-color: #448aff;
-            min-width: 72px;
-            max-width: 72px;
 
             .avatar {
-                cursor: pointer;
-                width: 72px;
+                border-radius: 50%;
+                height: 60px;
+                margin-right: 1em;
+                width: 60px;
+            }
 
-                img {
-                    height: 72px;
+            span {
+                margin-right: 0.5em;
+            }
+
+            .logout {
+                margin: 0;
+
+                i {
+                    color: #fafafa;
                 }
             }
         }
@@ -73,7 +71,7 @@
 
     .routerView {
         height: calc(100vh - 72px);
-        width: 100vw;
         padding: 1em;
+        width: 100vw;
     }
 }

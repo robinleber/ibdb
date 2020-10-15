@@ -1,10 +1,10 @@
 /* eslint-disable */
 import { Component, Vue } from "vue-property-decorator";
 import { mainEventBus } from "@/components/mainEventBus.ts";
-import firebase from "firebase";
 import { mapState } from "vuex";
 import * as fb from "@/firebase";
 import store from "@/store";
+import router from "@/router";
 
 @Component({
     computed: {
@@ -18,8 +18,15 @@ export default class Home extends Vue {
     public userProfile!: any;
     public books!: any;
 
+    public showConfirm = false;
+
     public logout(): void {
-        this.$store.dispatch("logout");
+        store.dispatch("logout");
+    }
+
+    public redirectRouter(route: string): void {
+        if (router.currentRoute.fullPath !== route)
+            router.replace(route);
     }
 
     public mounted() {

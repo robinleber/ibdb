@@ -1,7 +1,6 @@
 /* eslint-disable */
 import { Component, Vue, Watch } from "vue-property-decorator";
 import { mainEventBus } from "@/components/mainEventBus.ts";
-import firebase from "firebase";
 import { Message } from "element-ui";
 import {
     required,
@@ -10,11 +9,12 @@ import {
     maxLength,
     sameAs,
 } from "vuelidate/lib/validators";
-import { Cropper } from "vue-advanced-cropper";
+import CropperDialog from "@/components/CropperDialog/CropperDialog.vue";
+import store from "@/store";
 
 @Component({
     components: {
-        Cropper,
+        CropperDialog,
     },
     validations: {
         signUp: {
@@ -55,9 +55,6 @@ export default class SignUp extends Vue {
     // Image upload
     public isUploadImageDialog = false;
     public isImageLoading = false;
-    public imageUrl: any = null;
-    public imageUrlCropped: any = null;
-    public imageFile: any = null;
 
     public zoom = 0;
 
@@ -67,18 +64,58 @@ export default class SignUp extends Vue {
     public secondStepError = "";
     public steps = [{ step: false }, { step: false }];
 
-    // Cast imageInput as HTML-Element !IMPORTANT!
+    public imageUrl: any = null;
+    public imageUrlCropped: string = null;
+    public imageFile: File = null;
+
     public $refs!: {
-        imageInputForm: HTMLFormElement;
-        imageInput: HTMLFormElement;
-        nameInput: HTMLFormElement;
-        emailInput: HTMLFormElement;
-        cropper: HTMLFormElement;
+        imageInputForm: any;
+        imageInput: any;
+        nameInput: any;
+        emailInput: any;
     };
 
     /**
      * Methods
      */
+
+    public pickImage(): void {
+        this.$refs.imageInput.click(); // Focus on file-input for profile-image
+        this.isImageLoading = true;
+    }
+
+    public onImagePicked(e: any): void {
+        // Get selected files
+        const files = e.target.files;
+        if (files[0] !== undefined) {
+            let imageName = files[0].name; // Get file-name
+            // Check file-format
+            if (imageName.lastIndexOf(".") <= 0) {
+                Message.error("Keine gültige Datei!");
+                return; // if image type is invalid
+            }
+            this.isUploadImageDialog = true;
+            // Get image-url
+            const fr = new FileReader();
+            fr.onload = e => {
+                this.imageUrl = e.target.result;
+            };
+            // Get image-file
+            fr.readAsDataURL(files[0]);
+            this.imageFile = files[0];
+        }
+        this.$refs.imageInputForm.reset();
+    }
+
+    public onImageCropped(): void {
+        this.isUploadImageDialog = false;
+        this.isImageLoading = false;
+    }
+
+    public onCropCancled(): void {
+        this.isUploadImageDialog = false;
+        this.isImageLoading = false;
+    }
 
     public nextStep(): void {
         this.$v.signUp.email.$touch(); // Check signUp-form
@@ -99,56 +136,6 @@ export default class SignUp extends Vue {
         }
     }
 
-    public pickImage(): void {
-        this.$refs.imageInput.click(); // Focus on file-input for profile-image
-        this.isImageLoading = true;
-    }
-
-    public onImagePicked(e: any): void {
-        // Get selected files
-        const files = e.target.files;
-        if (files[0] !== undefined) {
-            let imageName = files[0].name; // Get file-name
-            // Check file-format
-            if (imageName.lastIndexOf(".") <= 0) {
-                Message.error("Keine gültige Datei!");
-                this.isImageLoading = false;
-                return; // if image type is invalid
-            }
-            this.isUploadImageDialog = true;
-            // Get image-url
-            const fr = new FileReader();
-            fr.onload = e => {
-                this.imageUrl = e.target.result;
-            };
-            // Get image-file
-            fr.readAsDataURL(files[0]);
-            this.imageFile = files[0];
-        }
-        this.$refs.imageInputForm.reset();
-    }
-
-    public zoomImage(): void {
-        this.$refs.cropper.zoom(this.zoomValue);
-    }
-
-    public cancelCrop(): void {
-        this.isImageLoading = false;
-        this.isUploadImageDialog = false;
-    }
-
-    public editImage(): void {
-        this.isUploadImageDialog = true;
-        this.isImageLoading = true;
-    }
-
-    public cropImage(): void {
-        const { canvas } = this.$refs.cropper.getResult();
-        this.imageUrlCropped = canvas.toDataURL();
-        this.isUploadImageDialog = false;
-        this.isImageLoading = false; // Hide loading-screen
-    }
-
     public async createAccount(): Promise<void> {
         this.isSignUpDisabled = true;
         let imageBlob = await fetch(this.imageUrlCropped).then(r => r.blob());
@@ -165,10 +152,7 @@ export default class SignUp extends Vue {
                     true,
                     "Erstelle Account!"
                 );
-                this.$store.dispatch("signUp", [
-                    this.signUp,
-                    imageBlob,
-                ]); // Create user-account
+                store.dispatch("signUp", [this.signUp, imageBlob]); // Create user-account
             } else {
                 // When signUp-form is invalid
                 this.steps[0].step = false; // Go to first step
@@ -192,7 +176,8 @@ export default class SignUp extends Vue {
     // Watch Steps
     @Watch("steps", { immediate: true })
     handler(value): void {
-        if (value[0].step) this.$nextTick(() => this.$refs.emailInput.focus());
-        else this.$nextTick(() => this.$refs.nameInput.focus());
+        if (value[0].step)
+            this.$nextTick(() => this.$refs.emailInput.$el.focus());
+        else this.$nextTick(() => this.$refs.nameInput.$el.focus());
     }
 }

@@ -1,48 +1,20 @@
 <template>
     <div :id="$style.signUp">
-        <md-dialog
-            :class="$style.uploadImageDialog"
-            :md-active.sync="isUploadImageDialog"
-        >
-            <md-dialog-title>Bild hochladen</md-dialog-title>
-            <md-dialog-content :class="$style.content">
-                <div class="cropper-wrapper">
-                    <div
-                        class="cropper-background"
-                        :style="{ backgroundImage: 'url(' + imageUrl + ')' }"
-                    />
-                    <cropper
-                        :class="$style.imgCropper"
-                        :stencil-props="{ aspectRatio: 1 / 1 }"
-                        :src="imageUrl"
-                        v-if="true"
-                        ref="cropper"
-                    />
-                </div>
-                <md-button
-                    class="md-raised md-primary"
-                    :class="$style.uploadImageBtn"
-                    @click="pickImage()"
-                >
-                    Bild ändern
-                </md-button>
-            </md-dialog-content>
-            <md-dialog-actions>
-                <md-button
-                    :class="$style.buttonAsd"
-                    @click="cancelCrop()"
-                    class="md-accent md-raised"
-                    >Abbrechen</md-button
-                >
-                <md-button
-                    :class="$style.buttonAsd"
-                    class="md-primary md-raised"
-                    @click="cropImage()"
-                >
-                    Speichern
-                </md-button>
-            </md-dialog-actions>
-        </md-dialog>
+        <CropperDialog
+            :imageUrl="imageUrl"
+            :isCropperDialog="isUploadImageDialog"
+            v-model="imageUrlCropped"
+            @image-cropped="onImageCropped()"
+            @crop-canceled="onCropCancled()"
+        />
+        <form @keyup.prevent style="display: none;" ref="imageInputForm">
+            <input
+                @change="onImagePicked"
+                accept="image/png, image/jpg, image/jpeg"
+                ref="imageInput"
+                type="file"
+            />
+        </form>
         <div class="md-layout">
             <div class="md-layout-item md-elevation-10" :class="$style.col1">
                 <div :class="$style.container">
@@ -248,18 +220,6 @@
                                         <md-icon>delete</md-icon>
                                     </md-button>
                                 </div>
-                                <form
-                                    @keyup.prevent
-                                    style="display: none;"
-                                    ref="imageInputForm"
-                                >
-                                    <input
-                                        @change="onImagePicked"
-                                        accept="image/png, image/jpg, image/jpeg"
-                                        ref="imageInput"
-                                        type="file"
-                                    />
-                                </form>
                                 <md-field
                                     :class="
                                         getValidationClass('profile', 'user')

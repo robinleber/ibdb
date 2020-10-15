@@ -4,6 +4,7 @@ import { mainEventBus } from "@/components/mainEventBus.ts";
 import { required, between } from "vuelidate/lib/validators";
 import { mapState } from "vuex";
 import * as fb from "@/firebase";
+import store from "@/store";
 
 @Component({
     validations: {
@@ -220,6 +221,10 @@ export default class Books extends Vue {
         "9783608939835",
     ];
 
+    $refs: {
+        isbnInput: any
+    }
+
     //
     // ▼ GETTERS ▼
     //
@@ -264,7 +269,7 @@ export default class Books extends Vue {
     }
 
     public addBook(): void {
-        this.$store.dispatch("fetchBook", this.isbnInput);
+        store.dispatch("fetchBook", this.isbnInput);
     }
 
     public getValidationClass(fieldName: string): any {
@@ -314,15 +319,15 @@ export default class Books extends Vue {
 
         switch (input) {
             case "minValue":
-                this.filters[3].value = this.filters[3].value.replace(
+                this.filters[3].value = this.filters[3].value[0].replace(
                     /[\D]/g,
                     ""
                 );
 
                 if (minValue > maxValue && minValue > 0)
-                    this.filters[4].value = this.filters[3].value;
+                    this.filters[4].value = this.filters[3].value[0];
             case "maxValue":
-                this.filters[4].value = this.filters[4].value.replace(
+                this.filters[4].value = this.filters[4].value[0].replace(
                     /[\D]/g,
                     ""
                 );

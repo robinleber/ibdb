@@ -28,36 +28,37 @@
                     to="Favorites"
                 />
             </md-tabs>
-            <span :class="$style.msg">
-                <span class="md-title"> Hallo, {{ userProfile.name }} </span>
-                <br />
-                <span class="md-subheading" :class="$style.sub"
-                    >Willkommen zurück</span
+            <div :class="$style.append">
+                <md-button
+                    :class="$style.settingsLink"
+                    @click="redirectRouter('/Settings')"
+                    class="md-icon-button"
                 >
-            </span>
-            <md-ripple :class="$style.menuRipple" class="md-elevation-3">
-                <md-menu :md-offset-y="15" :class="$style.avatar">
-                    <div md-menu-trigger>
-                        <img :src="userProfile.displayImagePath" />
-                    </div>
-
-                    <md-menu-content>
-                        <md-menu-item @click="$router.replace('profile')">
-                            <md-icon>face</md-icon>
-                            <span>Profil</span>
-                        </md-menu-item>
-                        <md-menu-item @click="$router.replace('settings')">
-                            <md-icon>settings</md-icon>
-                            <span>Einstellungen</span>
-                        </md-menu-item>
-                        <md-menu-item class="md-accent" @click="logout()">
-                            <md-icon class="md-accent">exit_to_app</md-icon>
-                            <span>Abmelden</span>
-                        </md-menu-item>
-                    </md-menu-content>
-                </md-menu>
-            </md-ripple>
+                    <md-icon style="color: #fafafa;">settings</md-icon>
+                </md-button>
+                <img
+                    :class="$style.avatar"
+                    :src="userProfile.displayImagePath"
+                />
+                <span class="md-title">{{ userProfile.name }} </span>
+                <md-button
+                    :class="$style.logout"
+                    @click="showConfirm = true"
+                    class="md-icon-button md-elevation-0"
+                    md-menu-trigger
+                >
+                    <md-icon>exit_to_app</md-icon>
+                </md-button>
+            </div>
         </div>
+        <md-dialog-confirm
+            :md-active.sync="showConfirm"
+            @md-cancel="showConfirm = false"
+            @md-confirm="logout()"
+            md-cancel-text="Abbrechen"
+            md-confirm-text="Abmelden"
+            md-title="Möchtest du dich wirklich abmelden?"
+        />
         <router-view :class="$style.routerView" />
     </div>
 </template>
