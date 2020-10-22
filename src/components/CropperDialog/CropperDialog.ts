@@ -26,6 +26,10 @@ export default class CropperDialog extends Vue {
         cropper: any;
     };
 
+    public pickImage(): void {
+        this.$emit("pick-image");
+    }
+
     public cancelCrop(): void {
         this.$emit("crop-canceled");
     }

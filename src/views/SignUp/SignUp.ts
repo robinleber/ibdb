@@ -45,10 +45,10 @@ export default class SignUp extends Vue {
 
     // SignUp-Form
     public signUp = {
-        email: "sabrina@lynn.com",
-        pass: "123456789",
-        passRepeat: "123456789",
-        user: "Sabriny Lynn",
+        email: "leber.beselich@web.de",
+        pass: "NmYDyd3D",
+        passRepeat: "NmYDyd3D",
+        user: "Robin Leber",
     };
     public isSignUpDisabled = true;
 
@@ -59,7 +59,7 @@ export default class SignUp extends Vue {
     public zoom = 0;
 
     // Stepper
-    public activeStep = "first";
+    public activeStep = "second";
     public firstStepError = "";
     public secondStepError = "";
     public steps = [{ step: false }, { step: false }];
@@ -152,7 +152,7 @@ export default class SignUp extends Vue {
                     true,
                     "Erstelle Account!"
                 );
-                store.dispatch("signUp", [this.signUp, imageBlob]); // Create user-account
+                store.dispatch("signUp", {form: this.signUp, file: imageBlob}); // Create user-account
             } else {
                 // When signUp-form is invalid
                 this.steps[0].step = false; // Go to first step

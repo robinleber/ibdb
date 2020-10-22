@@ -13,7 +13,7 @@
         position: relative;
 
         .logo {
-            background-color: #448aff;
+            background-color: var(--md-theme-default-primary);
             color: #fafafa;
             display: grid;
             font-family: "Roboto Slab Bold";
@@ -25,16 +25,8 @@
         }
 
         .navBar {
-            position: relative;
             user-select: none;
             width: 100%;
-
-            .lastItem {
-                align-items: center;
-                display: flex;
-                position: absolute;
-                right: 0;
-            }
         }
 
         .append {
@@ -49,7 +41,7 @@
             }
 
             .avatar {
-                border-radius: 50%;
+                border-radius: 3px;
                 height: 60px;
                 margin-right: 1em;
                 width: 60px;

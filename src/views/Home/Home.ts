@@ -24,9 +24,19 @@ export default class Home extends Vue {
         store.dispatch("logout");
     }
 
+    public getDisplayImagePath(): any {
+        if (this.userProfile.hasDisplayImage)
+            return this.userProfile.displayImageUrl;
+        let defaultDisplayImagePath = require.context(
+            "@/assets/images/",
+            false,
+            /\.png$/
+        );
+        return defaultDisplayImagePath("./defaultDisplayImage.png");
+    }
+
     public redirectRouter(route: string): void {
-        if (router.currentRoute.fullPath !== route)
-            router.replace(route);
+        if (router.currentRoute.fullPath !== route) router.replace(route);
     }
 
     public mounted() {

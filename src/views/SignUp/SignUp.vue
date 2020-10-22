@@ -2,10 +2,11 @@
     <div :id="$style.signUp">
         <CropperDialog
             :imageUrl="imageUrl"
-            :isCropperDialog="isUploadImageDialog"
+            :isVisible="isUploadImageDialog"
             v-model="imageUrlCropped"
             @image-cropped="onImageCropped()"
             @crop-canceled="onCropCancled()"
+            @pick-image="pickImage()"
         />
         <form @keyup.prevent style="display: none;" ref="imageInputForm">
             <input
@@ -207,7 +208,7 @@
                                     </md-button>
                                     <md-button
                                         v-else
-                                        @click="editImage()"
+                                        @click="pickImage()"
                                         class="md-raised md-primary md-icon-button"
                                     >
                                         <md-icon>create</md-icon>

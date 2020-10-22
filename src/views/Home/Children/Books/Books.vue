@@ -150,9 +150,9 @@
                 <md-field
                     v-if="isIsbnInput"
                     :class="[$style.isbnInputField, getValidationClass('isbn')]"
+                    md-clearable
                 >
-                    <!-- <span :class="$style.prefix">ISBN</span> -->
-                    <label>ISBN</label>
+                    <span :class="$style.prefix">ISBN</span>
                     <md-input
                         v-model="isbnInput"
                         maxlength="13"
@@ -191,6 +191,7 @@
                     :md-offset-y="10"
                     v-if="!isIsbnInput"
                     :class="$style.sortBtn"
+                    :mdCloseOnSelect="false"
                 >
                     <md-button class="md-raised md-accent" md-menu-trigger>
                         <md-icon>filter_list</md-icon>
@@ -198,53 +199,19 @@
                     </md-button>
 
                     <md-menu-content>
-                        <md-menu-item @click="sortSelected = 'title'">
+                        <md-menu-item
+                            @click="sortSelected = condition.value"
+                            v-for="(condition, index) in sortConditions"
+                            :key="index"
+                        >
                             <span
                                 :class="
-                                    sortSelected == 'title' ? $style.strong : ''
-                                "
-                            >
-                                Titel
-                            </span>
-                        </md-menu-item>
-                        <md-menu-item @click="sortSelected = 'author'">
-                            <span
-                                :class="
-                                    sortSelected == 'author'
+                                    sortSelected == condition.value
                                         ? $style.strong
                                         : ''
                                 "
                             >
-                                Autor
-                            </span>
-                        </md-menu-item>
-                        <md-menu-item @click="sortSelected = 'pages'">
-                            <span
-                                :class="
-                                    sortSelected == 'pages' ? $style.strong : ''
-                                "
-                            >
-                                Seitenzahl
-                            </span>
-                        </md-menu-item>
-                        <md-menu-item @click="sortSelected = 'publish'">
-                            <span
-                                :class="
-                                    sortSelected == 'publish'
-                                        ? $style.strong
-                                        : ''
-                                "
-                            >
-                                Veröffentlichung
-                            </span>
-                        </md-menu-item>
-                        <md-menu-item @click="sortSelected = 'added'">
-                            <span
-                                :class="
-                                    sortSelected == 'added' ? $style.strong : ''
-                                "
-                            >
-                                Buch Hinzugefügt
+                                {{ condition.label }}
                             </span>
                         </md-menu-item>
                     </md-menu-content>
@@ -287,7 +254,10 @@
                     class="md-elevation-3"
                 >
                     <md-ripple :class="$style.bookContent">
-                        <div :class="$style.imageNotFoundContainer" v-if="!coverPics">
+                        <div
+                            :class="$style.imageNotFoundContainer"
+                            v-if="!coverUrls"
+                        >
                             <md-empty-state
                                 :class="$style.imageNotFound"
                                 class="md-primary"
@@ -295,7 +265,11 @@
                                 md-label="Bild konnte nicht geladen werden"
                             />
                         </div>
-                        <img :class="$style.bookCover" :src="coverPics[index]" v-else />
+                        <img
+                            :class="$style.bookCover"
+                            :src="coverUrls[index]"
+                            v-else
+                        />
                     </md-ripple>
                 </div>
             </md-content>

@@ -130,11 +130,10 @@
                         }
 
                         .imageLoadingOverlay {
-                            align-items: center;
                             background-color: #fafafaaa;
-                            display: flex;
+                            display: grid;
                             height: 100%;
-                            justify-content: center;
+                            place-items: center;
                             position: absolute;
                             width: 100%;
                         }

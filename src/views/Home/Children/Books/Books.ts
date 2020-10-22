@@ -14,7 +14,7 @@ import store from "@/store";
         },
     },
     computed: {
-        ...mapState(["userProfile", "books"]),
+        ...mapState(["userProfile", "books", "coverUrls"]),
     },
 })
 export default class Books extends Vue {
@@ -115,6 +115,13 @@ export default class Books extends Vue {
     public isbnInput = "";
     public isIsbnInput = false;
     public readingState = "read";
+    public sortConditions = [
+        { value: "title", label: "Titel" },
+        { value: "author", label: "Autor" },
+        { value: "pages", label: "Seiten" },
+        { value: "published", label: "Veröffentlichung" },
+        { value: "added", label: "Buch hinzugefügt" },
+    ];
     public sortSelected = "added";
     public sort(value: string): void {
         this.sortSelected = value;
@@ -222,8 +229,8 @@ export default class Books extends Vue {
     ];
 
     $refs: {
-        isbnInput: any
-    }
+        isbnInput: any;
+    };
 
     //
     // ▼ GETTERS ▼
@@ -239,22 +246,6 @@ export default class Books extends Vue {
     //
     // ▼ METHODS ▼
     //
-
-    coverPics = [];
-    public async getCoverUrls(): Promise<any> {
-        for (let book of this.books) {
-            // Get the download URL
-            await fb.STORAGE.ref()
-                .child(book.cover)
-                .getDownloadURL()
-                .then((url: string) => {
-                    this.coverPics.push(url);
-                })
-                .catch(e =>
-                    console.error(`Error getting coverUrl: ${e.message}`)
-                );
-        }
-    }
 
     public showAddBook(): void {
         this.isIsbnInput = true;
@@ -356,7 +347,7 @@ export default class Books extends Vue {
     // ▼ LIFECYCLE HOOKS ▼
     //
 
-    public created(): void {
-        this.getCoverUrls();
+    public beforeMount(): void {
+        document.title = "IBDb: Bibliothek";
     }
 }

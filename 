@@ -1,0 +1,26 @@
+* [33m19f68ee[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m)[m Started and almost finished implementing Settings, Made component out of cropper-dialog
+* [33m766da2c[m Started settings-page, updated vuex to store profile image url
+* [33md27a4b2[m[33m ([m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m)[m Made really good progress regarding firestore connection and using Vuex Store for central variables and methods
+* [33mc61a5c1[m Added image cropping to avatar selection
+* [33m8f73442[m Started Implementation of firebase storage, and vuex
+* [33ma05a861[m Updated login-design
+* [33m4d52728[m Changed next to nothing
+* [33mc237ec8[m Changed login a little
+* [33m0d89e91[m Seperated search from the rest of the filter, added more filters, Added 'Reset filter'-button
+* [33m7f90f8b[m Added delete-image-button to signUp, Implemented ProfileImage download from firebase, updated addBook-dialog
+* [33mf016607[m Finished profileImage-Upload and download
+* [33m9382b61[m Added form-validation to signIn & signUp, added profileImage-upload to firebase
+* [33m2f91937[m Messed up everything
+* [33mfa3584d[m Updated filter, changed navbar to new design
+* [33m6bae3c5[m Updated login page, Moved 'sign-up' to own route, Updated 'sign-up', Started firebase authentication
+* [33m38b3560[m Stared register card
+* [33m4770735[m Added filter tree
+* [33m3ace951[m Started Dashboard, Started filter in Books
+* [33mb90020d[m Changed cover source to openlibrary, Fixed 'could not set 'done' of undefined'-Issue, Added Dark-Mode
+* [33mb506629[m Started 'Add Book'-Dialog
+* [33m4fcfbdf[m Fixed fetch problem
+* [33md760eb2[m Added vue material, changed design of navBar & bookInfo
+* [33mbbc1530[m Started booklist: Cover, Title, Author, Progress
+* [33m8a75a64[m Added gradient to navbar
+* [33mb30e12c[m Added login, started home
+* [33m3d73940[m Initial Commit

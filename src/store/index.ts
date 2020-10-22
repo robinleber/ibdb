@@ -8,28 +8,54 @@ import { mainEventBus } from "@/components/mainEventBus.ts";
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
-    state: {
+    state: () => ({
         userProfile: {
             name: "",
             displayImagePath: "",
+            displayImageUrl: "",
             isDarkMode: false,
+            hasDisplayImage: false,
         },
         books: [],
-    },
+        coverUrls: [],
+    }),
     mutations: {
         async setUserProfile(state, val) {
             state.userProfile.name = val.name;
-            state.userProfile.displayImagePath = await fb.STORAGE.ref()
-                .child(val.displayImagePath)
-                .getDownloadURL()
-                .then(url => url)
-                .catch(e =>
-                    Message.error(`Error loading profile image: ${e.message}`)
-                );
             state.userProfile.isDarkMode = val.isDarkMode;
+
+            state.userProfile.hasDisplayImage = val.displayImagePath !== "";
+
+            if (state.userProfile.hasDisplayImage) {
+                state.userProfile.displayImageUrl = await fb.STORAGE.ref()
+                    .child(val.displayImagePath)
+                    .getDownloadURL()
+                    .then(url => url)
+                    .catch(e => {
+                        Message.error(
+                            `Fehler! Profilbild konnte nicht hochgeladen werden`
+                        );
+                        console.error(
+                            `Error while getting image from storage: ${e.message}`
+                        );
+                    });
+            } else state.userProfile.displayImageUrl = "";
         },
-        setBooks(state, val) {
+        async setBooks(state, val) {
             state.books = val;
+
+            for (let book of state.books) {
+                // Get the download URL
+                await fb.STORAGE.ref()
+                    .child(book.cover)
+                    .getDownloadURL()
+                    .then((url: string) => {
+                        state.coverUrls.push(url);
+                    })
+                    .catch(e =>
+                        console.error(`Error getting coverUrl: ${e.message}`)
+                    );
+            }
         },
     },
     actions: {
@@ -49,7 +75,10 @@ const store = new Vuex.Store({
             } catch (e) {
                 mainEventBus.$emit("enableLoginButton", false);
                 mainEventBus.$emit("changeMainLoading", false, "");
-                Message.error(`Error: ${e.message}`);
+                Message.error(
+                    "Fehler! Benutzer konnte nicht eingeloggt werden"
+                );
+                console.error(`Error while loggin in user: ${e.message}`);
             }
         },
 
@@ -65,6 +94,7 @@ const store = new Vuex.Store({
 
         async signUp({ dispatch }, data: any) {
             let { form, file } = data;
+            console.log(data);
 
             try {
                 // Create User
@@ -77,7 +107,21 @@ const store = new Vuex.Store({
                 const ref = fb.STORAGE.ref();
                 const metaData = { contentType: file.type };
                 let fileName = `${user.uid}/displayImage`;
-                ref.child(fileName).put(file, metaData);
+                ref.child(fileName)
+                    .put(file, metaData)
+                    .then(() => {
+                        Message.success(
+                            "Profilbild wurde erfolgreich aktualisiert"
+                        );
+                    })
+                    .catch(e => {
+                        Message.error(
+                            `Fehler! Profilbild konnte nicht hochgeladen werden`
+                        );
+                        console.error(
+                            `Error while uploading image to storage: ${e.message}`
+                        );
+                    });
 
                 // Add User to Database
                 await fb.USERS_COLLECTION.doc(user!.uid).set({
@@ -91,7 +135,8 @@ const store = new Vuex.Store({
                 dispatch("fetchUserProfile", user);
             } catch (e) {
                 mainEventBus.$emit("changeMainLoading", false, "");
-                Message.error(e.message);
+                Message.error("Fehler! Benutzer konnte nicht erstellt werden");
+                console.error(`Error while creating user: ${e.message}`);
             }
         },
 
@@ -122,10 +167,9 @@ const store = new Vuex.Store({
         async fetchBook({ dispatch }, isbn: string) {
             // Google Books Api - Authentication Key
             const AUTH_KEY = process.env.VUE_APP_GOOGLE_AUTH_KEY;
+            let remoteBookUrl = `https://www.googleapis.com/books/v1/volumes?q=isbn%3D${isbn}&key=${AUTH_KEY}`;
 
-            await Vue.axios(
-                `https://www.googleapis.com/books/v1/volumes?q=isbn%3D${isbn}&key=${AUTH_KEY}`
-            )
+            await Vue.axios(remoteBookUrl)
                 .then(response => {
                     // Add book to bookList
                     const BOOKS = response.data.items;
@@ -151,10 +195,10 @@ const store = new Vuex.Store({
             const book = dataArray[0],
                 isbn = dataArray[1];
 
-            let remoteimageurl = `https://www.buecherserien.de/wp-content/uploads/2009/04/Eragon_von_Christopher_Paolini.jpg`;
+            let remoteImageUrl = `https://www.buecherserien.de/wp-content/uploads/2009/04/Eragon_von_Christopher_Paolini.jpg`;
             let filename = `cover_pics/${isbn}.jpg`;
             // Download book cover and upload to firebase store
-            await fetch(remoteimageurl)
+            await fetch(remoteImageUrl)
                 .then(response => {
                     return response.blob();
                 })
@@ -182,12 +226,89 @@ const store = new Vuex.Store({
             });
         },
 
-        async switchDarkMode({ dispatch }, isDarkMode: boolean) {
-            const user = await fb.AUTH.currentUser;
-            await fb.USERS_COLLECTION.doc(user!.uid).update({
-                isDarkMode: isDarkMode,
-            });
-            dispatch("fetchUserProfile", user);
+        async addDisplayImage({ dispatch }, file) {
+            const user = fb.AUTH.currentUser;
+            const ref = fb.STORAGE.ref();
+            const metaData = { contentType: file.type };
+            let fileName = `${user.uid}/displayImage`;
+
+            ref.child(fileName)
+                .put(file, metaData)
+                .then(() => {
+                    fb.USERS_COLLECTION.doc(user!.uid).update({
+                        displayImagePath: fileName,
+                    });
+                    Message.success(
+                        "Profilbild wurde erfolgreich aktualisiert"
+                    );
+                    dispatch("fetchUserProfile", user);
+                })
+                .catch(e => {
+                    Message.error(
+                        "Fehler! Profilbild konnte nicht hochgeladen werden"
+                    );
+                    console.error(
+                        `Error while uploading image in storage: ${e.message}`
+                    );
+                });
+        },
+
+        async updateDisplayImage({ dispatch }, file) {
+            const user = fb.AUTH.currentUser;
+            const ref = fb.STORAGE.ref();
+            const metaData = { contentType: file.type };
+            let fileName = `${user.uid}/displayImage`;
+
+            ref.child(fileName)
+                .delete()
+                .then(() => {
+                    ref.child(fileName)
+                        .put(file, metaData)
+                        .then(() => {
+                            fb.USERS_COLLECTION.doc(user!.uid).update({
+                                displayImagePath: fileName,
+                            });
+                            Message.success(
+                                "Profilbild wurde erfolgreich aktualisiert"
+                            );
+                            dispatch("fetchUserProfile", user);
+                        })
+                        .catch(e => {
+                            Message.error(
+                                "Fehler! Profilbild konnte nicht hochgeladen werden"
+                            );
+                            console.error(
+                                `Error while updating image in storage: ${e.message}`
+                            );
+                        });
+                })
+                .catch(e => {
+                    Message.error("Fehler! Altes Profilbild konnte nicht gelöscht werden");
+                    console.error(
+                        `Error while deleting image from storage: ${e.message}`
+                    );
+                });
+        },
+
+        async deleteDisplayImage({ dispatch }) {
+            const user = fb.AUTH.currentUser;
+            const ref = fb.STORAGE.ref();
+            let fileName = `${user.uid}/displayImage`;
+            ref.child(fileName)
+                .delete()
+                .then(async () => {
+                    fb.USERS_COLLECTION.doc(user!.uid).update({
+                        displayImagePath: "",
+                    });
+                    Message.success("Profilbild wurde erfolgreich gelöscht");
+                    dispatch("fetchUserProfile", user);
+                })
+                .catch(e => {
+                    Message.error("Fehler! Profilbild konnte nicht gelöscht werden");
+                    console.error(
+                        `Error while deleting image from storage: ${e.message}`
+                    );
+                });
         },
 
         async updateName({ dispatch }, name: string) {
@@ -202,13 +323,13 @@ const store = new Vuex.Store({
                         dispatch("fetchUserProfile", user);
                     })
                     .catch(e => {
-                        Message.error("Name konnte nicht geändert werden!");
+                        Message.error("Fehler! Name konnte nicht geändert werden!");
                         console.error(`Error changing name: ${e.message}`);
                     });
             }
         },
 
-        async updateEmail({ commit }, email: string) {
+        async updateEmail({ dispatch }, email: string) {
             const user = await fb.AUTH.currentUser;
             if (email !== user.email) {
                 user.updateEmail(email)
@@ -217,11 +338,12 @@ const store = new Vuex.Store({
                     })
                     .catch(e => {
                         Message.error(
-                            "E-Mail-Adresse konnte nicht geändert werden!"
+                            "Fehler! E-Mail-Adresse konnte nicht geändert werden!"
                         );
                         console.error(`Error changing email: ${e.message}`);
                     });
             }
+            dispatch("fetchUserProfile", user);
         },
 
         async updatePassword({ commit }, password: any) {
@@ -239,7 +361,7 @@ const store = new Vuex.Store({
                         })
                         .catch(e => {
                             Message.error(
-                                "Passwort konnte nicht geändert werden!"
+                                "Fehler! Passwort konnte nicht geändert werden!"
                             );
                             console.error(
                                 `error changing password: ${e.message}`
@@ -248,13 +370,22 @@ const store = new Vuex.Store({
                 })
                 .catch(e => {
                     Message.error(
-                        "Benutzer konnte nicht re-authentifiziert werden!"
+                        "Fehler! Benutzer konnte nicht re-authentifiziert werden!"
                     );
                     console.error(`error re-authenticating user: ${e.message}`);
                 });
         },
+
+        async switchDarkMode({ dispatch }, isDarkMode: boolean) {
+            const user = await fb.AUTH.currentUser;
+            await fb.USERS_COLLECTION.doc(user!.uid).update({
+                isDarkMode: isDarkMode,
+            });
+            dispatch("fetchUserProfile", user);
+        },
     },
     modules: {},
+    getters: {},
 });
 
 export default store;
