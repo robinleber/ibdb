@@ -4,13 +4,14 @@ import * as fb from "../firebase";
 import router from "../router/index";
 import { Message } from "element-ui";
 import { mainEventBus } from "@/components/mainEventBus.ts";
+import { email } from "vuelidate/lib/validators";
 
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
     state: () => ({
         userProfile: {
-            name: "",
+            displayName: "",
             displayImagePath: "",
             displayImageUrl: "",
             isDarkMode: false,
@@ -21,7 +22,7 @@ const store = new Vuex.Store({
     }),
     mutations: {
         async setUserProfile(state, val) {
-            state.userProfile.name = val.name;
+            state.userProfile.displayName = val.displayName;
             state.userProfile.isDarkMode = val.isDarkMode;
 
             state.userProfile.hasDisplayImage = val.displayImagePath !== "";
@@ -59,6 +60,50 @@ const store = new Vuex.Store({
         },
     },
     actions: {
+        async signInWithGoogle({ dispatch }) {
+            let provider = new fb._AUTH.GoogleAuthProvider();
+
+            fb.AUTH.signInWithPopup(provider)
+                .then(async result => {
+                    // let token = result.credential.accessToken;
+                    let user = result.user;
+                    console.log(user);
+
+                    let imageBlob = await fetch(user.photoURL).then(r =>
+                        r.blob()
+                    );
+                    dispatch("addDisplayImage", imageBlob);
+                    
+                    // Check if user is signed in the first time
+                    if (
+                        user.metadata.creationTime ===
+                        user.metadata.lastSignInTime
+                    ) {
+                        await fb.USERS_COLLECTION.doc(user!.uid)
+                            .set({
+                                displayName: user.displayName,
+                                displayImagePath: `${user.uid}/displayImage`,
+                                isDarkMode: false,
+                            })
+                            .catch(e => {
+                                Message.error(
+                                    "Fehler! Benutzer konnte nicht erstellt werden"
+                                );
+                                console.log(
+                                    `Error while creating user in cloud firestore  - ${e.message}`
+                                );
+                            });
+                    }
+                })
+                .catch(e => {
+                    Message.error(
+                        "Fehler! Benutzer konnte nicht über Google angemeldet werden"
+                    );
+                    console.log(`Error while signInWithGoogle - ${e.message}`);
+                    fb.AUTH.signOut();
+                });
+        },
+
         async login({ dispatch }, form: any) {
             // Set Authentication State Persistance
             const AUTH_PERSISTENCE = form.remainLoggedIn
@@ -103,30 +148,12 @@ const store = new Vuex.Store({
                     form.pass
                 );
 
-                // Upload Profile Image to Storage
-                const ref = fb.STORAGE.ref();
-                const metaData = { contentType: file.type };
-                let fileName = `${user.uid}/displayImage`;
-                ref.child(fileName)
-                    .put(file, metaData)
-                    .then(() => {
-                        Message.success(
-                            "Profilbild wurde erfolgreich aktualisiert"
-                        );
-                    })
-                    .catch(e => {
-                        Message.error(
-                            `Fehler! Profilbild konnte nicht hochgeladen werden`
-                        );
-                        console.error(
-                            `Error while uploading image to storage: ${e.message}`
-                        );
-                    });
+                dispatch("addDisplayImage", file);
 
                 // Add User to Database
-                await fb.USERS_COLLECTION.doc(user!.uid).set({
-                    name: form.user,
-                    displayImagePath: fileName,
+                await fb.USERS_COLLECTION.doc(user.uid).set({
+                    displayName: form.user,
+                    displayImagePath: `${user.uid}/displayImage`,
                     isDarkMode: false,
                 });
 
@@ -283,7 +310,9 @@ const store = new Vuex.Store({
                         });
                 })
                 .catch(e => {
-                    Message.error("Fehler! Altes Profilbild konnte nicht gelöscht werden");
+                    Message.error(
+                        "Fehler! Altes Profilbild konnte nicht gelöscht werden"
+                    );
                     console.error(
                         `Error while deleting image from storage: ${e.message}`
                     );
@@ -304,45 +333,65 @@ const store = new Vuex.Store({
                     dispatch("fetchUserProfile", user);
                 })
                 .catch(e => {
-                    Message.error("Fehler! Profilbild konnte nicht gelöscht werden");
+                    Message.error(
+                        "Fehler! Profilbild konnte nicht gelöscht werden"
+                    );
                     console.error(
                         `Error while deleting image from storage: ${e.message}`
                     );
                 });
         },
 
-        async updateName({ dispatch }, name: string) {
-            if (name !== this.state.userProfile.name) {
+        async updateName({ dispatch }, displayName: string) {
+            if (displayName !== this.state.userProfile.displayName) {
                 const user = await fb.AUTH.currentUser;
                 await fb.USERS_COLLECTION.doc(user!.uid)
-                    .update({
-                        name,
-                    })
+                    .update({ displayName })
                     .then(() => {
                         Message.success("Name erfolgreich geändert!");
                         dispatch("fetchUserProfile", user);
                     })
                     .catch(e => {
-                        Message.error("Fehler! Name konnte nicht geändert werden!");
+                        Message.error(
+                            "Fehler! Name konnte nicht geändert werden!"
+                        );
                         console.error(`Error changing name: ${e.message}`);
                     });
             }
         },
 
-        async updateEmail({ dispatch }, email: string) {
+        async updateEmail({ dispatch }, data: any) {
             const user = await fb.AUTH.currentUser;
-            if (email !== user.email) {
-                user.updateEmail(email)
-                    .then(() => {
-                        Message.success("E-Mail-Adresse erfolgreich geändert!");
-                    })
-                    .catch(e => {
-                        Message.error(
-                            "Fehler! E-Mail-Adresse konnte nicht geändert werden!"
-                        );
-                        console.error(`Error changing email: ${e.message}`);
-                    });
-            }
+            const { email, pass } = data;
+            const credential = fb._AUTH.EmailAuthProvider.credential(
+                user.email,
+                pass
+            );
+            user.reauthenticateWithCredential(credential)
+                .then(() => {
+                    if (email !== user.email) {
+                        user.updateEmail(email)
+                            .then(() => {
+                                Message.success(
+                                    "E-Mail-Adresse erfolgreich geändert!"
+                                );
+                            })
+                            .catch(e => {
+                                Message.error(
+                                    "Fehler! E-Mail-Adresse konnte nicht geändert werden!"
+                                );
+                                console.error(
+                                    `Error changing email: ${e.message}`
+                                );
+                            });
+                    }
+                })
+                .catch(e => {
+                    Message.error(
+                        "Fehler! Benutzer konnte nicht re-authentifiziert werden!"
+                    );
+                    console.error(`error re-authenticating user: ${e.message}`);
+                });
             dispatch("fetchUserProfile", user);
         },
 

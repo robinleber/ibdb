@@ -37,7 +37,7 @@
                     <md-icon style="color: #fafafa;">settings</md-icon>
                 </md-button>
                 <img :class="$style.avatar" :src="getDisplayImagePath()" class="md-elevation-1" />
-                <span class="md-title">{{ userProfile.name }} </span>
+                <span class="md-title">{{ userProfile.displayName }} </span>
                 <md-button
                     :class="$style.logout"
                     @click="showConfirm = true"

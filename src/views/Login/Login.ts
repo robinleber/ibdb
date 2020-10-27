@@ -82,4 +82,8 @@ export default class Login extends Vue {
             this.isLoginDisabled = isLoginDisabled;
         })
     }
+
+    public signInWithGoogle(): void {
+        store.dispatch("signInWithGoogle");
+    }
 }

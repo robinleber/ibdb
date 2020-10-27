@@ -22,7 +22,7 @@
                 <div class="md-headline">Einstellungen</div>
             </md-card-header>
             <md-card-content>
-                <form @submit.prevent>
+                <form @keydown.enter.prevent autocomplete="off">
                     <!-- Profile Picture -->
                     <section :class="$style.imageContainer">
                         <div :class="$style.wrapper">
@@ -54,7 +54,7 @@
                                 <md-button
                                     :class="$style.deleteImageBtn"
                                     class="md-raised md-accent"
-                                    @click="deleteDisplayImage()"
+                                    @click="isDeleteDisplayImage = true"
                                     :disabled="!userProfile.hasDisplayImage"
                                 >
                                     <span>Bild löschen</span>
@@ -63,7 +63,10 @@
                         </div>
                     </section>
                     <!-- Name -->
-                    <section>
+                    <section
+                        :class="$style.changeName"
+                        @keyup.enter="updateName()"
+                    >
                         <md-field :class="getValidationClass('name', 'value')">
                             <label>Name</label>
                             <md-input
@@ -87,42 +90,41 @@
                                 v-if="!$v.settingsForm.name.value.maxLength"
                                 >Name zu lang! (max. 32 Zeichen)
                             </span>
-                            <button
-                                @click="cancelChangeName()"
-                                v-if="!settingsForm.name.isDisabled"
-                                class="md-elevation-2"
-                                :class="[$style.cancelBtn, $style.btn]"
-                            >
-                                <md-ripple>
-                                    <md-icon class="icon">close</md-icon>
-                                </md-ripple>
-                            </button>
                             <md-button
-                                :class="[
-                                    settingsForm.name.isDisabled
-                                        ? $style.changeBtn
-                                        : $style.saveBtn,
-                                    $style.btn,
-                                ]"
-                                @click="
-                                    settingsForm.name.isDisabled
-                                        ? changeName()
-                                        : updateName()
-                                "
+                                v-if="settingsForm.name.isDisabled"
+                                :class="$style.btn"
+                                @click="changeName()"
                                 class="md-raised md-primary md-dense"
                             >
-                                {{
-                                    settingsForm.name.isDisabled
-                                        ? "Ändern"
-                                        : "Speichern"
-                                }}
+                                Ändern
                             </md-button>
                         </md-field>
+                        <div
+                            :class="$style.btnGroup"
+                            v-if="!settingsForm.name.isDisabled"
+                        >
+                            <md-button
+                                :class="$style.btn"
+                                @click="abortChange('name')"
+                                class="md-raised md-dense md-accent"
+                                >Abbrechen</md-button
+                            >
+                            <md-button
+                                :disabled="
+                                    settingsForm.name.value ===
+                                        userProfile.displayName
+                                "
+                                @click="updateName()"
+                                :class="[$style.btn, $style.saveBtn]"
+                                class="md-raised md-dense"
+                                >Speichern</md-button
+                            >
+                        </div>
                     </section>
                     <!-- E-Mail -->
-                    <section>
+                    <section :class="$style.changeEmail">
                         <md-field :class="getValidationClass('email', 'value')">
-                            <label>E-Mail-Adresse</label>
+                            <label ref="emailLabel">E-Mail-Adresse</label>
                             <md-input
                                 :disabled="settingsForm.email.isDisabled"
                                 @focus.native="$event.target.select()"
@@ -140,26 +142,54 @@
                                 >E-Mail erforderlich
                             </span>
                             <md-button
-                                :class="[
-                                    settingsForm.email.isDisabled
-                                        ? $style.changeBtn
-                                        : $style.saveBtn,
-                                    $style.btn,
-                                ]"
-                                @click="
-                                    settingsForm.email.isDisabled
-                                        ? changeEmail()
-                                        : updateEmail()
-                                "
+                                v-if="settingsForm.email.isDisabled"
+                                :class="$style.btn"
+                                @click="changeEmail()"
                                 class="md-raised md-primary md-dense"
+                                :disabled="isGoogleEmail"
                             >
-                                {{
-                                    settingsForm.email.isDisabled
-                                        ? "Ändern"
-                                        : "Speichern"
-                                }}
+                                Ändern
                             </md-button>
+                            <span
+                                v-if="isGoogleEmail"
+                                :class="$style.gmailWarning"
+                                >Gmail-Adresse kann innerhalb von IBDb <b>nicht</b> geändert
+                                werden!</span
+                            >
                         </md-field>
+                        <md-field
+                            v-if="!settingsForm.email.isDisabled"
+                            :class="getValidationClass('email', 'pass')"
+                            :md-toggle-password="false"
+                        >
+                            <label>Password</label>
+                            <md-input
+                                type="password"
+                                v-model="settingsForm.email.pass"
+                            />
+                            <span
+                                class="md-error"
+                                v-if="!$v.settingsForm.email.pass.required"
+                                >Passwort erforderlich</span
+                            >
+                        </md-field>
+                        <div
+                            :class="$style.btnGroup"
+                            v-if="!settingsForm.email.isDisabled"
+                        >
+                            <md-button
+                                :class="[$style.cancelBtn, $style.btn]"
+                                class="md-raised md-dense md-accent"
+                                @click="abortChange('email')"
+                                >Abbrechen</md-button
+                            >
+                            <md-button
+                                :class="[$style.saveBtn, $style.btn]"
+                                class="md-raised md-dense"
+                                @click="updateEmail()"
+                                >Speichern</md-button
+                            >
+                        </div>
                     </section>
                     <!-- Password -->
                     <section v-if="settingsForm.newPassword.isDisabled">
@@ -168,21 +198,30 @@
                             <md-input
                                 v-model="settingsForm.password.value"
                                 :disabled="settingsForm.password.isDisabled"
-                                type="password"
+                                @select="$event.target.selectionStart = $event.target.selectionEnd"
                             />
                             <md-button
                                 :class="$style.btn"
                                 class="md-raised md-primary md-dense"
                                 @click="changePassword()"
+                                :disabled="isGoogleEmail"
                                 >Ändern</md-button
+                            >
+                            <span
+                                v-if="isGoogleEmail"
+                                :class="$style.gmailWarning"
+                                >Gmail-Passwort kann innerhalb von IBDb <b>nicht</b> geändert
+                                werden!</span
                             >
                         </md-field>
                     </section>
                     <!-- Change Password -->
-                    <section :class="$style.changePass" v-else>
+                    <section
+                        :class="$style.changePass"
+                        v-if="!settingsForm.newPassword.isDisabled"
+                    >
                         <section>
                             <md-field
-                                :md-toggle-password="false"
                                 :class="
                                     getValidationClass('newPassword', 'oldPass')
                                 "
@@ -206,7 +245,6 @@
                         </section>
                         <section>
                             <md-field
-                                :md-toggle-password="false"
                                 :class="
                                     getValidationClass('newPassword', 'newPass')
                                 "
@@ -237,7 +275,6 @@
                         </section>
                         <section>
                             <md-field
-                                :md-toggle-password="false"
                                 :class="
                                     getValidationClass(
                                         'newPassword',
@@ -263,7 +300,7 @@
                                 </span>
                                 <span
                                     class="md-error"
-                                    v-if="
+                                    v-else-if="
                                         !$v.settingsForm.newPassword
                                             .newPassRepeat.sameAsNewPass
                                     "
@@ -274,7 +311,7 @@
                         <div :class="$style.btnGroup">
                             <md-button
                                 :class="$style.btn"
-                                @click="cancelChangePassword()"
+                                @click="abortChange('pass')"
                                 class="md-raised md-accent md-dense"
                                 >Abbrechen</md-button
                             >
@@ -287,7 +324,7 @@
                         </div>
                     </section>
                     <!-- Dark Mode -->
-                    <section :class="$style.darkMode">
+                    <section :class="$style.darkMode" :style="isGoogleEmail ? 'margin-top: 25px;' : ''">
                         <span>Dark Mode</span>
                         <div :class="$style.switchWrapper">
                             <md-icon
@@ -318,6 +355,15 @@
                 </form>
             </md-card-content>
         </md-card>
+        <md-dialog-confirm
+            :md-active.sync="isDeleteDisplayImage"
+            md-title="Profilbild wirklich löschen?"
+            md-content="Das Profilbild kann nicht wiederhergestellt werden!"
+            md-confirm-text="Löschen"
+            md-cancel-text="Abbrechen"
+            @md-confirm="deleteDisplayImage()"
+            @md-cancel="isDeleteDisplayImage = false"
+        />
     </div>
 </template>
 

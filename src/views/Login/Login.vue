@@ -4,16 +4,24 @@
             <div class="md-layout-item md-elevation-10" :class="$style.col1">
                 <div :class="$style.container">
                     <div class="md-display-4" :class="$style.logo">IBDb</div>
-                    <span class="md-caption" :class="$style.caption">Dein digitales Bücherregal</span>
+                    <span class="md-caption" :class="$style.caption"
+                        >Dein digitales Bücherregal</span
+                    >
                     <div :class="$style.introduction">
-                        Auch gibt es niemanden, der den Schmerz an sich liebt, sucht oder wünscht, nur, weil er Schmerz
-                        ist, es sei denn, es kommt zu zufälligen Umständen, in denen Mühen und Schmerz ihm große Freude
-                        bereiten können.
+                        Auch gibt es niemanden, der den Schmerz an sich liebt,
+                        sucht oder wünscht, nur, weil er Schmerz ist, es sei
+                        denn, es kommt zu zufälligen Umständen, in denen Mühen
+                        und Schmerz ihm große Freude bereiten können.
                     </div>
                 </div>
             </div>
             <div class="md-layout-item" :class="$style.col2">
-                <form @keyup.enter="login()" @submit.prevent="login()" class="md-layout md-elevation-10" novalidate>
+                <form
+                    @keyup.enter="login()"
+                    @submit.prevent="login()"
+                    class="md-layout md-elevation-10"
+                    novalidate
+                >
                     <md-card :class="$style.loginCard" class="md-layout-item">
                         <div :class="$style.loginTxt">
                             <span>
@@ -22,8 +30,15 @@
                         </div>
 
                         <md-card-content :class="$style.content">
-                            <md-button :class="$style.googleBtn" class="md-accent md-raised">
-                                <img :class="$style.googleIcon" src="@/assets/images/google.svg" />
+                            <md-button
+                                @click="signInWithGoogle()"
+                                :class="$style.googleBtn"
+                                class="md-accent md-raised"
+                            >
+                                <img
+                                    :class="$style.googleIcon"
+                                    src="@/assets/images/google.svg"
+                                />
                                 Mit Google anmelden
                             </md-button>
                             <div :class="$style.loginWithTxt">
@@ -39,10 +54,16 @@
                                     type="email"
                                     v-model="signIn.email"
                                 />
-                                <span class="md-error" v-if="!$v.signIn.email.required">
+                                <span
+                                    class="md-error"
+                                    v-if="!$v.signIn.email.required"
+                                >
                                     E-Mail erforderlich
                                 </span>
-                                <span class="md-error" v-if="!$v.signIn.email.email">
+                                <span
+                                    class="md-error"
+                                    v-if="!$v.signIn.email.email"
+                                >
                                     E-Mail ist ungültig
                                 </span>
                             </md-field>
@@ -56,17 +77,28 @@
                                     type="password"
                                     v-model="signIn.pass"
                                 />
-                                <span class="md-error" v-if="!$v.signIn.pass.required">
+                                <span
+                                    class="md-error"
+                                    v-if="!$v.signIn.pass.required"
+                                >
                                     Passwort erforderlich
                                 </span>
                             </md-field>
-                            <el-link :class="$style.forgotPass" :underline="false" @click="resetPass()">
-                                Passwort vergessen?
-                            </el-link><br />
-                            <md-checkbox :class="$style.rememberMe" v-model="signIn.rememberMe"
+                            <el-link
+                                :class="$style.forgotPass"
+                                :underline="false"
+                                @click="resetPass()"
+                            >
+                                Passwort vergessen? </el-link
+                            ><br />
+                            <md-checkbox
+                                :class="$style.rememberMe"
+                                v-model="signIn.rememberMe"
                                 >E-Mail-Adresse merken</md-checkbox
                             >
-                            <md-checkbox :class="$style.stayLoggedIn" v-model="signIn.remainLoggedIn"
+                            <md-checkbox
+                                :class="$style.stayLoggedIn"
+                                v-model="signIn.remainLoggedIn"
                                 >Angemeldet bleiben</md-checkbox
                             >
                         </md-card-content>
@@ -86,7 +118,11 @@
                         <div :class="$style.notAMemberTxt">
                             Noch keinen Account?
                             <br />
-                            <el-link :underline="false" @click="$router.replace('SignUp')">Hier registrieren</el-link>
+                            <el-link
+                                :underline="false"
+                                @click="$router.replace('SignUp')"
+                                >Hier registrieren</el-link
+                            >
                         </div>
                     </md-card>
                 </form>

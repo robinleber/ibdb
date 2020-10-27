@@ -24,10 +24,10 @@
                         >Dein digitales Bücherregal</span
                     >
                     <div :class="$style.introduction">
-                        Auch gibt es niemanden, der den Schmerz an sich liebt,
-                        sucht oder wünscht, nur, weil er Schmerz ist, es sei
-                        denn, es kommt zu zufälligen Umständen, in denen Mühen
-                        und Schmerz ihm große Freude bereiten können.
+                        Lorem ipsum dolor sit amet, consectetuer adipiscing
+                        elit. Aenean commodo ligula eget dolor. Aenean massa.
+                        Cum sociis natoque penatibus et magnis dis parturient
+                        montes.
                     </div>
                 </div>
             </div>
@@ -253,12 +253,23 @@
                                         enthalten
                                     </span>
                                 </md-field>
+                                <md-checkbox
+                                    v-model="signUp.acceptTerms"
+                                    :class="$style.acceptTerms"
+                                >
+                                    Ich habe die
+                                    <router-link to="terms_conditions"
+                                        >AGB</router-link
+                                    >
+                                    gelesen und akzeptiert
+                                </md-checkbox>
                                 <md-card-actions :class="$style.cardActions">
                                     <md-button
                                         :class="$style.completeBtn"
                                         :disabled="
                                             signUp.user == '' &&
-                                                isSignUpDisabled
+                                                isSignUpDisabled &&
+                                                !signUp.acceptTerms
                                         "
                                         @click="createAccount()"
                                         class="md-raised md-accent"

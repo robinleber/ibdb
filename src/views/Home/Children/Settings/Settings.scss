@@ -7,6 +7,7 @@
         grid-row-start: 0;
         grid-row-end: 1;
         width: 400px;
+        border-radius: 3px;
 
         .header {
             background-color: var(--md-theme-default-primary);
@@ -74,6 +75,10 @@
             .btn {
                 margin-top: -8px;
 
+                &:not([disabled]) {
+                    color: #fafafa;
+                }
+
                 &.cancelBtn {
                     background-color: var(--md-theme-default-accent);
                     border-radius: 3px;
@@ -100,7 +105,17 @@
                 }
             }
 
-            &.changePass {
+            .gmailWarning {
+                position: absolute;
+                bottom: -22px;
+                font-size: 9pt;
+                color: gray;
+                left: 0;
+            }
+
+            &.changePass,
+            &.changeEmail,
+            &.changeName {
                 display: block;
 
                 .btnGroup {
@@ -116,10 +131,15 @@
                 }
             }
 
+            .passPlaceholderInput {
+                user-select: none;
+            }
+
             &.darkMode {
                 align-items: center;
                 justify-content: space-between;
                 position: relative;
+                margin: 4px 0 24px;
 
                 &:after {
                     background-image: linear-gradient(

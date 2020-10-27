@@ -45,10 +45,11 @@ export default class SignUp extends Vue {
 
     // SignUp-Form
     public signUp = {
-        email: "leber.beselich@web.de",
-        pass: "NmYDyd3D",
-        passRepeat: "NmYDyd3D",
-        user: "Robin Leber",
+        email: "",
+        pass: "",
+        passRepeat: "",
+        user: "",
+        acceptTerms: false,
     };
     public isSignUpDisabled = true;
 
@@ -59,7 +60,7 @@ export default class SignUp extends Vue {
     public zoom = 0;
 
     // Stepper
-    public activeStep = "second";
+    public activeStep = "";
     public firstStepError = "";
     public secondStepError = "";
     public steps = [{ step: false }, { step: false }];

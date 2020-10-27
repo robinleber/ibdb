@@ -10,6 +10,11 @@ npm install
 VUE_APP_GOOGLE_AUTH_KEY = <your_auth_key>
 ```
 
+### Add your Firebase API Key in ".env.local"
+```
+VUE_APP_FIREBASE_API_KEY = <your_auth_key>
+```
+
 ### Compiles and hot-reloads for development
 ```
 npm run serve

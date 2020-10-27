@@ -33,6 +33,9 @@ import CropperDialog from "@/components/CropperDialog/CropperDialog.vue";
                     required,
                     email,
                 },
+                pass: {
+                    required,
+                },
             },
             newPassword: {
                 oldPass: {
@@ -54,8 +57,8 @@ export default class Settings extends Vue {
     public userProfile!: any;
     public settingsForm = {
         name: { value: "", isDisabled: true },
-        email: { value: "", isDisabled: true },
-        password: { value: "placeholder", isDisabled: true },
+        email: { value: "", isDisabled: true, pass: "" },
+        password: { value: "••••••••••", isDisabled: true },
         newPassword: {
             oldPass: "",
             newPass: "",
@@ -65,6 +68,7 @@ export default class Settings extends Vue {
         isDarkMode: { value: false },
     };
     public isUploadImageDialog = false;
+    public isDeleteDisplayImage = false;
     public isImageLoading = false;
     public imageUrl: any = null;
     public imageUrlCropped: any = null;
@@ -79,6 +83,7 @@ export default class Settings extends Vue {
     $refs: {
         nameInput: any;
         emailInput: any;
+        emailLabel: any;
         oldPasswordInput: any;
         imageInput: any;
         imageInputForm: any;
@@ -86,7 +91,9 @@ export default class Settings extends Vue {
 
     public getValidationClass(form: string, fieldName: string): any {
         const field =
-            fieldName !== "" ? this.$v.settingsForm[form][fieldName] : this.$v.settingsForm[form];
+            fieldName !== ""
+                ? this.$v.settingsForm[form][fieldName]
+                : this.$v.settingsForm[form];
         if (field) return { "md-invalid": field.$invalid && field.$dirty };
     }
 
@@ -153,29 +160,76 @@ export default class Settings extends Vue {
         this.isImageLoading = false;
     }
 
+    public abortChange(field: string): void {
+        switch (field) {
+            case "name":
+                alert("sad");
+                this.$v.settingsForm.name.$reset();
+                this.settingsForm.name = {
+                    value: this.userProfile.displayName,
+                    isDisabled: true,
+                };
+                break;
+            case "email":
+                this.$v.settingsForm.email.$reset();
+                this.settingsForm.email = {
+                    value: fb.AUTH.currentUser.email,
+                    isDisabled: true,
+                    pass: "",
+                };
+                this.$refs.emailLabel.innerHTML = "E-Mail-Adresse";
+                break;
+            case "pass":
+                this.$v.settingsForm.newPassword.$reset();
+                this.settingsForm.newPassword = {
+                    oldPass: "",
+                    newPass: "",
+                    newPassRepeat: "",
+                    isDisabled: true,
+                };
+        }
+    }
+
+    public abortAllChangeExcept(field: string): void {
+        switch (field) {
+            case "name":
+                this.abortChange("email");
+                this.abortChange("pass");
+                break;
+            case "email":
+                this.abortChange("name");
+                this.abortChange("pass");
+                break;
+            case "pass":
+                this.abortChange("name");
+                this.abortChange("email");
+                break;
+        }
+    }
+
     public changeName(): void {
+        this.abortAllChangeExcept("name");
         this.settingsForm.name.isDisabled = false;
         this.$nextTick(() => {
             this.$refs.nameInput.$el.focus();
         });
     }
 
-    public cancelChangeName(): void {
-        alert("ENTER HITS cancelChangeName METHOD!!!");
-        this.settingsForm.name.value = this.userProfile.name;
-        this.settingsForm.name.isDisabled = true;
-    }
-
     public updateName(): void {
         this.$v.settingsForm.name.$touch();
         if (!this.$v.settingsForm.name.$invalid) {
-            this.settingsForm.name.isDisabled = true;
-            store.dispatch("updateName", this.settingsForm.name.value);
+            if (this.settingsForm.name !== this.userProfile.displayName) {
+                this.settingsForm.name.isDisabled = true;
+                store.dispatch("updateName", this.settingsForm.name.value);
+            }
         }
     }
 
     public changeEmail(): void {
+        this.abortAllChangeExcept("email");
         this.settingsForm.email.isDisabled = false;
+        this.settingsForm.email.value = "";
+        this.$refs.emailLabel.innerHTML = "Neue E-Mail-Adresse";
         this.$nextTick(() => {
             this.$refs.emailInput.$el.focus();
         });
@@ -184,28 +238,22 @@ export default class Settings extends Vue {
     public updateEmail(): void {
         this.$v.settingsForm.email.$touch();
         if (!this.$v.settingsForm.email.$invalid) {
-            store.dispatch("updateEmail", this.settingsForm.email.value);
+            store.dispatch("updateEmail", {
+                email: this.settingsForm.email.value,
+                pass: this.settingsForm.email.pass,
+            });
             this.settingsForm.email.isDisabled = true;
-            this.settingsForm.email.value = fb.AUTH.currentUser.email;
+            this.settingsForm.email.pass = "";
         }
     }
 
     public changePassword(): void {
+        this.abortAllChangeExcept("pass");
         this.settingsForm.newPassword.isDisabled = false;
         this.$nextTick(() => {
             this.$refs.oldPasswordInput.$el.focus();
             this.$refs.oldPasswordInput.$el.select();
         });
-    }
-
-    public cancelChangePassword(): void {
-        this.$v.settingsForm.newPassword.$reset();
-        this.settingsForm.newPassword = {
-            oldPass: "",
-            newPass: "",
-            newPassRepeat: "",
-            isDisabled: true,
-        };
     }
 
     public updatePassword(): void {
@@ -221,20 +269,20 @@ export default class Settings extends Vue {
         }
     }
 
-    public changeField(field: string): void {
-        this.settingsForm[field].isDisabled;
-    }
-
     public switchDarkMode(): void {
         store.dispatch("switchDarkMode", this.settingsForm.isDarkMode.value);
     }
 
     get name(): string {
-        return this.userProfile.name;
+        return this.userProfile.displayName;
     }
 
     get isDarkMode(): boolean {
         return this.userProfile.isDarkMode;
+    }
+
+    get isGoogleEmail(): boolean {
+        return fb.AUTH.currentUser.providerData[0].providerId === "google.com";
     }
 
     //

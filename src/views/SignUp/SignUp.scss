@@ -150,11 +150,17 @@
                         margin-top: -22px;
                     }
 
+                    .acceptTerms {
+                        margin: 0 0 1em 0;
+                        text-align: left;
+                    }
+
                     .cardActions {
                         display: flex;
                         justify-content: stretch;
                         padding: 0;
                         margin-bottom: 15px;
+                        margin-top: 15px;
 
                         .completeBtn {
                             width: 80%;
