@@ -6,11 +6,16 @@ import { mapState } from "vuex";
 import * as fb from "@/firebase";
 import store from "@/store";
 
+// custom validation
+const isbnFormat = (value, vm) => value.length === 10 || value.length === 13;
+
 @Component({
     validations: {
-        isbnInput: {
-            required,
-            between: between(10, 13),
+        isbn: {
+            input: {
+                required,
+                isbnFormat,
+            },
         },
     },
     computed: {
@@ -112,7 +117,7 @@ export default class Books extends Vue {
     public clearFilters = this.filters;
 
     // Function Bar
-    public isbnInput = "";
+    public isbn = { input: "" };
     public isIsbnInput = false;
     public readingState = "read";
     public sortConditions = [
@@ -256,11 +261,14 @@ export default class Books extends Vue {
 
     public cancelAddBook(): void {
         this.isIsbnInput = false;
-        this.isbnInput = "";
+        this.isbn.input = "";
+        this.$v.isbn.input.$reset();
     }
 
     public addBook(): void {
-        store.dispatch("fetchBook", this.isbnInput);
+        this.$v.isbn.input.$touch();
+        if (!this.$v.isbn.input.$invalid)
+            store.dispatch("fetchBook", this.isbn.input);
     }
 
     public getValidationClass(fieldName: string): any {
@@ -268,8 +276,13 @@ export default class Books extends Vue {
         if (field) return { "md-invalid": field.$invalid && field.$dirty };
     }
 
-    public getProgress(pages: number, atPage: number): number {
-        return Math.round((100 / pages) * atPage);
+    public getPages(id: string): number {
+        return this.books.find(x => x.id === id).data.volumeInfo.pageCount;
+    }
+
+    public getProgress(id: string, progress: number): number {
+        let pages = this.getPages(id);
+        if (this.books) return Math.round((100 / pages) * progress);
     }
 
     public getAuthors(authors: [string]): string {
@@ -339,15 +352,17 @@ export default class Books extends Vue {
         this.searchInput = "";
     }
 
-    public checkIsbnValidity(): void {
-        this.isbnInput = this.isbnInput.replace(/\D/g, "");
-    }
-
     //
     // ▼ LIFECYCLE HOOKS ▼
     //
 
     public beforeMount(): void {
         document.title = "IBDb: Bibliothek";
+
+        if (this.books) {
+            for (let book of this.books) {
+                book.showBookModal = false;
+            }
+        }
     }
 }

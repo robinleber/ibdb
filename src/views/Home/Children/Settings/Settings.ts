@@ -12,6 +12,9 @@ import * as fb from "@/firebase";
 import store from "@/store";
 import CropperDialog from "@/components/CropperDialog/CropperDialog.vue";
 
+// custom validation
+const deletion = (value, vm) => value === "account löschen";
+
 @Component({
     components: {
         CropperDialog,
@@ -51,6 +54,11 @@ import CropperDialog from "@/components/CropperDialog/CropperDialog.vue";
                 },
             },
         },
+        deleteAccount: {
+            input: {
+                deletion
+            },
+        },
     },
 })
 export default class Settings extends Vue {
@@ -73,6 +81,11 @@ export default class Settings extends Vue {
     public imageUrl: any = null;
     public imageUrlCropped: any = null;
     public imageFile: any = null;
+
+    public deleteAccountData = {
+        showDeleteAccount: false,
+        deleteAccountInput: "",
+    }
 
     public selectedPalette = "blue";
     public palettes = [
@@ -271,6 +284,14 @@ export default class Settings extends Vue {
 
     public switchDarkMode(): void {
         store.dispatch("switchDarkMode", this.settingsForm.isDarkMode.value);
+    }
+
+    public deleteAccount(): void {
+        if (this.deleteAccountInput === "account löschen")
+    }
+
+    public get isDeletionConfirmed(): boolean {
+        return this.deleteAccountInput !== "account löschen";
     }
 
     get name(): string {

@@ -66,7 +66,7 @@
 
     .mainView {
         display: grid;
-        gap: 1em;
+        gap: 1.5em 0;
         grid-template-rows: 36px auto;
         max-height: 100%;
         overflow: hidden;
@@ -107,19 +107,30 @@
             align-items: center;
             display: flex;
 
-            .isbnInputField {
-                width: 250px;
+            form {
+                align-items: center;
+                display: flex;
 
-                &[class*="md-focused"] {
-                    .prefix {
-                        color: var(--md-theme-default-primary) !important;
+                .isbnInputField {
+                    width: 250px;
+
+                    &[class*="md-focused"] {
+                        .prefix {
+                            color: var(--md-theme-default-primary) !important;
+                        }
                     }
-                }
 
-                .prefix {
-                    margin-top: 7px;
-                    margin-right: 5px;
-                    transition: color 400ms ease;
+                    &[class*="md-invalid"] {
+                        .prefix {
+                            color: var(--md-theme-default-accent) !important;
+                        }
+                    }
+
+                    .prefix {
+                        margin-top: 7px;
+                        margin-right: 5px;
+                        transition: color 400ms ease;
+                    }
                 }
             }
 
@@ -159,13 +170,13 @@
             gap: 1em;
             grid-template-columns: repeat(auto-fill, 200px);
             height: 100%;
-            grid-column-start: 0;
-            grid-column-end: 1;
             overflow: auto;
 
             .book {
                 height: 350px;
                 border-radius: 3px;
+                overflow: hidden;
+                position: relative;
 
                 .bookContent {
                     .bookCover {
@@ -176,6 +187,26 @@
                         cursor: pointer;
                         user-select: none;
                         z-index: 2000;
+                    }
+                }
+
+                .progressBar {
+                    position: absolute;
+                    bottom: 0;
+                    left: 0;
+                    right: 0;
+                    height: 8px;
+                    z-index: 5;
+                }
+
+                .tooltip {
+                    .pages {
+                        border-right: 1px solid black;
+                        height: 100%;
+                    }
+                    
+                    .percentage {
+                        color: green !important;
                     }
                 }
             }

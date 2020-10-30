@@ -53,9 +53,17 @@ const store = new Vuex.Store({
                     .then((url: string) => {
                         state.coverUrls.push(url);
                     })
-                    .catch(e =>
-                        console.error(`Error getting coverUrl: ${e.message}`)
-                    );
+                    .catch(e => {
+                        console.warn(`Warning - Could not get coverUrl! Default book cover was used\n${e.message}`);
+                        let defaultDisplayImagePath = require.context(
+                            "@/assets/images/",
+                            false,
+                            /\.jpg$/
+                        );
+                        state.coverUrls.push(
+                            defaultDisplayImagePath("./defaultBookCover.jpg")
+                        );
+                    });
             }
         },
     },
@@ -73,7 +81,7 @@ const store = new Vuex.Store({
                         r.blob()
                     );
                     dispatch("addDisplayImage", imageBlob);
-                    
+
                     // Check if user is signed in the first time
                     if (
                         user.metadata.creationTime ===
@@ -210,41 +218,50 @@ const store = new Vuex.Store({
                                 BOOK.volumeInfo.industryIdentifiers[1]
                                     .identifier
                         ) {
-                            dispatch("addBook", [BOOK, isbn]);
+                            dispatch("addBook", { book: BOOK, isbn });
                             break;
+                        } else {
+                            Message.error("Buch konnte nicht gefunden werden!");
+                            console.error(
+                                "Error while fetching book with google-api"
+                            );
                         }
                     }
                 })
                 .catch(e => console.error(`Error: ${e.message}`));
         },
 
-        async addBook({ commit }, dataArray: [object, string]) {
-            const book = dataArray[0],
-                isbn = dataArray[1];
+        async addBook({ commit }, dataArray) {
+            const { book, isbn } = dataArray;
+            const user = fb.AUTH.currentUser;
 
-            let remoteImageUrl = `https://www.buecherserien.de/wp-content/uploads/2009/04/Eragon_von_Christopher_Paolini.jpg`;
-            let filename = `cover_pics/${isbn}.jpg`;
+            let remoteImageUrl = `http://covers.openlibrary.org/b/isbn/${isbn}-L.jpg`;
+            console.log(`http://covers.openlibrary.org/b/isbn/${isbn}-L.jpg`);
+            let filename = `${user.uid}/bookCovers/${isbn}.jpg`;
             // Download book cover and upload to firebase store
-            await fetch(remoteImageUrl)
+
+            await Vue.axios({
+                url: remoteImageUrl,
+                method: "GET",
+                responseType: "blob",
+            })
                 .then(response => {
-                    return response.blob();
-                })
-                .then(blob => {
                     fb.STORAGE.ref()
                         .child(filename)
-                        .put(blob)
-                        .then(function(snapshot) {
-                            return snapshot.ref.getDownloadURL();
+                        .put(new Blob(response.data))
+                        .then(snapshot => {
+                            snapshot.ref.getDownloadURL();
+                            console.log("snapshot");
                         })
-                        .catch(e =>
+                        .catch(e => {
                             console.error(
                                 `Error uploading coverImage: ${e.message}`
-                            )
-                        );
+                            );
+                        });
                 })
-                .catch(e =>
-                    console.error(`Error getting coverImage: ${e.message}`)
-                );
+                .catch(e => {
+                    console.error(`Error getting coverImage: ${e.message}`);
+                });
             // Add book and cover-url to book collection
             fb.BOOKS_COLLECTION.add({
                 data: book,

@@ -39,7 +39,9 @@
                                     :class="$style.googleIcon"
                                     src="@/assets/images/google.svg"
                                 />
-                                Mit Google anmelden
+                                <div :class="$style.googleTxt">
+                                    Mit Google anmelden
+                                </div>
                             </md-button>
                             <div :class="$style.loginWithTxt">
                                 Oder mit E-Mail anmelden

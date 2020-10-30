@@ -126,7 +126,7 @@
                 v-if="books.length < 1 && !isLoading"
             >
             </md-empty-state>
-
+            <!-- Loading Screen -->
             <div
                 :class="$style.loadingScreen"
                 class="md-elevation-3"
@@ -135,7 +135,7 @@
                 <md-progress-spinner md-mode="indeterminate" />
                 <span :class="$style.loadingMessage">Lade Bibliothek</span>
             </div>
-
+            <!-- Function Bar -->
             <div :class="$style.fnBar">
                 <md-button
                     v-if="!isIsbnInput"
@@ -147,44 +147,49 @@
                     <span>&nbsp;Buch hinzufügen</span>
                 </md-button>
 
-                <md-field
-                    v-if="isIsbnInput"
-                    :class="[$style.isbnInputField, getValidationClass('isbn')]"
-                    md-clearable
-                >
-                    <span :class="$style.prefix">ISBN</span>
-                    <md-input
-                        v-model="isbnInput"
-                        maxlength="13"
-                        ref="isbnInput"
-                        @keyup="checkIsbnValidity()"
-                        @blur="checkIsbnValidity()"
-                        @keyup.enter="addBook()"
-                    />
-                    <span class="md-error" v-if="!$v.isbnInput.required"
-                        >Bitte eine ISBN eingeben</span
+                <form novalidate @keyup.enter.prevent="">
+                    <md-field
+                        v-if="isIsbnInput"
+                        :class="[
+                            $style.isbnInputField,
+                            getValidationClass('isbn'),
+                        ]"
+                        md-clearable
                     >
-                    <span class="md-error" v-if="!$v.isbnInput.between"
-                        >ISBN muss entweder 10 oder 13 Zeichen enthalten</span
+                        <span :class="$style.prefix">ISBN</span>
+                        <md-input
+                            v-model="isbn.input"
+                            maxlength="13"
+                            ref="isbnInput"
+                            @keyup.enter="addBook()"
+                        />
+                        <span class="md-error" v-if="!$v.isbn.input.required"
+                            >Bitte eine ISBN eingeben</span
+                        >
+                        <span
+                            class="md-error"
+                            v-else-if="!$v.isbn.input.between"
+                            >ISBN muss entweder 10 oder 13 Zeichen
+                            enthalten</span
+                        >
+                    </md-field>
+
+                    <md-button
+                        class="md-accent md-raised"
+                        v-if="isIsbnInput"
+                        @click="cancelAddBook()"
                     >
-                </md-field>
+                        Abbrechen
+                    </md-button>
 
-                <md-button
-                    class="md-accent md-raised"
-                    v-if="isIsbnInput"
-                    @click="cancelAddBook()"
-                >
-                    Abbrechen
-                </md-button>
-
-                <md-button
-                    v-if="isIsbnInput"
-                    @click="addBook()"
-                    class="md-primary md-raised"
-                    :disabled="isbnInput == ''"
-                >
-                    Hinzufügen
-                </md-button>
+                    <md-button
+                        v-if="isIsbnInput"
+                        @click="addBook()"
+                        class="md-primary md-raised"
+                    >
+                        Hinzufügen
+                    </md-button>
+                </form>
 
                 <md-menu
                     :md-offset-x="0"
@@ -245,15 +250,19 @@
                     * gefiltert *
                 </span>
             </div>
-
+            <!-- Book Gallery -->
             <md-content :class="$style.bookGallery" class="md-scrollbar">
+                <!-- Book -->
                 <div
                     :class="$style.book"
-                    v-for="(book, index) in books"
-                    :key="index"
+                    :key="book.id"
                     class="md-elevation-3"
+                    v-for="(book, index) in books"
+                    @click="book.showBookModal = true"
                 >
+                    <!-- Content -->
                     <md-ripple :class="$style.bookContent">
+                        <!-- No Cover found -->
                         <div
                             :class="$style.imageNotFoundContainer"
                             v-if="!coverUrls"
@@ -265,12 +274,33 @@
                                 md-label="Bild konnte nicht geladen werden"
                             />
                         </div>
+                        <!-- Cover -->
                         <img
                             :class="$style.bookCover"
                             :src="coverUrls[index]"
                             v-else
                         />
                     </md-ripple>
+                    <!-- Info Modal -->
+                    <div
+                        :class="$style.bookModal"
+                        class="md-elevation-3"
+                        v-if="book.showBookModal"
+                    ></div>
+                    <!-- Progress Bar -->
+                    <md-progress-bar
+                        :class="$style.progressBar"
+                        class="md-accent"
+                        md-mode="determinate"
+                        :md-value="getProgress(book.id, book.progress)"
+                        v-if="book.progress > 0"
+                    />
+                    <md-tooltip md-direction="bottom">
+                        {{
+                            `${book.progress} von ${getPages(book.id)}
+                            Seiten │ ${getProgress(book.id, book.progress)}%`
+                        }}
+                    </md-tooltip>
                 </div>
             </md-content>
         </div>
