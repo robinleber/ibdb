@@ -363,13 +363,14 @@
                     <md-button
                         :class="$style.deleteAccountBtn"
                         class="md-accent"
-                        @click="showDeleteAccount = true"
+                        @click="deleteAccountData.show = true"
                     >
                         Account löschen
                     </md-button>
                 </div>
             </md-card-content>
         </md-card>
+        <!-- Delete Display Image -->
         <md-dialog-confirm
             :md-active.sync="isDeleteDisplayImage"
             md-title="Profilbild wirklich löschen?"
@@ -379,8 +380,9 @@
             @md-confirm="deleteDisplayImage()"
             @md-cancel="isDeleteDisplayImage = false"
         />
-        <md-dialog :md-active.sync="showDeleteAccount">
-            <md-icon>delete</md-icon>
+        <!-- Delete Account -->
+        <md-dialog :class="$style.deleteAccountDialog" :md-active.sync="deleteAccountData.show">
+            <md-icon :class="$style.icon">delete</md-icon>
             <md-dialog-title>Account löschen?</md-dialog-title>
             <md-dialog-content>
                 Es werden<br />
@@ -391,10 +393,10 @@
                 endgültig gelöscht<br /><br />
                 Gebe "account löschen" ein um zu bestätigen
                 <md-field>
-                    <md-input v-model="deleteAccountInput" />
+                    <md-input v-model="deleteAccountData.input" />
                 </md-field>
                 <md-dialog-actions>
-                    <md-button class="md-raised">Abbrechen</md-button>
+                    <md-button class="md-raised" @click="deleteAccountData.show = false">Abbrechen</md-button>
                     <md-button class="md-accent md-raised" :disabled="isDeletionConfirmed" @click="deleteAccount()">Account löschen</md-button>
                 </md-dialog-actions>
             </md-dialog-content>

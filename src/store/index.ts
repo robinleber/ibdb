@@ -33,12 +33,8 @@ const store = new Vuex.Store({
                     .getDownloadURL()
                     .then(url => url)
                     .catch(e => {
-                        Message.error(
-                            `Fehler! Profilbild konnte nicht hochgeladen werden`
-                        );
-                        console.error(
-                            `Error while getting image from storage: ${e.message}`
-                        );
+                        Message.error(`Fehler! Profilbild konnte nicht hochgeladen werden`);
+                        console.error(`Error while getting image from storage: ${e.message}`);
                     });
             } else state.userProfile.displayImageUrl = "";
         },
@@ -55,14 +51,8 @@ const store = new Vuex.Store({
                     })
                     .catch(e => {
                         console.warn(`Warning - Could not get coverUrl! Default book cover was used\n${e.message}`);
-                        let defaultDisplayImagePath = require.context(
-                            "@/assets/images/",
-                            false,
-                            /\.jpg$/
-                        );
-                        state.coverUrls.push(
-                            defaultDisplayImagePath("./defaultBookCover.jpg")
-                        );
+                        let defaultDisplayImagePath = require.context("@/assets/images/", false, /\.jpg$/);
+                        state.coverUrls.push(defaultDisplayImagePath("./defaultBookCover.jpg"));
                     });
             }
         },
@@ -75,18 +65,12 @@ const store = new Vuex.Store({
                 .then(async result => {
                     // let token = result.credential.accessToken;
                     let user = result.user;
-                    console.log(user);
 
-                    let imageBlob = await fetch(user.photoURL).then(r =>
-                        r.blob()
-                    );
+                    let imageBlob = await fetch(user.photoURL).then(r => r.blob());
                     dispatch("addDisplayImage", imageBlob);
 
                     // Check if user is signed in the first time
-                    if (
-                        user.metadata.creationTime ===
-                        user.metadata.lastSignInTime
-                    ) {
+                    if (user.metadata.creationTime === user.metadata.lastSignInTime) {
                         await fb.USERS_COLLECTION.doc(user!.uid)
                             .set({
                                 displayName: user.displayName,
@@ -94,20 +78,14 @@ const store = new Vuex.Store({
                                 isDarkMode: false,
                             })
                             .catch(e => {
-                                Message.error(
-                                    "Fehler! Benutzer konnte nicht erstellt werden"
-                                );
-                                console.log(
-                                    `Error while creating user in cloud firestore  - ${e.message}`
-                                );
+                                Message.error("Fehler! Benutzer konnte nicht erstellt werden");
+                                console.error(`Error while creating user in cloud firestore  - ${e.message}`);
                             });
                     }
                 })
                 .catch(e => {
-                    Message.error(
-                        "Fehler! Benutzer konnte nicht über Google angemeldet werden"
-                    );
-                    console.log(`Error while signInWithGoogle - ${e.message}`);
+                    Message.error("Fehler! Benutzer konnte nicht über Google angemeldet werden");
+                    console.error(`Error while signInWithGoogle - ${e.message}`);
                     fb.AUTH.signOut();
                 });
         },
@@ -120,17 +98,12 @@ const store = new Vuex.Store({
 
             try {
                 await fb.AUTH.setPersistence(AUTH_PERSISTENCE);
-                const { user } = await fb.AUTH.signInWithEmailAndPassword(
-                    form.email,
-                    form.pass
-                );
+                const { user } = await fb.AUTH.signInWithEmailAndPassword(form.email, form.pass);
                 dispatch("fetchUserProfile", user);
             } catch (e) {
                 mainEventBus.$emit("enableLoginButton", false);
                 mainEventBus.$emit("changeMainLoading", false, "");
-                Message.error(
-                    "Fehler! Benutzer konnte nicht eingeloggt werden"
-                );
+                Message.error("Fehler! Benutzer konnte nicht eingeloggt werden");
                 console.error(`Error while loggin in user: ${e.message}`);
             }
         },
@@ -147,14 +120,10 @@ const store = new Vuex.Store({
 
         async signUp({ dispatch }, data: any) {
             let { form, file } = data;
-            console.log(data);
 
             try {
                 // Create User
-                const { user } = await fb.AUTH.createUserWithEmailAndPassword(
-                    form.email,
-                    form.pass
-                );
+                const { user } = await fb.AUTH.createUserWithEmailAndPassword(form.email, form.pass);
 
                 dispatch("addDisplayImage", file);
 
@@ -179,24 +148,18 @@ const store = new Vuex.Store({
             const USER_PROFILE = await fb.USERS_COLLECTION.doc(user.uid).get();
             commit("setUserProfile", USER_PROFILE.data());
 
-            fb.BOOKS_COLLECTION.orderBy("addedOn", "desc").onSnapshot(
-                snapshot => {
-                    const BOOKS_ARRAY = [];
+            fb.BOOKS_COLLECTION.orderBy("addedOn", "desc").onSnapshot(snapshot => {
+                const BOOKS_ARRAY = [];
 
-                    snapshot.forEach(doc => {
-                        const BOOK = doc.data();
-                        BOOK.id = doc.id;
-                        BOOKS_ARRAY.push(BOOK);
-                    });
-                    store.commit("setBooks", BOOKS_ARRAY);
-                }
-            );
+                snapshot.forEach(doc => {
+                    const BOOK = doc.data();
+                    BOOK.id = doc.id;
+                    BOOKS_ARRAY.push(BOOK);
+                });
+                store.commit("setBooks", BOOKS_ARRAY);
+            });
 
-            if (
-                router.currentRoute.path === "/Login" ||
-                router.currentRoute.path === "/SignUp"
-            )
-                router.replace("Home");
+            if (router.currentRoute.path === "/Login" || router.currentRoute.path === "/SignUp") router.replace("Home");
         },
 
         async fetchBook({ dispatch }, isbn: string) {
@@ -211,20 +174,14 @@ const store = new Vuex.Store({
 
                     for (const BOOK of BOOKS) {
                         if (
-                            isbn ===
-                                BOOK.volumeInfo.industryIdentifiers[0]
-                                    .identifier ||
-                            isbn ===
-                                BOOK.volumeInfo.industryIdentifiers[1]
-                                    .identifier
+                            isbn === BOOK.volumeInfo.industryIdentifiers[0].identifier ||
+                            isbn === BOOK.volumeInfo.industryIdentifiers[1].identifier
                         ) {
                             dispatch("addBook", { book: BOOK, isbn });
                             break;
                         } else {
                             Message.error("Buch konnte nicht gefunden werden!");
-                            console.error(
-                                "Error while fetching book with google-api"
-                            );
+                            console.error("Error while fetching book with google-api");
                         }
                     }
                 })
@@ -236,7 +193,6 @@ const store = new Vuex.Store({
             const user = fb.AUTH.currentUser;
 
             let remoteImageUrl = `http://covers.openlibrary.org/b/isbn/${isbn}-L.jpg`;
-            console.log(`http://covers.openlibrary.org/b/isbn/${isbn}-L.jpg`);
             let filename = `${user.uid}/bookCovers/${isbn}.jpg`;
             // Download book cover and upload to firebase store
 
@@ -254,19 +210,37 @@ const store = new Vuex.Store({
                             console.log("snapshot");
                         })
                         .catch(e => {
-                            console.error(
-                                `Error uploading coverImage: ${e.message}`
-                            );
+                            console.error(`Error uploading coverImage: ${e.message}`);
                         });
                 })
-                .catch(e => {
-                    console.error(`Error getting coverImage: ${e.message}`);
+                .catch(async () => {
+                    await Vue.axios({
+                        url: book.volumeInfo.imageLinks.thumbnail,
+                        method: "GET",
+                        responseType: "blob",
+                    })
+                        .then(response => {
+                            fb.STORAGE.ref()
+                                .child(filename)
+                                .put(new Blob(response.data))
+                                .then(snapshot => {
+                                    snapshot.ref.getDownloadURL();
+                                    console.log("snapshot - google");
+                                })
+                                .catch(e => {
+                                    console.error(`Error uploading coverImage: ${e.message}`);
+                                });
+                        })
+                        .catch(e => {
+                            console.error(`Error getting google coverImage: ${e.message}`);
+                        });
                 });
             // Add book and cover-url to book collection
             fb.BOOKS_COLLECTION.add({
                 data: book,
                 addedOn: new Date(),
-                cover: filename,
+                cover: filename ? filename : null,
+                progress: 0,
             });
         },
 
@@ -282,18 +256,12 @@ const store = new Vuex.Store({
                     fb.USERS_COLLECTION.doc(user!.uid).update({
                         displayImagePath: fileName,
                     });
-                    Message.success(
-                        "Profilbild wurde erfolgreich aktualisiert"
-                    );
+                    Message.success("Profilbild wurde erfolgreich aktualisiert");
                     dispatch("fetchUserProfile", user);
                 })
                 .catch(e => {
-                    Message.error(
-                        "Fehler! Profilbild konnte nicht hochgeladen werden"
-                    );
-                    console.error(
-                        `Error while uploading image in storage: ${e.message}`
-                    );
+                    Message.error("Fehler! Profilbild konnte nicht hochgeladen werden");
+                    console.error(`Error while uploading image in storage: ${e.message}`);
                 });
         },
 
@@ -312,27 +280,17 @@ const store = new Vuex.Store({
                             fb.USERS_COLLECTION.doc(user!.uid).update({
                                 displayImagePath: fileName,
                             });
-                            Message.success(
-                                "Profilbild wurde erfolgreich aktualisiert"
-                            );
+                            Message.success("Profilbild wurde erfolgreich aktualisiert");
                             dispatch("fetchUserProfile", user);
                         })
                         .catch(e => {
-                            Message.error(
-                                "Fehler! Profilbild konnte nicht hochgeladen werden"
-                            );
-                            console.error(
-                                `Error while updating image in storage: ${e.message}`
-                            );
+                            Message.error("Fehler! Profilbild konnte nicht hochgeladen werden");
+                            console.error(`Error while updating image in storage: ${e.message}`);
                         });
                 })
                 .catch(e => {
-                    Message.error(
-                        "Fehler! Altes Profilbild konnte nicht gelöscht werden"
-                    );
-                    console.error(
-                        `Error while deleting image from storage: ${e.message}`
-                    );
+                    Message.error("Fehler! Altes Profilbild konnte nicht gelöscht werden");
+                    console.error(`Error while deleting image from storage: ${e.message}`);
                 });
         },
 
@@ -350,12 +308,8 @@ const store = new Vuex.Store({
                     dispatch("fetchUserProfile", user);
                 })
                 .catch(e => {
-                    Message.error(
-                        "Fehler! Profilbild konnte nicht gelöscht werden"
-                    );
-                    console.error(
-                        `Error while deleting image from storage: ${e.message}`
-                    );
+                    Message.error("Fehler! Profilbild konnte nicht gelöscht werden");
+                    console.error(`Error while deleting image from storage: ${e.message}`);
                 });
         },
 
@@ -369,9 +323,7 @@ const store = new Vuex.Store({
                         dispatch("fetchUserProfile", user);
                     })
                     .catch(e => {
-                        Message.error(
-                            "Fehler! Name konnte nicht geändert werden!"
-                        );
+                        Message.error("Fehler! Name konnte nicht geändert werden!");
                         console.error(`Error changing name: ${e.message}`);
                     });
             }
@@ -380,33 +332,22 @@ const store = new Vuex.Store({
         async updateEmail({ dispatch }, data: any) {
             const user = await fb.AUTH.currentUser;
             const { email, pass } = data;
-            const credential = fb._AUTH.EmailAuthProvider.credential(
-                user.email,
-                pass
-            );
+            const credential = fb._AUTH.EmailAuthProvider.credential(user.email, pass);
             user.reauthenticateWithCredential(credential)
                 .then(() => {
                     if (email !== user.email) {
                         user.updateEmail(email)
                             .then(() => {
-                                Message.success(
-                                    "E-Mail-Adresse erfolgreich geändert!"
-                                );
+                                Message.success("E-Mail-Adresse erfolgreich geändert!");
                             })
                             .catch(e => {
-                                Message.error(
-                                    "Fehler! E-Mail-Adresse konnte nicht geändert werden!"
-                                );
-                                console.error(
-                                    `Error changing email: ${e.message}`
-                                );
+                                Message.error("Fehler! E-Mail-Adresse konnte nicht geändert werden!");
+                                console.error(`Error changing email: ${e.message}`);
                             });
                     }
                 })
                 .catch(e => {
-                    Message.error(
-                        "Fehler! Benutzer konnte nicht re-authentifiziert werden!"
-                    );
+                    Message.error("Fehler! Benutzer konnte nicht re-authentifiziert werden!");
                     console.error(`error re-authenticating user: ${e.message}`);
                 });
             dispatch("fetchUserProfile", user);
@@ -415,10 +356,7 @@ const store = new Vuex.Store({
         async updatePassword({ commit }, password: any) {
             const user = await fb.AUTH.currentUser;
             const { oldPass, newPass } = password;
-            const credential = fb._AUTH.EmailAuthProvider.credential(
-                user.email,
-                oldPass
-            );
+            const credential = fb._AUTH.EmailAuthProvider.credential(user.email, oldPass);
             user.reauthenticateWithCredential(credential)
                 .then(() => {
                     user.updatePassword(newPass)
@@ -426,18 +364,12 @@ const store = new Vuex.Store({
                             Message.success("Passwort erfolgreich geändert!");
                         })
                         .catch(e => {
-                            Message.error(
-                                "Fehler! Passwort konnte nicht geändert werden!"
-                            );
-                            console.error(
-                                `error changing password: ${e.message}`
-                            );
+                            Message.error("Fehler! Passwort konnte nicht geändert werden!");
+                            console.error(`error changing password: ${e.message}`);
                         });
                 })
                 .catch(e => {
-                    Message.error(
-                        "Fehler! Benutzer konnte nicht re-authentifiziert werden!"
-                    );
+                    Message.error("Fehler! Benutzer konnte nicht re-authentifiziert werden!");
                     console.error(`error re-authenticating user: ${e.message}`);
                 });
         },

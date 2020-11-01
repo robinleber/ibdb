@@ -1,26 +1,19 @@
 import { Vue, Component } from "vue-property-decorator";
 import { mapState } from "vuex";
 import { Message } from "element-ui";
-import {
-    required,
-    email,
-    minLength,
-    maxLength,
-    sameAs,
-} from "vuelidate/lib/validators";
+import { required, email, minLength, maxLength, sameAs } from "vuelidate/lib/validators";
 import * as fb from "@/firebase";
 import store from "@/store";
 import CropperDialog from "@/components/CropperDialog/CropperDialog.vue";
-
-// custom validation
-const deletion = (value, vm) => value === "account löschen";
 
 @Component({
     components: {
         CropperDialog,
     },
     computed: {
-        ...mapState(["userProfile"]),
+        ...mapState({
+            userProfile: "userProfile",
+        }),
     },
     validations: {
         settingsForm: {
@@ -54,11 +47,6 @@ const deletion = (value, vm) => value === "account löschen";
                 },
             },
         },
-        deleteAccount: {
-            input: {
-                deletion
-            },
-        },
     },
 })
 export default class Settings extends Vue {
@@ -83,9 +71,9 @@ export default class Settings extends Vue {
     public imageFile: any = null;
 
     public deleteAccountData = {
-        showDeleteAccount: false,
-        deleteAccountInput: "",
-    }
+        show: false,
+        input: "",
+    };
 
     public selectedPalette = "blue";
     public palettes = [
@@ -103,21 +91,13 @@ export default class Settings extends Vue {
     };
 
     public getValidationClass(form: string, fieldName: string): any {
-        const field =
-            fieldName !== ""
-                ? this.$v.settingsForm[form][fieldName]
-                : this.$v.settingsForm[form];
+        const field = fieldName !== "" ? this.$v.settingsForm[form][fieldName] : this.$v.settingsForm[form];
         if (field) return { "md-invalid": field.$invalid && field.$dirty };
     }
 
     public getDisplayImagePath(): any {
-        if (this.userProfile.hasDisplayImage)
-            return this.userProfile.displayImageUrl;
-        let defaultDisplayImagePath = require.context(
-            "@/assets/images/",
-            false,
-            /\.png$/
-        );
+        if (this.userProfile.hasDisplayImage) return this.userProfile.displayImageUrl;
+        let defaultDisplayImagePath = require.context("@/assets/images/", false, /\.png$/);
         return defaultDisplayImagePath("./defaultDisplayImage.png");
     }
 
@@ -162,8 +142,7 @@ export default class Settings extends Vue {
 
     public async updateDisplayImage(): Promise<void> {
         let imageBlob = await fetch(this.imageUrlCropped).then(r => r.blob());
-        if (this.userProfile.hasDisplayImage)
-            store.dispatch("updateDisplayImage", imageBlob);
+        if (this.userProfile.hasDisplayImage) store.dispatch("updateDisplayImage", imageBlob);
         else store.dispatch("addDisplayImage", imageBlob);
     }
 
@@ -176,7 +155,6 @@ export default class Settings extends Vue {
     public abortChange(field: string): void {
         switch (field) {
             case "name":
-                alert("sad");
                 this.$v.settingsForm.name.$reset();
                 this.settingsForm.name = {
                     value: this.userProfile.displayName,
@@ -287,19 +265,18 @@ export default class Settings extends Vue {
     }
 
     public deleteAccount(): void {
-        if (this.deleteAccountInput === "account löschen")
+        if (this.deleteAccountData.input === "account löschen") {
+        }
+    }
+
+    public getUserProfile(): any {
+        this.settingsForm.email.value = fb.AUTH.currentUser.email;
+        this.settingsForm.name.value = this.userProfile.name;
+        this.settingsForm.isDarkMode.value = this.userProfile.isDarkMode;
     }
 
     public get isDeletionConfirmed(): boolean {
-        return this.deleteAccountInput !== "account löschen";
-    }
-
-    get name(): string {
-        return this.userProfile.displayName;
-    }
-
-    get isDarkMode(): boolean {
-        return this.userProfile.isDarkMode;
+        return this.deleteAccountData.input !== "account löschen";
     }
 
     get isGoogleEmail(): boolean {
@@ -312,9 +289,6 @@ export default class Settings extends Vue {
 
     public mounted(): void {
         document.title = "IBDb: Einstellungen";
-
-        this.settingsForm.name.value = this.name;
-        this.settingsForm.email.value = fb.AUTH.currentUser.email;
-        this.settingsForm.isDarkMode.value = this.isDarkMode;
+        this.getUserProfile();
     }
 }
