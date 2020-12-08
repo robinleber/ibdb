@@ -19,10 +19,6 @@ const routes: Array<RouteConfig> = [
     },
     {
         path: "/",
-        redirect: "Login",
-    },
-    {
-        path: "/home",
         redirect: "Dashboard",
         meta: {
             requiresAuth: true,
@@ -82,8 +78,8 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
     const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
     const isAuthenticated = fb.AUTH.currentUser;
-    if (isAuthenticated && to.path == "/") next("Home");
-    if (isAuthenticated && !requiresAuth) next("Home");
+    if (isAuthenticated && to.path == "/") next("Dashboard");
+    if (isAuthenticated && !requiresAuth) next("Dashboard");
     if (requiresAuth && !isAuthenticated) next("Login");
     else next();
 })

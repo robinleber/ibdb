@@ -100,7 +100,7 @@
                     }
                 }
 
-                &.saveBtn {
+                &.saveBtn:not([disabled]) {
                     background-color: #50bb62;
                 }
             }
@@ -153,7 +153,8 @@
                     right: 0;
                     left: 0;
                     z-index: 1;
-                    transition: border 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                    transition: border 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                        opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1),
                         transform 0s cubic-bezier(0.4, 0, 0.2, 1) 0.3s;
                     will-change: border, opacity, transform;
                     content: "";
@@ -201,17 +202,79 @@
                 margin-bottom: 100px;
             }
         }
+    }
+}
 
-        .deleteAccountDialog {
-            [class*="md-dialog-container"] {
-                position: relative;
-                border-top: 4px solid #ff5252;
+.deleteAccountDialog {
+    [class*="md-dialog-container"] {
+        border-radius: 3px 3px 0 0 !important;
 
-                .icon {
-                    position: absolute;
-                    top: 0;
-                    transform: translateY(-50%);
+        .header {
+            display: flex;
+            margin-bottom: 20px;
+            flex-direction: column;
+            align-items: center;
+            color: #fafafa;
+            background-color: var(--md-theme-default-accent);
+
+            .icon {
+                color: #fafafa;
+                left: 50%;
+                font-size: 32pt !important;
+                margin-top: 20px;
+            }
+
+            .headLine {
+                margin-top: 0 !important;
+            }
+        }
+
+        .content {
+            text-align: center;
+            text-transform: uppercase;
+
+            ul {
+                margin: 1em 0;
+                list-style: none;
+
+                li {
+                    background-color: var(--md-theme-default-accent);
+                    border-radius: 3px;
+                    padding: 15px 0 5px;
+                    color: #fafafa;
+                    transition: opacity 200ms ease;
+                    position: relative;
+
+                    + li {
+                        margin-top: 15px;
+                    }
+
+                    .listBullet {
+                        color: #fafafa;
+                        font-size: 18px !important;
+                        position: absolute; 
+                        top: -12px;
+                        left: 50%;
+                        transform: translateX(-50%);
+                        background-color: var(--md-theme-default-accent);
+                        border: 2px solid #fafafa;
+                        border-radius: 50%;
+                    }
                 }
+            }
+
+            .deleteCommand {
+                background-color: var(--md-theme-default-accent);
+                padding: 5px;
+                border-radius: 3px;
+                color: #fafafa;
+                margin: 2px;
+                text-transform: lowercase;
+                user-select: none;
+            }
+
+            .deleteAccountInput input {
+                text-align: center !important;
             }
         }
     }

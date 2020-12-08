@@ -12,23 +12,28 @@
     }
 }
 
-#app {
-    background-image: linear-gradient(to top, #fafafabb, #fafafabb),
-        url("assets/images/bg4.png");
+body {
+    background-image: linear-gradient(to top, #fafafabb, #fafafabb), url("assets/images/bg4.png");
     background-position: center;
     background-repeat: no-repeat;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
     background-size: cover;
+}
 
+#app {
     font-family: "Roboto Regular", sans-serif;
     height: 100vh;
     width: 100vw;
 
-.md-count {
-    display: none;
-}
+    * {
+        box-shadow: none;
+    }
+
+    .md-count {
+        display: none;
+    }
 
     a {
         text-decoration: none;
@@ -40,6 +45,15 @@
 
     ::selection {
         background-color: #323232;
+        color: #fafafa;
+    }
+
+    .md-warning:not([disabled]) {
+        background-color: #eac435;
+    }
+
+    .md-success:not([disabled]) {
+        background-color: #0cca4a;
         color: #fafafa;
     }
 

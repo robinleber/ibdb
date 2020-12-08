@@ -27,10 +27,7 @@
                     <section :class="$style.imageContainer">
                         <div :class="$style.wrapper">
                             <div :class="$style.profilePicture">
-                                <div
-                                    :class="$style.imageLoadingOverlay"
-                                    v-if="isImageLoading"
-                                >
+                                <div :class="$style.imageLoadingOverlay" v-if="isImageLoading">
                                     <md-progress-spinner
                                         md-mode="indeterminate"
                                         :class="$style.imageLoadingSpinner"
@@ -63,10 +60,7 @@
                         </div>
                     </section>
                     <!-- Name -->
-                    <section
-                        :class="$style.changeName"
-                        @keyup.enter="updateName()"
-                    >
+                    <section :class="$style.changeName" @keyup.enter="updateName()">
                         <md-field :class="getValidationClass('name', 'value')">
                             <label>Name</label>
                             <md-input
@@ -75,19 +69,13 @@
                                 ref="nameInput"
                                 v-model="settingsForm.name.value"
                             />
-                            <span
-                                class="md-error"
-                                v-if="!$v.settingsForm.name.value.required"
+                            <span class="md-error" v-if="!$v.settingsForm.name.value.required"
                                 >Name erforderlich!
                             </span>
-                            <span
-                                class="md-error"
-                                v-if="!$v.settingsForm.name.value.minLength"
+                            <span class="md-error" v-if="!$v.settingsForm.name.value.minLength"
                                 >Name zu kurz! (min. 3 Zeichen)
                             </span>
-                            <span
-                                class="md-error"
-                                v-if="!$v.settingsForm.name.value.maxLength"
+                            <span class="md-error" v-if="!$v.settingsForm.name.value.maxLength"
                                 >Name zu lang! (max. 32 Zeichen)
                             </span>
                             <md-button
@@ -99,10 +87,7 @@
                                 Ändern
                             </md-button>
                         </md-field>
-                        <div
-                            :class="$style.btnGroup"
-                            v-if="!settingsForm.name.isDisabled"
-                        >
+                        <div :class="$style.btnGroup" v-if="!settingsForm.name.isDisabled">
                             <md-button
                                 :class="$style.btn"
                                 @click="abortChange('name')"
@@ -110,10 +95,7 @@
                                 >Abbrechen</md-button
                             >
                             <md-button
-                                :disabled="
-                                    settingsForm.name.value ===
-                                        userProfile.displayName
-                                "
+                                :disabled="settingsForm.name.value === userProfile.displayName"
                                 @click="updateName()"
                                 :class="[$style.btn, $style.saveBtn]"
                                 class="md-raised md-dense"
@@ -131,14 +113,10 @@
                                 ref="emailInput"
                                 v-model="settingsForm.email.value"
                             />
-                            <span
-                                class="md-error"
-                                v-if="!$v.settingsForm.email.value.email"
+                            <span class="md-error" v-if="!$v.settingsForm.email.value.email"
                                 >E-Mail ungültig
                             </span>
-                            <span
-                                class="md-error"
-                                v-if="!$v.settingsForm.email.value.required"
+                            <span class="md-error" v-if="!$v.settingsForm.email.value.required"
                                 >E-Mail erforderlich
                             </span>
                             <md-button
@@ -150,11 +128,9 @@
                             >
                                 Ändern
                             </md-button>
-                            <span
-                                v-if="isGoogleEmail"
-                                :class="$style.gmailWarning"
-                                >Gmail-Adresse kann innerhalb von IBDb
-                                <b>nicht</b> geändert werden!</span
+                            <span v-if="isGoogleEmail" :class="$style.gmailWarning"
+                                >Gmail-Adresse kann innerhalb von IBDb <b>nicht</b> geändert
+                                werden!</span
                             >
                         </md-field>
                         <md-field
@@ -163,20 +139,12 @@
                             :md-toggle-password="false"
                         >
                             <label>Password</label>
-                            <md-input
-                                type="password"
-                                v-model="settingsForm.email.pass"
-                            />
-                            <span
-                                class="md-error"
-                                v-if="!$v.settingsForm.email.pass.required"
+                            <md-input type="password" v-model="settingsForm.email.pass" />
+                            <span class="md-error" v-if="!$v.settingsForm.email.pass.required"
                                 >Passwort erforderlich</span
                             >
                         </md-field>
-                        <div
-                            :class="$style.btnGroup"
-                            v-if="!settingsForm.email.isDisabled"
-                        >
+                        <div :class="$style.btnGroup" v-if="!settingsForm.email.isDisabled">
                             <md-button
                                 :class="[$style.cancelBtn, $style.btn]"
                                 class="md-raised md-dense md-accent"
@@ -198,10 +166,7 @@
                             <md-input
                                 v-model="settingsForm.password.value"
                                 :disabled="settingsForm.password.isDisabled"
-                                @select="
-                                    $event.target.selectionStart =
-                                        $event.target.selectionEnd
-                                "
+                                @select="$event.target.selectionStart = $event.target.selectionEnd"
                             />
                             <md-button
                                 :class="$style.btn"
@@ -210,25 +175,16 @@
                                 :disabled="isGoogleEmail"
                                 >Ändern</md-button
                             >
-                            <span
-                                v-if="isGoogleEmail"
-                                :class="$style.gmailWarning"
-                                >Gmail-Passwort kann innerhalb von IBDb
-                                <b>nicht</b> geändert werden!</span
+                            <span v-if="isGoogleEmail" :class="$style.gmailWarning"
+                                >Gmail-Passwort kann innerhalb von IBDb <b>nicht</b> geändert
+                                werden!</span
                             >
                         </md-field>
                     </section>
                     <!-- Change Password -->
-                    <section
-                        :class="$style.changePass"
-                        v-if="!settingsForm.newPassword.isDisabled"
-                    >
+                    <section :class="$style.changePass" v-if="!settingsForm.newPassword.isDisabled">
                         <section>
-                            <md-field
-                                :class="
-                                    getValidationClass('newPassword', 'oldPass')
-                                "
-                            >
+                            <md-field :class="getValidationClass('newPassword', 'oldPass')">
                                 <label>Altes Passwort</label>
                                 <md-input
                                     v-model="settingsForm.newPassword.oldPass"
@@ -238,20 +194,13 @@
                                 />
                                 <span
                                     class="md-error"
-                                    v-if="
-                                        !$v.settingsForm.newPassword.oldPass
-                                            .required
-                                    "
+                                    v-if="!$v.settingsForm.newPassword.oldPass.required"
                                     >Altes Passwort erforderlich
                                 </span>
                             </md-field>
                         </section>
                         <section>
-                            <md-field
-                                :class="
-                                    getValidationClass('newPassword', 'newPass')
-                                "
-                            >
+                            <md-field :class="getValidationClass('newPassword', 'newPass')">
                                 <label>Neues Passwort</label>
                                 <md-input
                                     v-model="settingsForm.newPassword.newPass"
@@ -260,52 +209,33 @@
                                 />
                                 <span
                                     class="md-error"
-                                    v-if="
-                                        !$v.settingsForm.newPassword.newPass
-                                            .minLength
-                                    "
+                                    v-if="!$v.settingsForm.newPassword.newPass.minLength"
                                     >Neues Password zu kurz (min. 8 Zeichen)
                                 </span>
                                 <span
                                     class="md-error"
-                                    v-if="
-                                        !$v.settingsForm.newPassword.newPass
-                                            .required
-                                    "
+                                    v-if="!$v.settingsForm.newPassword.newPass.required"
                                     >Neues Passwort erforderlich
                                 </span>
                             </md-field>
                         </section>
                         <section>
-                            <md-field
-                                :class="
-                                    getValidationClass(
-                                        'newPassword',
-                                        'newPassRepeat'
-                                    )
-                                "
-                            >
+                            <md-field :class="getValidationClass('newPassword', 'newPassRepeat')">
                                 <label>Neues Passwort wiederholen</label>
                                 <md-input
-                                    v-model="
-                                        settingsForm.newPassword.newPassRepeat
-                                    "
+                                    v-model="settingsForm.newPassword.newPassRepeat"
                                     type="password"
                                     @keyup.enter="updatePassword()"
                                 />
                                 <span
                                     class="md-error"
-                                    v-if="
-                                        !$v.settingsForm.newPassword
-                                            .newPassRepeat.required
-                                    "
+                                    v-if="!$v.settingsForm.newPassword.newPassRepeat.required"
                                     >Neues Passwort wiederholen
                                 </span>
                                 <span
                                     class="md-error"
                                     v-else-if="
-                                        !$v.settingsForm.newPassword
-                                            .newPassRepeat.sameAsNewPass
+                                        !$v.settingsForm.newPassword.newPassRepeat.sameAsNewPass
                                     "
                                     >Passwörter stimmen nicht überein
                                 </span>
@@ -336,9 +266,7 @@
                             <md-icon
                                 :class="[
                                     $style.icon,
-                                    !settingsForm.isDarkMode.value
-                                        ? $style.active
-                                        : '',
+                                    !settingsForm.isDarkMode.value ? $style.active : '',
                                 ]"
                                 >wb_sunny</md-icon
                             >
@@ -350,9 +278,7 @@
                             <md-icon
                                 :class="[
                                     $style.icon,
-                                    settingsForm.isDarkMode.value
-                                        ? $style.active
-                                        : '',
+                                    settingsForm.isDarkMode.value ? $style.active : '',
                                 ]"
                                 >nights_stay</md-icon
                             >
@@ -365,7 +291,7 @@
                         class="md-accent"
                         @click="deleteAccountData.show = true"
                     >
-                        Account löschen
+                        Konto löschen
                     </md-button>
                 </div>
             </md-card-content>
@@ -380,24 +306,69 @@
             @md-confirm="deleteDisplayImage()"
             @md-cancel="isDeleteDisplayImage = false"
         />
-        <!-- Delete Account -->
+        <!-- Delete Konto -->
         <md-dialog :class="$style.deleteAccountDialog" :md-active.sync="deleteAccountData.show">
-            <md-icon :class="$style.icon">delete</md-icon>
-            <md-dialog-title>Account löschen?</md-dialog-title>
+            <div :class="$style.header">
+                <md-icon :class="$style.icon">delete</md-icon>
+                <md-dialog-title :class="$style.headLine" class="md-headline"
+                    >Konto löschen?</md-dialog-title
+                >
+            </div>
             <md-dialog-content>
-                Es werden<br />
-                - deine gesamte Bibliothek<br />
-                - deine Statistiken<br />
-                - deine Favoriten<br />
-                - & deine Autoren<br />
-                endgültig gelöscht<br /><br />
-                Gebe "account löschen" ein um zu bestätigen
-                <md-field>
-                    <md-input v-model="deleteAccountData.input" />
-                </md-field>
+                <div :class="$style.content">
+                    <span>Es werden</span>
+                    <ul>
+                        <li>
+                            <md-icon :class="$style.listBullet">close</md-icon>
+                            dein Profil
+                        </li>
+                        <li>
+                            <md-icon :class="$style.listBullet">close</md-icon>
+                            deine gesamte Bibliothek
+                        </li>
+                        <li>
+                            <md-icon :class="$style.listBullet">close</md-icon>
+                            deine Favoriten
+                        </li>
+                        <li>
+                            <md-icon :class="$style.listBullet">close</md-icon>
+                            deine Autoren
+                        </li>
+                    </ul>
+                    <div>endgültig gelöscht!</div>
+                    <br />
+                    <span style="text-transform: none;">
+                        Bestätige, dass du dein Konto löschen möchtest.<br /><br />Gib dazu
+                        <span :class="$style.deleteCommand">konto löschen</span>
+                        und dein Passwort ein.
+                    </span>
+                </div>
+                <form @submit.prevent="onDeleteUser()">
+                    <md-field :class="[$style.deleteAccountInput, getValidationClassDeleteUser('input')]">
+                        <md-input v-model="deleteAccountData.input" placeholder="konto löschen" />
+                        <span class="md-error" v-if="!$v.deleteAccountData.input.required">
+                            Eingabe erforderlich
+                        </span>
+                        <span
+                            class="md-error"
+                            v-else-if="!$v.deleteAccountData.input.mustBeDeleteAccount"
+                        >
+                            Eingabe nicht korrekt
+                        </span>
+                    </md-field>
+                    <md-field ref="passInput" :class="[$style.deleteAccountInput, getValidationClassDeleteUser('password')]">
+                        <label>Passwort</label>
+                        <md-input type="password" v-model="deleteAccountData.password" />
+                        <span class="md-error" v-if="!$v.deleteAccountData.password.required">Passwort erforderlich</span>
+                    </md-field>
+                </form>
                 <md-dialog-actions>
-                    <md-button class="md-raised" @click="deleteAccountData.show = false">Abbrechen</md-button>
-                    <md-button class="md-accent md-raised" :disabled="isDeletionConfirmed" @click="deleteAccount()">Account löschen</md-button>
+                    <md-button @click="deleteAccountData.show = false">
+                        Abbrechen
+                    </md-button>
+                    <md-button class="md-accent md-raised" @click="onDeleteUser()">
+                        konto löschen
+                    </md-button>
                 </md-dialog-actions>
             </md-dialog-content>
         </md-dialog>

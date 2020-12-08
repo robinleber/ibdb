@@ -31,12 +31,12 @@ const USERS_COLLECTION = DB.collection("users");
 // export utils/refs
 export {
     AUTH,
+    _AUTH,
+    STORAGE,
+    DB,
     AUTHORS_COLLECTION,
     BOOKS_COLLECTION,
     COVERS_COLLECTIONS,
-    DB,
     FAVORITES_COLLECTION,
-    STORAGE,
     USERS_COLLECTION,
-    _AUTH,
 };

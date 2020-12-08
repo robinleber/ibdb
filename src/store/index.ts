@@ -16,6 +16,7 @@ const store = new Vuex.Store({
             displayImageUrl: "",
             isDarkMode: false,
             hasDisplayImage: false,
+            bookList: [],
         },
         books: [],
         coverUrls: [],
@@ -50,8 +51,14 @@ const store = new Vuex.Store({
                         state.coverUrls.push(url);
                     })
                     .catch(e => {
-                        console.warn(`Warning - Could not get coverUrl! Default book cover was used\n${e.message}`);
-                        let defaultDisplayImagePath = require.context("@/assets/images/", false, /\.jpg$/);
+                        console.warn(
+                            `Warning - Could not get coverUrl! Default book cover was used\n${e.message}`
+                        );
+                        let defaultDisplayImagePath = require.context(
+                            "@/assets/images/",
+                            false,
+                            /\.jpg$/
+                        );
                         state.coverUrls.push(defaultDisplayImagePath("./defaultBookCover.jpg"));
                     });
             }
@@ -79,7 +86,9 @@ const store = new Vuex.Store({
                             })
                             .catch(e => {
                                 Message.error("Fehler! Benutzer konnte nicht erstellt werden");
-                                console.error(`Error while creating user in cloud firestore  - ${e.message}`);
+                                console.error(
+                                    `Error while creating user in cloud firestore  - ${e.message}`
+                                );
                             });
                     }
                 })
@@ -123,10 +132,11 @@ const store = new Vuex.Store({
 
             try {
                 // Create User
-                const { user } = await fb.AUTH.createUserWithEmailAndPassword(form.email, form.pass);
-
+                const { user } = await fb.AUTH.createUserWithEmailAndPassword(
+                    form.email,
+                    form.pass
+                );
                 dispatch("addDisplayImage", file);
-
                 // Add User to Database
                 await fb.USERS_COLLECTION.doc(user.uid).set({
                     displayName: form.user,
@@ -144,22 +154,67 @@ const store = new Vuex.Store({
             }
         },
 
+        async deleteUser({ commit }, password) {
+            const user = await fb.AUTH.currentUser;
+            const credential = fb._AUTH.EmailAuthProvider.credential(user.email, password);
+            user.reauthenticateWithCredential(credential)
+                .then(() => {
+                    fb.USERS_COLLECTION.doc(user.uid)
+                        .delete()
+                        .then(() => {
+                            user.delete()
+                                .then(() => {
+                                    Message.success("Konto erfolgreich gelöscht!");
+                                    router.push("Login");
+                                })
+                                .catch(e => {
+                                    Message.error(
+                                        "Konto konnten nicht gelöscht werden. Bitte kontaktiere einen Administrator!"
+                                    );
+                                    console.error(`error deleting user: ${e.message}`);
+                                });
+                        })
+                        .catch(e => {
+                            Message.error(
+                                "Kontodaten konnten nicht gelöscht werden. Bitte kontaktiere einen Administrator!"
+                            );
+                            console.error(`error deleting user-data: ${e.message}`);
+                        });
+                })
+                .catch(e => {
+                    Message.error("Fehler! Benutzer konnte nicht re-authentifiziert werden!");
+                    console.error(`error re-authenticating user: ${e.message}`);
+                });
+        },
+
         async fetchUserProfile({ commit }, user: any) {
             const USER_PROFILE = await fb.USERS_COLLECTION.doc(user.uid).get();
             commit("setUserProfile", USER_PROFILE.data());
 
+            let bookList = this.state.userProfile.bookList;
+
             fb.BOOKS_COLLECTION.orderBy("addedOn", "desc").onSnapshot(snapshot => {
                 const BOOKS_ARRAY = [];
 
-                snapshot.forEach(doc => {
-                    const BOOK = doc.data();
-                    BOOK.id = doc.id;
-                    BOOKS_ARRAY.push(BOOK);
+                bookList.forEach(book => {
+                    snapshot.forEach(doc => {
+                        const BOOK = doc.data();
+
+                        if (
+                            BOOK.data.volumeInfo.industryIdentifiers[0] == book ||
+                            BOOK.data.volumeInfo.industryIdentifiers[1] == book
+                        ) {
+                            BOOK.id = doc.id;
+                            BOOKS_ARRAY.push(BOOK);
+                        }
+                    });
                 });
+
                 store.commit("setBooks", BOOKS_ARRAY);
             });
 
-            if (router.currentRoute.path === "/Login" || router.currentRoute.path === "/SignUp") router.replace("Home");
+            if (router.currentRoute.path === "/Login" || router.currentRoute.path === "/SignUp")
+                router.replace("Home");
         },
 
         async fetchBook({ dispatch }, isbn: string) {
@@ -193,48 +248,49 @@ const store = new Vuex.Store({
             const user = fb.AUTH.currentUser;
 
             let remoteImageUrl = `http://covers.openlibrary.org/b/isbn/${isbn}-L.jpg`;
-            let filename = `${user.uid}/bookCovers/${isbn}.jpg`;
+            let filename = `books/${isbn}.jpg`;
             // Download book cover and upload to firebase store
 
-            await Vue.axios({
-                url: remoteImageUrl,
-                method: "GET",
-                responseType: "blob",
-            })
-                .then(response => {
-                    fb.STORAGE.ref()
-                        .child(filename)
-                        .put(new Blob(response.data))
-                        .then(snapshot => {
-                            snapshot.ref.getDownloadURL();
-                            console.log("snapshot");
-                        })
-                        .catch(e => {
-                            console.error(`Error uploading coverImage: ${e.message}`);
-                        });
-                })
-                .catch(async () => {
-                    await Vue.axios({
-                        url: book.volumeInfo.imageLinks.thumbnail,
-                        method: "GET",
-                        responseType: "blob",
-                    })
-                        .then(response => {
-                            fb.STORAGE.ref()
-                                .child(filename)
-                                .put(new Blob(response.data))
-                                .then(snapshot => {
-                                    snapshot.ref.getDownloadURL();
-                                    console.log("snapshot - google");
-                                })
-                                .catch(e => {
-                                    console.error(`Error uploading coverImage: ${e.message}`);
-                                });
-                        })
-                        .catch(e => {
-                            console.error(`Error getting google coverImage: ${e.message}`);
-                        });
-                });
+            // await Vue.axios({
+            //     url: remoteImageUrl,
+            //     method: "GET",
+            //     responseType: "blob",
+            // })
+            //     .then(response => {
+            //         fb.STORAGE.ref()
+            //             .child(filename)
+            //             .put(new Blob(response.data))
+            //             .then(snapshot => {
+            //                 snapshot.ref.getDownloadURL();
+            //                 console.log("snapshot");
+            //             })
+            //             .catch(e => {
+            //                 console.error(`Error uploading coverImage: ${e.message}`);
+            //             });
+            //     })
+            //     .catch(async () => {
+            //         await Vue.axios({
+            //             url: book.volumeInfo.imageLinks.thumbnail,
+            //             method: "GET",
+            //             responseType: "blob",
+            //         })
+            //             .then(response => {
+            //                 fb.STORAGE.ref()
+            //                     .child(filename)
+            //                     .put(new Blob(response.data))
+            //                     .then(snapshot => {
+            //                         snapshot.ref.getDownloadURL();
+            //                         console.log("snapshot - google");
+            //                     })
+            //                     .catch(e => {
+            //                         console.error(`Error uploading coverImage: ${e.message}`);
+            //                     });
+            //             })
+            //             .catch(e => {
+            //                 console.error(`Error getting google coverImage: ${e.message}`);
+            //             });
+            //     });
+
             // Add book and cover-url to book collection
             fb.BOOKS_COLLECTION.add({
                 data: book,
@@ -242,13 +298,36 @@ const store = new Vuex.Store({
                 cover: filename ? filename : null,
                 progress: 0,
             });
+
+            // Add isbn to users isbn-list
+            let isbnList = [];
+            let bookExists = false;
+            let i = 0;
+            await fb.USERS_COLLECTION.doc(user.uid)
+                .get()
+                .then(doc => {
+                    if (doc.exists) {
+                        let data = doc.data();
+                        if (data.isbnList) {
+                            console.log(data.isbnList)
+                            data.isbnList.forEach(ISBN => {
+                                if (ISBN == isbn) bookExists = true;
+                                isbnList.push(ISBN);
+                                console.log(ISBN);
+                            });
+                        }
+                    }
+                });
+            isbnList.push(isbn);
+            console.log(isbnList);
+            // fb.USERS_COLLECTION.doc(user.uid).update({ isbnList });
         },
 
         async addDisplayImage({ dispatch }, file) {
             const user = fb.AUTH.currentUser;
             const ref = fb.STORAGE.ref();
             const metaData = { contentType: file.type };
-            let fileName = `${user.uid}/displayImage`;
+            let fileName = `users/${user.uid}/displayImage`;
 
             ref.child(fileName)
                 .put(file, metaData)
@@ -341,7 +420,9 @@ const store = new Vuex.Store({
                                 Message.success("E-Mail-Adresse erfolgreich geändert!");
                             })
                             .catch(e => {
-                                Message.error("Fehler! E-Mail-Adresse konnte nicht geändert werden!");
+                                Message.error(
+                                    "Fehler! E-Mail-Adresse konnte nicht geändert werden!"
+                                );
                                 console.error(`Error changing email: ${e.message}`);
                             });
                     }

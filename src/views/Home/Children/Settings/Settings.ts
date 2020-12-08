@@ -5,6 +5,9 @@ import { required, email, minLength, maxLength, sameAs } from "vuelidate/lib/val
 import * as fb from "@/firebase";
 import store from "@/store";
 import CropperDialog from "@/components/CropperDialog/CropperDialog.vue";
+import VueMaterial from "vue-material";
+
+const mustBeDeleteAccount = value => value == "konto löschen";
 
 @Component({
     components: {
@@ -47,6 +50,15 @@ import CropperDialog from "@/components/CropperDialog/CropperDialog.vue";
                 },
             },
         },
+        deleteAccountData: {
+            input: {
+                required,
+                mustBeDeleteAccount,
+            },
+            password: {
+                required,
+            },
+        },
     },
 })
 export default class Settings extends Vue {
@@ -71,8 +83,9 @@ export default class Settings extends Vue {
     public imageFile: any = null;
 
     public deleteAccountData = {
-        show: false,
         input: "",
+        password: "",
+        show: false,
     };
 
     public selectedPalette = "blue";
@@ -91,7 +104,13 @@ export default class Settings extends Vue {
     };
 
     public getValidationClass(form: string, fieldName: string): any {
-        const field = fieldName !== "" ? this.$v.settingsForm[form][fieldName] : this.$v.settingsForm[form];
+        const field =
+            fieldName !== "" ? this.$v.settingsForm[form][fieldName] : this.$v.settingsForm[form];
+        if (field) return { "md-invalid": field.$invalid && field.$dirty };
+    }
+
+    public getValidationClassDeleteUser(form: string) {
+        const field = this.$v.deleteAccountData[form];
         if (field) return { "md-invalid": field.$invalid && field.$dirty };
     }
 
@@ -264,19 +283,21 @@ export default class Settings extends Vue {
         store.dispatch("switchDarkMode", this.settingsForm.isDarkMode.value);
     }
 
-    public deleteAccount(): void {
-        if (this.deleteAccountData.input === "account löschen") {
+    public onDeleteUser(): void {
+        this.$v.deleteAccountData.$touch();
+
+        if (!this.$v.deleteAccountData.$invalid) {
+            store.dispatch("deleteUser", this.deleteAccountData.password);
         }
     }
 
-    public getUserProfile(): any {
+    public getUserProfile(): void {
+        this.settingsForm.name = {
+            value: this.userProfile.displayName,
+            isDisabled: true,
+        };
+        this.userProfile.isDarkMode = this.userProfile.isDarkMode;
         this.settingsForm.email.value = fb.AUTH.currentUser.email;
-        this.settingsForm.name.value = this.userProfile.name;
-        this.settingsForm.isDarkMode.value = this.userProfile.isDarkMode;
-    }
-
-    public get isDeletionConfirmed(): boolean {
-        return this.deleteAccountData.input !== "account löschen";
     }
 
     get isGoogleEmail(): boolean {

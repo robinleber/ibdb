@@ -5,9 +5,7 @@
                 <md-card class="md-primary" :class="$style.filterHeaderCard">
                     <md-icon :class="$style.filterIcon">filter_alt</md-icon>
                     <br />
-                    <span class="md-subheading" :class="$style.filterTxt"
-                        >Filter</span
-                    >
+                    <span class="md-subheading" :class="$style.filterTxt">Filter</span>
                 </md-card>
             </md-card-header>
             <md-card-content :class="$style.filterContent">
@@ -30,12 +28,7 @@
                 </md-field>
                 <md-field>
                     <label>Autor</label>
-                    <md-select
-                        v-model="filters[1].value"
-                        multiple
-                        md-dense
-                        clearable
-                    >
+                    <md-select v-model="filters[1].value" multiple md-dense clearable>
                         <md-option
                             :key="index"
                             v-for="(author, index) in filters[1].children"
@@ -47,12 +40,7 @@
                 </md-field>
                 <md-field>
                     <label>Verlag</label>
-                    <md-select
-                        v-model="filters[2].value"
-                        multiple
-                        md-dense
-                        clearable
-                    >
+                    <md-select v-model="filters[2].value" multiple md-dense clearable>
                         <md-option
                             :key="index"
                             v-for="(publisher, index) in filters[2].children"
@@ -67,9 +55,7 @@
                         <label>Min. Seiten</label>
                         <md-input
                             :class="$style.pagesInput"
-                            @keyup="
-                                validateInput('minValue'), checkBookLength()
-                            "
+                            @keyup="validateInput('minValue'), checkBookLength()"
                             v-model="filters[3].value"
                             type="number"
                         ></md-input>
@@ -87,12 +73,7 @@
                 </div>
                 <md-field>
                     <label>Franchise</label>
-                    <md-select
-                        v-model="filters[5].value"
-                        multiple
-                        md-dense
-                        clearable
-                    >
+                    <md-select v-model="filters[5].value" multiple md-dense clearable>
                         <md-option
                             :key="index"
                             v-for="(franchise, index) in filters[5].children"
@@ -103,14 +84,8 @@
                     </md-select>
                 </md-field>
             </md-card-content>
-            <md-card-actions
-                style="position: absolute; width: 100%; bottom: 0;"
-            >
-                <md-button
-                    @click="resetFilter()"
-                    class="md-raised md-accent"
-                    style="width: 100%;"
-                >
+            <md-card-actions style="position: absolute; width: 100%; bottom: 0;">
+                <md-button @click="resetFilter()" class="md-raised md-accent" style="width: 100%;">
                     Filter zurücksetzen
                 </md-button>
             </md-card-actions>
@@ -127,11 +102,7 @@
             >
             </md-empty-state>
             <!-- Loading Screen -->
-            <div
-                :class="$style.loadingScreen"
-                class="md-elevation-3"
-                v-if="isLoading"
-            >
+            <div :class="$style.loadingScreen" class="md-elevation-3" v-if="isLoading">
                 <md-progress-spinner md-mode="indeterminate" />
                 <span :class="$style.loadingMessage">Lade Bibliothek</span>
             </div>
@@ -150,10 +121,7 @@
                 <form novalidate @keyup.enter.prevent="">
                     <md-field
                         v-if="isIsbnInput"
-                        :class="[
-                            $style.isbnInputField,
-                            getValidationClass('isbn'),
-                        ]"
+                        :class="[$style.isbnInputField, getValidationClass('isbn')]"
                         md-clearable
                     >
                         <span :class="$style.prefix">ISBN</span>
@@ -166,11 +134,8 @@
                         <span class="md-error" v-if="!$v.isbn.input.required"
                             >Bitte eine ISBN eingeben</span
                         >
-                        <span
-                            class="md-error"
-                            v-else-if="!$v.isbn.input.between"
-                            >ISBN muss entweder 10 oder 13 Zeichen
-                            enthalten</span
+                        <span class="md-error" v-else-if="!$v.isbn.input.between"
+                            >ISBN muss entweder 10 oder 13 Zeichen enthalten</span
                         >
                     </md-field>
 
@@ -182,11 +147,7 @@
                         Abbrechen
                     </md-button>
 
-                    <md-button
-                        v-if="isIsbnInput"
-                        @click="addBook()"
-                        class="md-primary md-raised"
-                    >
+                    <md-button v-if="isIsbnInput" @click="addBook()" class="md-success md-raised">
                         Hinzufügen
                     </md-button>
                 </form>
@@ -209,13 +170,7 @@
                             v-for="(condition, index) in sortConditions"
                             :key="index"
                         >
-                            <span
-                                :class="
-                                    sortSelected == condition.value
-                                        ? $style.strong
-                                        : ''
-                                "
-                            >
+                            <span :class="sortSelected == condition.value ? $style.strong : ''">
                                 {{ condition.label }}
                             </span>
                         </md-menu-item>
@@ -223,30 +178,18 @@
                 </md-menu>
 
                 <div v-if="!isIsbnInput" :class="$style.readingStateWrapper">
-                    <md-radio
-                        :class="$style.readingState"
-                        v-model="readingState"
-                        value="read"
+                    <md-radio :class="$style.readingState" v-model="readingState" value="read"
                         >Gelesen</md-radio
                     >
-                    <md-radio
-                        :class="$style.readingState"
-                        v-model="readingState"
-                        value="reading"
+                    <md-radio :class="$style.readingState" v-model="readingState" value="reading"
                         >Am Lesen</md-radio
                     >
-                    <md-radio
-                        :class="$style.readingState"
-                        v-model="readingState"
-                        value="notRead"
+                    <md-radio :class="$style.readingState" v-model="readingState" value="notRead"
                         >Nicht gelesen</md-radio
                     >
                 </div>
 
-                <span
-                    v-if="isFilter && !isIsbnInput"
-                    :class="$style.filteredTxt"
-                >
+                <span v-if="isFilter && !isIsbnInput" :class="$style.filteredTxt">
                     * gefiltert *
                 </span>
             </div>
@@ -263,10 +206,7 @@
                     <!-- Content -->
                     <md-ripple :class="$style.bookContent">
                         <!-- No Cover found -->
-                        <div
-                            :class="$style.imageNotFoundContainer"
-                            v-if="!coverUrls"
-                        >
+                        <div :class="$style.imageNotFoundContainer" v-if="!coverUrls">
                             <md-empty-state
                                 :class="$style.imageNotFound"
                                 class="md-primary"
@@ -275,11 +215,7 @@
                             />
                         </div>
                         <!-- Cover -->
-                        <img
-                            :class="$style.bookCover"
-                            :src="coverUrls[index]"
-                            v-else
-                        />
+                        <img :class="$style.bookCover" :src="coverUrls[index]" v-else />
                     </md-ripple>
                     <!-- Info Modal -->
                     <div
@@ -295,11 +231,13 @@
                         :md-value="getProgress(book.id, book.progress)"
                         v-if="book.progress > 0"
                     />
-                    <md-tooltip md-direction="bottom">
-                        {{
-                            `${book.progress} von ${getPages(book.id)}
-                            Seiten │ ${getProgress(book.id, book.progress)}%`
-                        }}
+                    <md-tooltip md-direction="bottom" :class="$style.tooltip">
+                        <div :class="$style.pages">
+                            {{ `${book.progress} von ${getPages(book.id)} Seiten` }}
+                        </div>
+                        <div :class="$style.percent">
+                            {{ `${getProgress(book.id, book.progress)}%` }}
+                        </div>
                     </md-tooltip>
                 </div>
             </md-content>
