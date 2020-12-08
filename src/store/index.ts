@@ -16,7 +16,7 @@ const store = new Vuex.Store({
             displayImageUrl: "",
             isDarkMode: false,
             hasDisplayImage: false,
-            bookList: [],
+            isbnList: [],
         },
         books: [],
         coverUrls: [],
@@ -191,27 +191,35 @@ const store = new Vuex.Store({
             const USER_PROFILE = await fb.USERS_COLLECTION.doc(user.uid).get();
             commit("setUserProfile", USER_PROFILE.data());
 
-            let bookList = this.state.userProfile.bookList;
+            // fb.BOOKS_COLLECTION.orderBy("addedOn", "desc").onSnapshot(snapshot => {
+            //     const BOOKS_ARRAY = [];
 
-            fb.BOOKS_COLLECTION.orderBy("addedOn", "desc").onSnapshot(snapshot => {
-                const BOOKS_ARRAY = [];
+            //     snapshot.forEach(doc => {
+            //         const BOOK = doc.data();
 
-                bookList.forEach(book => {
-                    snapshot.forEach(doc => {
-                        const BOOK = doc.data();
+            //         if (
+            //             BOOK.data.volumeInfo.industryIdentifiers[0] == isbn ||
+            //             BOOK.data.volumeInfo.industryIdentifiers[1] == isbn
+            //         ) {
+            //             BOOK.id = doc.id;
+            //             BOOKS_ARRAY.push(BOOK);
+            //         }
+            //     });
 
-                        if (
-                            BOOK.data.volumeInfo.industryIdentifiers[0] == book ||
-                            BOOK.data.volumeInfo.industryIdentifiers[1] == book
-                        ) {
-                            BOOK.id = doc.id;
-                            BOOKS_ARRAY.push(BOOK);
-                        }
+            //     store.commit("setBooks", BOOKS_ARRAY);
+            // });
+
+            let isbnList = this.state.userProfile.isbnList;
+            const BOOKS_ARRAY = [];
+            console.log(isbnList);
+            isbnList.forEach(isbn => {
+                fb.BOOKS_COLLECTION.where("isbn13", "==", isbn)
+                    .get()
+                    .then(doc => {
+                        BOOKS_ARRAY.push(doc);
                     });
-                });
-
-                store.commit("setBooks", BOOKS_ARRAY);
             });
+            store.commit("setBooks", BOOKS_ARRAY);
 
             if (router.currentRoute.path === "/Login" || router.currentRoute.path === "/SignUp")
                 router.replace("Home");
@@ -297,30 +305,28 @@ const store = new Vuex.Store({
                 addedOn: new Date(),
                 cover: filename ? filename : null,
                 progress: 0,
+                isbn10: book.volumeInfo.industryIdentifiers[0].identifier,
+                isbn13: book.volumeInfo.industryIdentifiers[1].identifier,
             });
 
             // Add isbn to users isbn-list
             let isbnList = [];
             let bookExists = false;
-            let i = 0;
             await fb.USERS_COLLECTION.doc(user.uid)
                 .get()
                 .then(doc => {
                     if (doc.exists) {
                         let data = doc.data();
-                        if (data.isbnList) {
-                            console.log(data.isbnList)
-                            data.isbnList.forEach(ISBN => {
-                                if (ISBN == isbn) bookExists = true;
-                                isbnList.push(ISBN);
-                                console.log(ISBN);
-                            });
-                        }
+                        data.isbnList.forEach(ISBN => {
+                            if (ISBN == isbn) bookExists = true;
+                            isbnList.push(ISBN);
+                        });
                     }
                 });
-            isbnList.push(isbn);
-            console.log(isbnList);
-            // fb.USERS_COLLECTION.doc(user.uid).update({ isbnList });
+            if (!bookExists) {
+                isbnList.push(isbn);
+                fb.USERS_COLLECTION.doc(user.uid).update({ isbnList });
+            }
         },
 
         async addDisplayImage({ dispatch }, file) {
