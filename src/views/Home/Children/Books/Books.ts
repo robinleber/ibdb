@@ -243,8 +243,7 @@ export default class Books extends Vue {
 
     public get isFilter(): boolean {
         if (this.searchInput) return true;
-        for (let filter of this.filters)
-            if (filter.value.length > 1) return true;
+        for (let filter of this.filters) if (filter.value.length > 1) return true;
         return false;
     }
 
@@ -267,8 +266,7 @@ export default class Books extends Vue {
 
     public addBook(): void {
         this.$v.isbn.input.$touch();
-        if (!this.$v.isbn.input.$invalid)
-            store.dispatch("fetchBook", this.isbn.input);
+        if (!this.$v.isbn.input.$invalid) store.dispatch("fetchBook", this.isbn.input);
     }
 
     public getValidationClass(fieldName: string): any {
@@ -277,7 +275,9 @@ export default class Books extends Vue {
     }
 
     public getPages(id: string): number {
-        return this.books.find(x => x.id === id).data.volumeInfo.pageCount;
+        if (id) {
+            return this.books.find(x => x.id === id).data.volumeInfo.pageCount;
+        }
     }
 
     public getProgress(id: string, progress: number): number {
@@ -287,8 +287,7 @@ export default class Books extends Vue {
 
     public getAuthors(authors: [string]): string {
         let authorsString = authors[0];
-        for (let i = 1; i < authors.length; i++)
-            authorsString += ", " + authors[i];
+        for (let i = 1; i < authors.length; i++) authorsString += ", " + authors[i];
         return authorsString;
     }
 
@@ -323,18 +322,12 @@ export default class Books extends Vue {
 
         switch (input) {
             case "minValue":
-                this.filters[3].value = this.filters[3].value[0].replace(
-                    /[\D]/g,
-                    ""
-                );
+                this.filters[3].value = this.filters[3].value[0].replace(/[\D]/g, "");
 
                 if (minValue > maxValue && minValue > 0)
                     this.filters[4].value = this.filters[3].value[0];
             case "maxValue":
-                this.filters[4].value = this.filters[4].value[0].replace(
-                    /[\D]/g,
-                    ""
-                );
+                this.filters[4].value = this.filters[4].value[0].replace(/[\D]/g, "");
         }
     }
 
@@ -360,6 +353,7 @@ export default class Books extends Vue {
         document.title = "IBDb: Bibliothek";
 
         if (this.books) {
+            console.log(this.books.data());
             for (let book of this.books) {
                 book.showBookModal = false;
             }

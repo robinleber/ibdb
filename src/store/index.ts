@@ -27,6 +27,7 @@ const store = new Vuex.Store({
             state.userProfile.isDarkMode = val.isDarkMode;
 
             state.userProfile.hasDisplayImage = val.displayImagePath !== "";
+            state.userProfile.isbnList = val.isbnList;
 
             if (state.userProfile.hasDisplayImage) {
                 state.userProfile.displayImageUrl = await fb.STORAGE.ref()
@@ -211,9 +212,8 @@ const store = new Vuex.Store({
 
             let isbnList = this.state.userProfile.isbnList;
             const BOOKS_ARRAY = [];
-            console.log(isbnList);
-            isbnList.forEach(isbn => {
-                fb.BOOKS_COLLECTION.where("isbn13", "==", isbn)
+            isbnList.forEach(async isbn => {
+                await fb.BOOKS_COLLECTION.where("isbn13", "==", isbn)
                     .get()
                     .then(doc => {
                         BOOKS_ARRAY.push(doc);
